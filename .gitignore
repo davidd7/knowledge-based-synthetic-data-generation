@@ -12,3 +12,15 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+*.zip
+*.hdf5
+
+
+
+
+
+
+
+
+
