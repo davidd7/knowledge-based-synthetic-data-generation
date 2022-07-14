@@ -1,6 +1,67 @@
 
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  * {
+    font-family: Arial;
+}
+
+
+
+
+
+
+
 
 .ident {
     margin-left: 40px;
 }
+
+
+
+.object-box {
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 28px;
+    padding-bottom: 20px;
+
+
+    border: 1px solid grey;
+    border-radius: 20px;
+    box-shadow: 0px 0px grey;
+}
+
+
+.number-input-with-unit-container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.dynamic-list-container {
+    display: flex;
+    row-gap: 16px;
+    flex-direction: column;
+}
+
+
+
+.group-label {
+    margin-bottom: 4px;
+    margin-top: 8px;
+}
+
+
+
+.group-child-container {
+    display: flex;
+    row-gap: 4px;
+    flex-direction: column;
+}
+
 

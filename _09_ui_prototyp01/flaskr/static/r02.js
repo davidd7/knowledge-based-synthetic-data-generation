@@ -1,11 +1,4 @@
 'use strict';
-
-
-
-
-
-
-
 const {
   colors,
   CssBaseline,
@@ -18,113 +11,6 @@ const {
   Link,
   Slider
 } = MaterialUI;
-
-
-
-
-
-
-
-
-
-// Create a theme instance.
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#556cd6',
-//     },
-//     secondary: {
-//       main: '#19857b',
-//     },
-//     error: {
-//       main: colors.red.A400,
-//     },
-//   },
-// });
-
-// function LightBulbIcon(props) {
-//   return (
-//     <SvgIcon {...props}>
-//       <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
-//     </SvgIcon>
-//   );
-// }
-
-// function ProTip() {
-//   return (
-//     <Typography sx={{ mt: 6, mb: 3 }} color="text.secondary">
-//       <LightBulbIcon sx={{ mr: 1, verticalAlign: 'top' }} />
-//       Pro tip: See more{' '}
-//       <Link href="https://mui.com/getting-started/templates/">templates</Link> on the MUI
-//       documentation.
-//     </Typography>
-//   );
-// }
-
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center">
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
-
-// function App() {
-//   return (
-//     <Container maxWidth="sm">
-//       <Box sx={{ my: 4 }}>
-//         <Typography variant="h4" component="h1" gutterBottom>
-//           CDN example
-//         </Typography>
-//         <ProTip />
-//         <Copyright />
-//       </Box>
-//     </Container>
-//   );
-// }
-
-// const root2 = ReactDOM.createRoot(document.getElementById('root'));
-// root2.render(
-//   <ThemeProvider theme={theme}>
-//     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-//     <CssBaseline />
-//     <App />
-//   </ThemeProvider>,
-// );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -152,24 +38,33 @@ class Group extends React.Component {
 
     return (
       <div >
-        <div >{label}</div>
-        <div className={'ident'}>{children}</div>
+        <div className={"group-label"}>{label}</div>
+        <div className={'ident group-child-container'}>{children}</div>
       </div>);
   }
 }
 
 
 class DynamicList extends React.Component {
+
+  key = 0;
+  getKey() {
+    this.key += 1;
+    return this.key;
+  }
+
   render() {
     // data is the list
     const data = this.props.data;
+    this.keys = data.map( (a) => this.getKey() )
+
     // in children there should be how a single list element should look
     const children = this.props.children;
 
     return (
-      <div>
-        {data.map((listElement) =>
-          React.Children.only(React.cloneElement(children, { data: listElement })) // TODO: Kein key
+      <div className={"dynamic-list-container"}>
+        {data.map((listElement, index) =>
+          React.Children.only(React.cloneElement(children, { data: listElement, key: this.keys[index] })) // TODO: Kein key
         )}
         <button>Add element</button>
       </div>);
@@ -177,23 +72,23 @@ class DynamicList extends React.Component {
 }
 
 
-class XYZ extends React.Component {
+class ObjectBox extends React.Component {
   render() {
-    // data is the list
-    const data = this.props.data;
-    // in children there should be how a single list element should look
-    const children = this.props.children;
-
     return (
-      <div>
-        {data.map((listElement) =>
-          React.Children.only(React.cloneElement(children, { data: listElement })) // TODO: Kein key
-        )}
-        <button>Add element</button>
-      </div>);
+      <Box sx={{ display:"flex", flexDirection:"column", gap:"20px" }} className={'object-box'}>
+        <div>
+          <Group label="3D-Modell"/>
+          <input type="file" />
+        </div>
+        <div>
+          <Group label="Wieviele Objekte dieses Typs pro Bild"/>
+          <RangeSlider value={[5,7]} min={0} max={10} />
+        </div>
+    </Box>
+    );
   }
-}
 
+}
 
 
 
@@ -216,9 +111,7 @@ function RangeSlider() {
     }]  
 
   return (
-    <Box sx={{ width: 300 }}>
       <Slider
-        getAriaLabel={() => 'Temperature range'}
         value={value}
         onChange={handleChange}
         getAriaValueText={(a) => "valuetext"}
@@ -227,8 +120,26 @@ function RangeSlider() {
         valueLabelDisplay="auto"
         marks={marks}
       />
-    </Box>
   );
+}
+
+
+
+
+
+class NumberInputWithUnit extends React.Component {
+  render() {
+    const label = this.props.label;
+    const unit = this.props.unit;
+    const value = this.props.value;
+
+    return (
+      <div className={"number-input-with-unit-container"}>
+        <div>{label}:</div>
+        <input type="number" value={value}/>
+        <div>{unit}</div>
+      </div>);
+  }
 }
 
 
@@ -239,20 +150,24 @@ const root = ReactDOM.createRoot(
     document.getElementById('root')
 );
 root.render( (
-  <Group label="ddd">
-    <DynamicList data={[1,2,3]}>
-      <a><input type="file" /><RangeSlider
-        getAriaLabel={() => 'Temperature range'}
-        value={[5,7]}
-        min={0}
-        max={10}
-      />
-      </a>
-    </DynamicList>
-  </Group>
+  <Box sx={{width:'800px', marginLeft:'auto', marginRight:'auto'}}>
+    <Group label="Zu erkennende Objekte">
+      <DynamicList data={[1,2,3]}>
+        <ObjectBox />
+      </DynamicList>
+    </Group>
 
+    <Group label="Szene modellieren">
+      <Group label="Bereich, in dem alle Objekte erscheinen">
+        <NumberInputWithUnit label={"Länge in x-Richtung"} unit={"cm"} value={data.area_length_x} />
+        <NumberInputWithUnit label={"Länge in y-Richtung"} unit={"cm"} value={data.area_length_y} />
+      </Group>
+      <Group label="Kamera">
+        <NumberInputWithUnit label={"Höhe über Tisch"} unit={"cm"} value={data.camera_height} />
+      </Group>
+    </Group>
 
-
+  </Box>
 
 ));
 
