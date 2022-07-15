@@ -1,0 +1,611 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#"
+     xml:base="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Camera -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Camera">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Effect -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Effect">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FallingObject -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FallingObject">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FixedObject -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FixedObject">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Ground -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Ground">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Ground"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Label -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Label">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Light -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Light">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Light"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Model -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Model">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Multiplicity -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Multiplicity">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Object -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Object">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ObjectToRecognize -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ObjectToRecognize">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SegmentationLabel"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_RotationInfo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_RotationInfo">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Scaling -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Scaling">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Scaling"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Texture -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Texture">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Texture"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributedLocationInVolume"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MaximumInt -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MaximumInt">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumInt -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumInt">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_SegmentationType -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_SegmentationType">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SegmentationLabel"/>
+        <rdfs:range>
+            <rdfs:Datatype>
+                <owl:oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                        <rdf:first>SegmentClasses</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                <rdf:first>SegmentInstances</rdf:first>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </owl:oneOf>
+            </rdfs:Datatype>
+        </rdfs:range>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XCoordinate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XCoordinate">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YCoodinate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YCoodinate">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributedLocationInVolume -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributedLocationInVolume">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MaximumInt"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumInt"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRotationLookingAtVolume -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRotationLookingAtVolume">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Ground -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Ground"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Light -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Light"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RandomTexture -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RandomTexture">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Texture"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Scaling -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Scaling"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SegmentationLabel -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SegmentationLabel">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_SegmentationType"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_RotationInfo"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleFlyingDistractors -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleFlyingDistractors">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Multiplicity"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Light"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#LocationInfo"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Multiplicity"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Multiplicity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_RotationInfo"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RotationInfo"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Ground"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomNoise -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomNoise">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XCoordinate"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YCoodinate"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Texture -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Texture"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Volume"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
