@@ -4,7 +4,13 @@ import pathlib
 
 import sys
 
-sys.path.append("E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01")
+path = pathlib.Path(__file__).parent
+sys.path.append(str(path)) # works only with str()!
+# print("### In current sys.path ###")
+# for el in sys.path:
+#     print(el)
+# print("### ### ### ### ### ### ###")
+
 
 from addons.components.sd_generation import sdgen_base
 import addons.modules.example
@@ -13,10 +19,6 @@ import addons.modules.example
 # if __name__ == "__main__":
 #     print("lol")
 
-print("### In current sys.path ###")
-for el in sys.path:
-    print(el)
-print("### ### ### ### ### ### ###")
 
 
 
