@@ -394,7 +394,9 @@
 
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme">
+        <rdfs:label>GenerationScheme</rdfs:label>
+    </owl:Class>
     
 
 
