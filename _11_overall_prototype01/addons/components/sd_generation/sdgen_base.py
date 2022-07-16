@@ -1,9 +1,7 @@
+
 from owlready2 import *
-
-# path = "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
-
-
-# res = onto.search(type=onto.GenerationScheme)
+# import blenderproc as bproc
+# import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
 
 
 class SDGenerationManager():
@@ -11,7 +9,6 @@ class SDGenerationManager():
         pass
     def start(self):
         pass
-
 
 class SDGenerationHandler():
     def init(self, onto):
@@ -48,7 +45,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
                 el.iteration()
 
         # Clean up all handlers
-        for el in self.__handlers:
+        for el in reversed(self.__handlers):
             el.end(ontology)
 
         # Perhaps remove ontology-connection
@@ -56,6 +53,32 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
 
 
+class BlenderHandler(SDGenerationHandler):
+    def init(self, onto):
+        pass
+    def iteration(self):
+        pass
+    def end(self):
+        pass
+
+
+class SimpleVolumeHandler(SDGenerationHandler):
+    def __init__(self):
+        self.__onto = None
+
+    def init(self, onto):
+        # Save reference to ontology
+        self.__onto = onto.search(type=onto.GenerationScheme)
+
+        # Query all volumes directly connected to generation scheme
+
+        # Add the queried volumes to blender
+
+
+    def iteration(self):
+        pass
+    def end(self):
+        pass
 
 
 
