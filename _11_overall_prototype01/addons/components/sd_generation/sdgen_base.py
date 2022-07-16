@@ -1,73 +1,88 @@
 from owlready2 import *
 
-#path = "C:\Users\david\Git Repositories\MATSE-bachelorarbeit-ss22-tests\_10_ontologie_tests\ontologies"
-path = "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies"
-onto = get_ontology(f"file://{path}/sdgen_ontology_1.owl") # get_ontology("file://../../data/ontologies/sdgen_ontology_1.owl")
-onto.load()
+path = "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
+
+
+# res = onto.search(type=onto.GenerationScheme)
 
 
 
 
-with onto:
-    pass
+# for el in res:
+#     print("lol")
+#     print(el.__dict__)
+#     pass
 
-
-
-#for el in onto.classes():
-    #print(el)
-    #print(el.__dict__)
-
-
-test = onto.EGS1
-print(test)
-
-
-# res = list(default_world.sparql(""" SELECT (COUNT(?x) AS ?nb) { ?x a owl:Class . } """))
-# res = list(default_world.sparql(""" SELECT (COUNT(?x) AS ?nb) { ?x rdfs:label "GenerationScheme" . } """))
-# res = list(default_world.sparql(""" SELECT (COUNT(?x) AS ?nb) { ?x rdfs:subClassOf* "GenerationScheme" . } """))
-
-#res = list(default_world.sparql(""" SELECT ?x { ?x rdfs:subClassOf* "GenerationScheme" . } """))
-#res = list(default_world.sparql(""" SELECT ((?x) AS ?nbc) { ?x rdfs:subClassOf* "GenerationScheme" . } """))
-
-res = list(default_world.sparql("""
-           SELECT ?y
-           { ?y a "GenerationScheme" .}
-    """))
-
-# res = list(default_world.sparql("""
-#            SELECT ?y
-#            { ?y a owl:Class }
-#     """))
-
-
-res = list(default_world.sparql("""
-           SELECT ?y
-           { ?x rdfs:label "GenerationScheme" .
-             ?y a/rdfs:subClassOf* ?x }
-    """))
+# print(res[0].Has_Volume)
 
 
 
 
-# res = list(default_world.sparql("""
-#            SELECT ?y
-#            { ?x rdf:about "http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme" .
-#              ?y a/rdfs:subClassOf* ?x }
-#     """))
-# -> geht noch nicht. bislang ist einzige Option die ich sehe überall label hinzufügen (oder weiter suchen, wie mit Namen finden kann)
+class SDGenerationManager():
+    def add(self):
+        pass
+    def start(self):
+        pass
 
 
-res = onto.search(type=onto.GenerationScheme)
+class SDGenerationHandler():
+    def init(self, onto):
+        pass
+    def iteration(self):
+        pass
+    def end(self):
+        pass
 
 
-print(res)
 
-for el in res:
-    print("lol")
-    print(el.__dict__)
-    pass
 
-print(res[0].Has_Volume)
+class SimpleSDGenerationManager(SDGenerationManager):
+    def __init__(self, path_to_ontology):
+        self.__handlers: list[SDGenerationHandler] = []
+        self.__path_to_ontology: str = path_to_ontology
+
+    def add(self, handler: SDGenerationHandler):
+        self.__handlers += handler
+
+    def start(self, number_of_images, target_path):
+        # Load ontology
+        ontology = get_ontology(self.__path_to_ontology).load()
+
+        # Set up all handlers
+        for el in self.__handlers:
+            el.init(ontology)
+
+        # Do the iteration
+        for i in range(number_of_images):
+            for el in self.__handlers:
+                el.iteration()
+
+        # Clean up all handlers
+        for el in self.__handlers:
+            el.end(ontology)
+
+        # Perhaps remove ontology-connection
+        pass
+
+
+
+
+
+
+
+
+# 1. Bereiche hinzufügen
+
+
+
+# Boden hinzufügen
+
+
+# 
+
+
+
+
 
 
 
