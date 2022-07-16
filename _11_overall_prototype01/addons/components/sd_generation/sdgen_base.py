@@ -1,21 +1,9 @@
 from owlready2 import *
 
-path = "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
+# path = "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
 
 
 # res = onto.search(type=onto.GenerationScheme)
-
-
-
-
-# for el in res:
-#     print("lol")
-#     print(el.__dict__)
-#     pass
-
-# print(res[0].Has_Volume)
-
-
 
 
 class SDGenerationManager():
@@ -47,6 +35,8 @@ class SimpleSDGenerationManager(SDGenerationManager):
     def start(self, number_of_images, target_path):
         # Load ontology
         ontology = get_ontology(self.__path_to_ontology).load()
+
+        # print(list(ontology.classes())) # -> klappt aktuell ==>  Später so etwas in Art zu Tests hinzufügen?
 
         # Set up all handlers
         for el in self.__handlers:

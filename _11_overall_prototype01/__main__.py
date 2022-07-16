@@ -4,7 +4,7 @@ import pathlib
 
 
 from addons.components.sd_generation import sdgen_base
-
+import addons.modules.example
 
 
 # if __name__ == "__main__":
@@ -15,12 +15,16 @@ path = pathlib.Path(__file__).parent.resolve() / "data/ontologies/" # "C:/Users/
 path = path / "sdgen_ontology_1.owl"
 path = f"file://{path}"
 print(path)
-test = sdgen_base.SimpleSDGenerationManager(path)
+# test = sdgen_base.SimpleSDGenerationManager(path)
 
-#test.start()
+# test.start(100, "")
 
-print (pathlib.Path(__file__).parent.resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01 # --> das ist, was wollen
-print(pathlib.Path().resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests
+test = addons.modules.example.SDGenExampleModule()
+test.onto_to_sd(path)
+
+
+# print(pathlib.Path(__file__).parent.resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01 # --> das ist, was wollen
+# print(pathlib.Path().resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests
 
 
 
