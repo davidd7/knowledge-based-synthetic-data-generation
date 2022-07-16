@@ -4,8 +4,15 @@ import pathlib
 
 import sys
 
-path = pathlib.Path(__file__).parent
-sys.path.append(str(path)) # works only with str()!
+state = "blender_run"
+state = "blender_debug"
+
+if state == "blender_run":
+    path = pathlib.Path(__file__).parent
+    sys.path.append(str(path)) # works only with str()!
+elif state == "blender_debug":
+    sys.path.append("E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01") # Das ist doch nötig, wenn man blenderproc mit debug-Argument aufruft
+
 # print("### In current sys.path ###")
 # for el in sys.path:
 #     print(el)
@@ -15,15 +22,11 @@ sys.path.append(str(path)) # works only with str()!
 from addons.components.sd_generation import sdgen_base
 import addons.modules.example
 
+path = pathlib.Path(__file__).parent.resolve() # "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
+if state == "blender_debug":
+    path = pathlib.Path("E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01")
+path = path / "data/ontologies/"
 
-# if __name__ == "__main__":
-#     print("lol")
-
-
-
-
-
-path = pathlib.Path(__file__).parent.resolve() / "data/ontologies/" # "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
 path = path / "sdgen_ontology_1.owl"
 path = f"file://{path}"
 print(path)
@@ -33,10 +36,6 @@ print(path)
 
 test = addons.modules.example.SDGenExampleModule()
 test.onto_to_sd(path)
-
-
-# print(pathlib.Path(__file__).parent.resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01 # --> das ist, was wollen
-# print(pathlib.Path().resolve()) # -> E:\...\MATSE-bachelorarbeit-ss22-tests
 
 
 
