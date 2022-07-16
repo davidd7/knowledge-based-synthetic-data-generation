@@ -22,6 +22,10 @@ class SDGenExampleModule(SDGenBaseModule):
             sdgen_base.SimpleVolumeHandler()
         )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleObjectHandler()
+        )
+
 
 
         sd_generation_manager.start(100, "")

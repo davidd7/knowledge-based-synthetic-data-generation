@@ -43,10 +43,10 @@ def create_area(x=None, y=None, z=None,
                 keys=[]):
     test = bproc.object.create_primitive(shape="CUBE")
     # Cube ist standardmäßig 2m x 2m x 2m groß. Scale von 10 in einer Richtung führt also zu 20m Länge in dieser Richtung
-    test.set_scale([x_length/2/100, y_length/2/100, z_length/2/100])
+    test.set_scale([x_length/2, y_length/2, z_length/2])
 
     # location bezieht auf Mittelpunkt des Objektes. Das ist für Modelle ggf. oft cool, für Rechteck wär aber auch cool genau ausmessen zu können, weswegen anpassen werde
-    test.set_location([x + x_length/2/100,  y + y_length/2/100,  z + z_length/2/100])
+    test.set_location([x + x_length/2,  y + y_length/2,  z + z_length/2])
 
     test.hide(True)
 

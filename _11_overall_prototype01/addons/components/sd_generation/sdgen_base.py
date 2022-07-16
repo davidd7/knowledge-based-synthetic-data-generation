@@ -78,18 +78,11 @@ class SimpleVolumeHandler(SDGenerationHandler):
         for volume in self.__generation_scheme_instance.Has_Volume: #onto.search(iri = list(self.__generation_scheme_instance.Has_Volume)): #    self.__generation_scheme_instance.Has_Volume: #onto.search(self.__generation_scheme_instance.Has_Volume, type=onto.Volume):
             if not onto.SimpleVolume in volume.is_a: # wär natürlich schöner direkt in Abfrage, aber das kriege mit bisherirgen sparql-Kenntnissen nicht hin (mit search kriege ggf über Schnittmenge der Ergebnis-Lsiten aus 2 Search-Abfragen hin, aber das wär denke icha uch nicht viel besser)
                 continue
-            print("-->" + str(volume.__dict__))
-            print(volume.Has_XCoordinate[0])
-            print(volume.Has_XLength[0])
-            print(volume.Has_YCoordinate[0])
-            print(volume.Has_YLength[0])
-            print(volume.Has_ZCoordinate[0])
             created_volume = create_area(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
                                          x_length=volume.Has_XLength[0], y_length=volume.Has_XLength[0], z_length=0)
             volume.bp_reference = created_volume
 
         # Add the queried volumes to blender
-
 
     def iteration(self):
         pass
@@ -98,6 +91,46 @@ class SimpleVolumeHandler(SDGenerationHandler):
 
 
 
+class SimpleObjectHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance):
+        # Save reference to ontology
+        self.__onto = onto
+        self.__generation_scheme_instance = generation_scheme_instance
+
+        # 1. Query all objects
+        for object in self.__generation_scheme_instance.Has_Object: #intersection(self.__generation_scheme_instance.Has_Object, onto.SimpleObject): # <- gibt aktuell noch kein SiomlesObject in Onto
+            create_objects(obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
+
+
+        # 2. Add all objects to scene
+
+
+        # 3. Instantiate LocationInfo- and RotationInfo-Handlers
+
+
+
+    def iteration(self):
+        pass
+    def end(self, onto):
+        pass
+
+
+class SimpleLocationHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance):
+        pass
+    def iteration(self):
+        pass
+    def end(self, onto):
+        pass
+
+
+class SimpleRotationHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance):
+        pass
+    def iteration(self):
+        pass
+    def end(self, onto):
+        pass
 
 
 # 1. Bereiche hinzufügen
@@ -140,6 +173,49 @@ def create_area(x=None, y=None, z=None,
     test.hide(True)
 
     return test
+
+
+
+
+
+
+
+def intersection(lst1, lst2): # from https://www.geeksforgeeks.org/python-intersection-two-lists/
+    # Use of hybrid method
+    temp = set(lst2)
+    lst3 = [value for value in lst1 if value in temp]
+    return lst3
+
+
+
+
+
+
+def create_objects(obj, how_many=1):
+    res = []
+
+    for i in range(how_many):
+        #mesh = bproc.loader.load_obj("E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01\\data\\ontologies\\media\\" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
+        mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
+        # mesh[0].set_location(0,0,0)
+        # mesh.get_material().
+
+        print(mesh)
+
+        #mat = mesh[0].get_materials()[0]
+        mat = mesh[0].new_material()
+        mat.set_principled_shader_value(
+            "Metallic", np.random.uniform(0.0, 0.0))
+        mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
+        print(mat)
+
+        res += mesh # note: this works only, because mesh is a list (containing only the 1 created mesh)
+
+    return res
+
+
+
+
 
 
 
