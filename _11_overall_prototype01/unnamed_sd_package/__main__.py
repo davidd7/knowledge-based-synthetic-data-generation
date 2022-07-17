@@ -24,9 +24,8 @@ def get_path_to_package():
 import unnamed_sd_package.addons.modules.example
 
 
-if __name__ == "__main__":
-    print("start")
 
+def generate_data():
     # Get path to ontology
     path_to_ontology = get_path_to_package() / "data/ontologies/"
     path_to_ontology = path_to_ontology / "sdgen_ontology_1.owl"
@@ -37,8 +36,22 @@ if __name__ == "__main__":
     path_where_to_save_result = path_where_to_save_result / "1/"
 
     # Start the (example) module for data generation
-    example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()
-    example_module.onto_to_sd(path_to_ontology, path_where_to_save_result)
+    #example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()
+    #example_module.onto_to_sd(path_to_ontology, path_where_to_save_result)
+    unnamed_sd_package.addons.modules.example.SDGenExampleModule.onto_to_sd(path_to_ontology, path_where_to_save_result)
+
+
+def start_json_to_onto():
+    # Get path to ontology
+    path_to_ontology_input = f'file://{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_in.owl" }'
+    path_to_ontology_output = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_out.owl" }'
+    unnamed_sd_package.addons.modules.example.SDGenExampleModule.json_to_onto(path_to_ontology_input, path_to_ontology_output)
+
+
+if __name__ == "__main__":
+    print("start")
+
+    start_json_to_onto()
 
     print("end")
 
