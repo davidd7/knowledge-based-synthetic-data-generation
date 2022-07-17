@@ -9,24 +9,26 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 
-
 class SDGenerationManager():
     def __init__(self, path_to_ontology, generation_scheme_instance_label):
         pass
+
     def add(self):
         pass
+
     def start(self):
         pass
+
 
 class SDGenerationHandler():
     def init(self, onto, generation_scheme_instance, manager):
         pass
+
     def iteration(self):
         pass
+
     def end(self, onto):
         pass
-
-
 
 
 class SimpleSDGenerationManager(SDGenerationManager):
@@ -35,20 +37,19 @@ class SimpleSDGenerationManager(SDGenerationManager):
         self.__handlers_iteration_normal: list[SDGenerationHandler] = []
         self.__handlers_iteration_end: list[SDGenerationHandler] = []
         self.__path_to_ontology: str = path_to_ontology
-        self.__generation_scheme_instance_label = generation_scheme_instance_label
+        self.__generation_scheme_instance_label: str = generation_scheme_instance_label
 
     def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
-        self.__handlers_all += [handler]
+        self.__handlers_all.append(handler)
         if not at_end_of_iteration:
-            self.__handlers_iteration_normal += [handler]
+            self.__handlers_iteration_normal.append(handler)
         else:
-            self.__handlers_iteration_end += [handler]
-
+            self.__handlers_iteration_end.append(handler)
 
     def start(self, number_of_images, target_path):
-        # Load ontology
+        # Load ontology (note: ontology is not closed or anything at the end at the moment)
         ontology = get_ontology(self.__path_to_ontology).load()
-        generation_scheme_instance = list(ontology.search(label = self.__generation_scheme_instance_label))[0] # Error wenn keines finde hoffentlich
+        generation_scheme_instance = list(ontology.search(label=self.__generation_scheme_instance_label))[0]  # Error wenn keines finde hoffentlich
 
         # Set up all handlers
         for el in self.__handlers_all:
@@ -65,50 +66,53 @@ class SimpleSDGenerationManager(SDGenerationManager):
         for el in reversed(self.__handlers_all):
             el.end(ontology)
 
-        # Perhaps remove ontology-connection
-        pass
-
 
 
 class BlenderHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager):
         bproc.init()
+
     def iteration(self):
         pass
+
     def end(self, onto):
         pass
 
 
-class RealImageRenderingHandler(SDGenerationHandler):
-    def __init__(self, outf):
-        # Set up target folder
-        self.__outf = outf
-        if os.path.isdir(self.__outf):
-            print(f'folder {self.__outf}/ exists')
+
+
+class Utility():
+    def create_folder_if_not_exists(path):
+        if os.path.isdir(path):
+            print(f'folder {path}/ exists')
         else:
-            os.mkdir(self.__outf)
-            print(f'created folder {self.__outf}/')
+            os.mkdir(path)
+            print(f'created folder {path}/')
+
+
+class RealImageRenderingHandler(SDGenerationHandler):
+    def __init__(self, path_where_to_save_result):
+        # Set up target folder
+        self.__outf = path_where_to_save_result
+        Utility.create_folder_if_not_exists(path_where_to_save_result)
 
         # Set up counter for naming images
-        self.__i = 0
+        self.__generation_index = 0
 
     def init(self, onto, generation_scheme_instance, manager):
         self.__generation_scheme_instance = generation_scheme_instance
-        pass
 
     def iteration(self):
         data = bproc.renderer.render()
         data_image = data["colors"]  # + data["instance_segmaps"]
         data_image = np.array(data_image)
 
-        img = None
-
         # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
-        for num, single_image in enumerate(data_image):
+        for keyframe, single_image in enumerate(data_image):
             img = Image.fromarray(single_image.astype('uint8'), 'RGB')
-            img.save(f"{self.__outf}/{self.__i}_{num}.png", "PNG")
+            img.save(f"{self.__outf}/{self.__generation_index}_{keyframe}.png", "PNG")
 
-        self.__i += 1
+        self.__generation_index += 1
 
         self.__generation_scheme_instance.temp_data = data
 
@@ -118,86 +122,82 @@ class RealImageRenderingHandler(SDGenerationHandler):
 
 
 
+class SimpleSegmentationLabelHandler(SDGenerationHandler):
+    """
+    Classes for when Has_SegmentType is "SegmentClasses" are set automatically based on to which Object individual a ObjectToRecognize belongs (remember: one Object individual are multiple blender objects (with the same model), when multiplicity is > 1). 
+    """
 
-
-
-
-class SegmentationLabelHandler(SDGenerationHandler):
-    def __init__(self, outf):
+    def __init__(self, path_where_to_save_result):
         # Set up target folder
-        self.__outf = outf
-        if os.path.isdir(self.__outf):
-            print(f'folder {self.__outf}/ exists')
-        else:
-            os.mkdir(self.__outf)
-            print(f'created folder {self.__outf}/')
+        self.path_where_to_save_result = path_where_to_save_result
+        Utility.create_folder_if_not_exists(path_where_to_save_result)
 
-        # Set up counter for naming images
-        self.__i = 0
-
-        self.__label_type = None
+        # Set up counter for naming images and list of label types
+        self.__generation_index = 0
+        self.__label_type = []
 
     def init(self, onto, generation_scheme_instance, manager):
+        # Remember generation scheme instance for later
         self.__generation_scheme_instance = generation_scheme_instance
 
+        # Query ontology for segmentationLabel individuals. End method if there is no segmentationLabel individual (because there's nothing to do for this handler then)
         segmentation_label_individuals = intersection(self.__generation_scheme_instance.Has_Label, onto.search(is_a=onto.SegmentationLabel))
-        print(segmentation_label_individuals)
         seg_individual = segmentation_label_individuals
         if len(seg_individual) == 0:
             return
-        else:
-            seg_individual = seg_individual[0] # Gehe davon aus, dass nur max. 1 segmentation-Individual gibt (mehr auf einmal aktuell nicht unterstützt)
 
-        for i, object in enumerate(seg_individual.Has_ObjectToRecognize): # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse) # Gibt meistens nur 1 segmantation-label, sodass hier nicht wirklich 3-fache for-Schleife ist. Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
+        seg_individual = seg_individual[0] # Assumption: There is at most 1 segmentation individual (rendering multiple segmentation individuals at once is not supported at the moment)
+
+        for i, object in enumerate(seg_individual.Has_ObjectToRecognize):  # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse)  Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
             for blender_object in object.bp_reference:
-                blender_object.set_cp("category_id", i + 1) #-> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
+                # -> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
+                blender_object.set_cp("category_id", i + 1)
 
         self.__label_type = seg_individual.Has_SegmentationType
 
     def iteration(self):
         data = self.__generation_scheme_instance.temp_data
 
+        # Find out which types of segmentation label(s) should be rendered
         map_by = []
         if "SegmentClasses" in self.__label_type:
             map_by.append("class")
         if "SegmentInstances" in self.__label_type:
             map_by.append("instance")
-        
-        data.update(bproc.renderer.render_segmap(map_by=map_by)) # render segmentation
-        
-        for el in map_by:
-            data_image = data[el + "_segmaps"] # "instance_segmaps" or "class_segmaps"
+
+        # Render segmentation label(s) for current image
+        data.update(bproc.renderer.render_segmap(map_by=map_by))
+
+        # Save rendered images in files
+        for label_type in map_by:
+            # "instance_segmaps" or "class_segmaps"
+            data_image = data[label_type + "_segmaps"]
 
             # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
-            for num, single_image in enumerate(data_image):
+            for keyframe, single_image in enumerate(data_image):
+                # Save image for label
                 img = Image.fromarray(single_image.astype('uint8'), None)
-                img.save(f"{self.__outf}/{self.__i}_{num}_{el}.png", "PNG")
+                img.save(f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}.png", "PNG")
 
+                # Save a second image highlighting the label for human eyes
                 plt.figure()
-                plt.subplot(1, 2, 1)
-                plt.imshow(data_image[0], 'jet', interpolation='none') # alt. zu gray: jet; ggf. kann über echtes Bild drübermalen mit #plt.imshow(masked, 'jet', interpolation='none', alpha=0.7) ? :p
-                plt.subplot(1, 2, 2)
-                plt.show()
-                plt.savefig(f"{self.__outf}/{self.__i}_{num}_{el}_visualization.png")
+                plt.subplot(1, 1, 1)
+                plt.imshow(data_image[0], 'jet', interpolation='none')
+                plt.savefig(
+                    f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}_visualization.png")
 
-        self.__i += 1
-
+        self.__generation_index += 1
 
     def end(self, onto):
         pass
 
 
-
-
-
 class SimpleVolumeHandler(SDGenerationHandler):
     def __init__(self, special_root=None):
-        self.__onto = None
         self.__special_root = special_root
 
     def init(self, onto, generation_scheme_instance, manager):
         # Save reference to ontology
-        self.__onto = onto
         self.__generation_scheme_instance = generation_scheme_instance
 
         if self.__special_root is None:
@@ -205,36 +205,30 @@ class SimpleVolumeHandler(SDGenerationHandler):
         else:
             root_node = self.__special_root
 
-        # Query all volumes directly connected to generation scheme
-        #print(self.__generation_scheme_instance.Has_Volume)
-        for volume in root_node.Has_Volume: #onto.search(iri = list(self.__generation_scheme_instance.Has_Volume)): #    self.__generation_scheme_instance.Has_Volume: #onto.search(self.__generation_scheme_instance.Has_Volume, type=onto.Volume):
-            if not onto.SimpleVolume in volume.is_a: # wär natürlich schöner direkt in Abfrage, aber das kriege mit bisherirgen sparql-Kenntnissen nicht hin (mit search kriege ggf über Schnittmenge der Ergebnis-Lsiten aus 2 Search-Abfragen hin, aber das wär denke icha uch nicht viel besser)
-                continue
-            created_volume = create_area(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
+        # Query all volumes directly connected to generation scheme and add them to blender
+        for volume in intersection( root_node.Has_Volume, onto.search(is_a=onto.SimpleVolume) ):
+            created_volume = create_blender_volume(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
                                          x_length=volume.Has_XLength[0], y_length=volume.Has_XLength[0], z_length=0)
             volume.bp_reference = created_volume
 
-        # Add the queried volumes to blender
-
     def iteration(self):
         pass
+
     def end(self, onto):
         pass
-
 
 
 class SimpleObjectHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
         # Save reference to ontology
-        self.__onto = onto
         self.__generation_scheme_instance = generation_scheme_instance
 
-        # 1. Query all objects
-        res = self.__generation_scheme_instance.Has_Object #intersection(self.__generation_scheme_instance.Has_Object, onto.SimpleObject): # <- gibt aktuell noch kein SiomlesObject in Onto
-
-        # 2. Add all objects to scene
+        # 1. Query and iterate over all objects
+        res = self.__generation_scheme_instance.Has_Object # There's no SimpleObject class in ontology yet so getting all Objects with Has_Object is enough
         for object in res:
-            res_objects = create_objects(obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
+            # Add object to blender
+            res_objects = create_objects(
+                obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
             object.bp_reference = res_objects
 
             # 3. Instantiate LocationInfo- and RotationInfo-Handlers
@@ -250,59 +244,58 @@ class SimpleObjectHandler(SDGenerationHandler):
 
     def iteration(self):
         pass
+
     def end(self, onto):
         pass
 
 
 
+class BlenderCameraWrapper():
+    """
+    Makes camera methods available in a way similar to how objects are manipulated. The camera is normally manipulated differently in blender, but it's advantageous to be able to change location/rotation of camera and objects in a similar way.
+    """
+    def set_location(self, location):
+        # Set first camera pose (= first key frame)
+        cam_pose = bproc.math.build_transformation_mat(location, [
+                                                        0, 0, 0])
+        # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
+        bproc.camera.add_camera_pose(cam_pose, frame=0)
+
+    def set_local2world_mat(self, matrix):
+        bproc.camera.add_camera_pose(matrix, frame=0)
+
+    def get_location(self):
+        matrix = bproc.camera.get_camera_pose(frame=0)
+        translation = matrix[0:3, 3]
+        return translation
+
+
+
 class SimpleCameraHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
-        # Save reference to ontology
-        self.__onto = onto
+        # Save reference to root
         self.__generation_scheme_instance = generation_scheme_instance
 
-        # 1. Query the SimpleCamera-individual (there should only be one)
-        cameras = intersection(self.__generation_scheme_instance.Has_Camera , onto.search(is_a=onto.SimpleCamera)) # (Eig. kann in blenderproc nur 1 Kanera geben und mehrere wären mehrere Frames)
+        # Query the SimpleCamera-individual (there should only be one)
+        cameras = intersection(
+            self.__generation_scheme_instance.Has_Camera, onto.search(is_a=onto.SimpleCamera))
         camera = cameras[0]
 
-        class BlenderCameraWrapper():
-            def set_location(self, location):
-                # print("It's me, Camera Wrapper!")
-                # print(location)
-                # print(b)
-                # Set first camera pose (= first key frame)
-                cam_pose = bproc.math.build_transformation_mat( location, [0, 0, 0] )
-                bproc.camera.add_camera_pose(cam_pose, frame=0) # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
-            # def set_rotation_euler(self, rotation): # TODO: Ich glaube dass das nicht echt euler ist!
-            #     # Set first camera pose (= first key frame)
-            #     cam_pose = bproc.math.build_transformation_mat( self.get_location(), rotation )
-            #     bproc.camera.add_camera_pose(cam_pose, frame=0)
-                pass
-            def set_local2world_mat(self, matrix):
-                bproc.camera.add_camera_pose(matrix, frame=0)
-            def get_location(self):
-                matrix = bproc.camera.get_camera_pose(frame=0)
-                translation = matrix[0:3, 3]#.reshape((-1,1))
-                #translation = 
-                print(matrix)
-                print(translation)
-                
-                return translation
-
-
+        # Add reference to CameraWrapper
         camera.bp_reference = [BlenderCameraWrapper()]
 
-        # 3. Instantiate LocationInfo- and RotationInfo-Handlers
-        print(camera.__dict__)
+        # Instantiate LocationInfo- and RotationInfo-Handlers
         manager.add(
             SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
         )
         manager.add(
-            SimpleRotationLookingAtVolumeHandler(camera, camera.Has_RotationInfo[0])
+            SimpleRotationLookingAtVolumeHandler(
+                camera, camera.Has_RotationInfo[0])
         )
 
     def iteration(self):
         pass
+
     def end(self, onto):
         pass
 
@@ -316,9 +309,11 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
         pass
 
     def iteration(self):
-        number = random.randint(self.__individual.Has_MinimumInt[0], self.__individual.Has_MaximumInt[0])
+        number = random.randint(
+            self.__individual.Has_MinimumInt[0], self.__individual.Has_MaximumInt[0])
 
-        for count, el in enumerate(self.__handled_object.bp_reference): # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+        # Iterate over all blender objects accosiated with this object individual. Show and hide the randomly chosen number of objects
+        for count, el in enumerate(self.__handled_object.bp_reference):
             if count < number:
                 el.hide(False)
             else:
@@ -337,11 +332,13 @@ class SimpleLocationHandler(SDGenerationHandler):
         pass
 
     def iteration(self):
-        for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+        # Iterate over all blender objects accosiated with this object individual
+        for blender_object in self.__handled_object.bp_reference:
             location = bproc.sampler.upper_region(
-                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
-                min_height=0, max_height=0) # sobald z_length gibt, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
-            el2.set_location(location)
+                objects_to_sample_on=[
+                    self.__individual.Has_Volume[0].bp_reference],
+                min_height=0, max_height=0)  # sobald z_length gibt, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
+            blender_object.set_location(location)
 
     def end(self, onto):
         pass
@@ -350,15 +347,15 @@ class SimpleLocationHandler(SDGenerationHandler):
 class SimpleRotationHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):
         self.__handled_object = handled_object
-        self.__individual = individual
-        
+
     def init(self, onto, generation_scheme_instance, manager):
         pass
 
     def iteration(self):
-        for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+        # Iterate over all blender objects accosiated with this object individual
+        for blender_object in self.__handled_object.bp_reference:
             rotation = bproc.sampler.uniformSO3(True, True, True)
-            el2.set_rotation_euler(rotation)
+            blender_object.set_rotation_euler(rotation)
 
     def end(self, onto):
         pass
@@ -368,113 +365,78 @@ class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):
         self.__handled_object = handled_object
         self.__individual = individual
-        
+
     def init(self, onto, generation_scheme_instance, manager):
+        # Add another volumeHandler, because volume where to look at may only be referenced through this individual
         manager.add(
             SimpleVolumeHandler(special_root=self.__individual)
         )
         pass
 
     def iteration(self):
-        # Get position of object and random psotion to look at
+        # Get position of object and random position to look at
         origin = self.__handled_object.bp_reference[0].get_location()
         target = bproc.sampler.upper_region(
-                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
-                min_height=0, max_height=0) # <- Kandidat für in eigene Helper-Fkt., um DRY zu erfüllen später (so mit height immer passend wählen - sofern überhaupot noch Objekte in Blender als Hilfen verwenden möchte zum samplen anstatt selbst zu machen)
-        
-        print(origin)
-        print(target)
-
+            objects_to_sample_on=[
+                self.__individual.Has_Volume[0].bp_reference],
+            min_height=0, max_height=0)
+            
         # Calculate and set rotation
-        rotation_matrix = bproc.camera.rotation_from_forward_vec(target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
+        rotation_matrix = bproc.camera.rotation_from_forward_vec(
+            target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
         # Add homog cam pose based on location an rotation
-        print(f"rotation matrix: {rotation_matrix}")
-        cam2world_matrix = bproc.math.build_transformation_mat(origin, rotation_matrix)
-        print( cam2world_matrix )
-        self.__handled_object.bp_reference[0].set_local2world_mat(cam2world_matrix) # Begriff set_local2world_mat von blenderproc gebort, hoffe dass passt
-
-
-        # for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
-        #     rotation = bproc.sampler.uniformSO3(True, True, True)
-        #     el2.set_rotation_euler(rotation)
+        cam2world_matrix = bproc.math.build_transformation_mat(
+            origin, rotation_matrix)
+        self.__handled_object.bp_reference[0].set_local2world_mat(
+            cam2world_matrix)
 
     def end(self, onto):
         pass
 
 
-
-
-
-
-
 def create_rectangular_cuboid(x=None, y=None, z=None,
                               x_length=None, y_length=None, z_length=None):
-    rect_cuboid = bproc.object.create_primitive(shape="CUBE")
-    rect_cuboid.set_scale([x_length/2, y_length/2, z_length/2])
-    rect_cuboid.set_location(
-        [x + x_length/2,  y + y_length/2,  z + z_length/2])
-    return rect_cuboid
-
-
-def create_area(x=None, y=None, z=None,
-                x_length=None, y_length=None, z_length=None):
-    test = bproc.object.create_primitive(shape="CUBE")
+    """
+    x, y, z, x_length, y_length, z_length should all be given in Millimeters (mm)
+    """
+    blender_object = bproc.object.create_primitive(shape="CUBE")
     # Cube ist standardmäßig 2m x 2m x 2m groß. Scale von 10 in einer Richtung führt also zu 20m Länge in dieser Richtung
-    test.set_scale([x_length/2/1000, y_length/2/1000, z_length/2/1000])
-
-    # location bezieht auf Mittelpunkt des Objektes. Das ist für Modelle ggf. oft cool, für Rechteck wär aber auch cool genau ausmessen zu können, weswegen anpassen werde
-
-    print(f"z = {z}")
-    print(f"z_length = {z_length}")
-
-    test.set_location([x/1000 + x_length/2/1000,  y/1000 + y_length/2/1000,  z/1000 + z_length/2/1000])
-
-    test.hide(True)
-
-    return test
+    blender_object.set_scale([x_length/2/1000, y_length/2/1000, z_length/2/1000])
+    blender_object.set_location([x/1000 + x_length/2/1000,  y/1000 +
+                      y_length/2/1000,  z/1000 + z_length/2/1000]) # location bezieht auf Mittelpunkt des Objektes. Das ist für Modelle ggf. oft cool, für Rechteck wär aber auch cool genau ausmessen zu können, weswegen anpassen werde
+    return blender_object
 
 
+def create_blender_volume(x=None, y=None, z=None,
+                x_length=None, y_length=None, z_length=None):
+    blender_object = create_rectangular_cuboid(x, y, z, x_length, y_length, z_length)
+    blender_object.hide(True) # volumes should not be visible in rendering
+    return blender_object
 
 
-
-
-
-def intersection(lst1, lst2): # from https://www.geeksforgeeks.org/python-intersection-two-lists/
+def intersection(lst1, lst2):  # from https://www.geeksforgeeks.org/python-intersection-two-lists/
     # Use of hybrid method
     temp = set(lst2)
     lst3 = [value for value in lst1 if value in temp]
     return lst3
 
 
-
-
-
-
 def create_objects(obj, how_many=1):
     res = []
 
     for i in range(how_many):
-        mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
+        # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
+        mesh = bproc.loader.load_obj(
+            "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj)
         # mesh.get_material().
 
         #mat = mesh[0].get_materials()[0]
         mat = mesh[0].new_material(name="test_material")
         mat.set_principled_shader_value(
-            "Metallic", np.random.uniform(0.0, 0.0))
+            "Metallic", np.random.uniform(1.0, 1.0))
         mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
-        print(mat)
+        mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
 
-        res += mesh # note: this works only, because mesh is a list (containing only the 1 created mesh)
+        res += mesh # works only because mesh is a list (containing only the 1 created mesh)
 
     return res
-
-
-
-
-
-
-
-
-
-
-

@@ -36,7 +36,7 @@ class SDGenExampleModule(SDGenBaseModule):
         )
 
         sd_generation_manager.add(
-            sdgen_base.SegmentationLabelHandler(path_where_to_save_result),
+            sdgen_base.SimpleSegmentationLabelHandler(path_where_to_save_result),
             at_end_of_iteration=True
         )
 
