@@ -1,4 +1,3 @@
-
 from owlready2 import *
 import blenderproc as bproc
 import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
@@ -7,6 +6,24 @@ import random
 import os
 from PIL import Image
 import matplotlib.pyplot as plt
+import pathlib
+ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
+def get_path_to_package():
+    """
+    Returns path object containing the path that should lead to the root of this package
+    """
+    if MODE == "":
+        return pathlib.Path(__file__).parent.resolve()
+    elif MODE == "bp_run" or MODE == "bp_debug":
+        return pathlib.Path(ABSOLUTE_PATH_TO_PACKAGE) / "unnamed_sd_package"
+#from unnamed_sd_package import get_path_to_package
+
+
+#get_path_to_package()
+
+#import 
+
 
 
 class SDGenerationManager():
@@ -48,7 +65,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self, number_of_images, target_path):
         # Load ontology (note: ontology is not closed or anything at the end at the moment)
-        ontology = get_ontology(self.__path_to_ontology).load()
+        ontology = get_ontology(self.__path_to_ontology).load() # World().get_ontology(... hat Probleme auch nicht gelöst
         generation_scheme_instance = list(ontology.search(label=self.__generation_scheme_instance_label))[0]  # Error wenn keines finde hoffentlich
 
         # Set up all handlers
@@ -88,6 +105,13 @@ class Utility():
         else:
             os.mkdir(path)
             print(f'created folder {path}/')
+
+    def print_syspath():
+        import sys
+        print("### In current sys.path ###")
+        for el in sys.path:
+            print(el)
+        print("### ### ### ### ### ### ###")
 
 
 class RealImageRenderingHandler(SDGenerationHandler):
@@ -313,6 +337,7 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
             self.__individual.Has_MinimumInt[0], self.__individual.Has_MaximumInt[0])
 
         # Iterate over all blender objects accosiated with this object individual. Show and hide the randomly chosen number of objects
+        print(self.__handled_object.bp_reference)
         for count, el in enumerate(self.__handled_object.bp_reference):
             if count < number:
                 el.hide(False)
@@ -427,7 +452,7 @@ def create_objects(obj, how_many=1):
     for i in range(how_many):
         # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
         mesh = bproc.loader.load_obj(
-            "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj)
+            str(get_path_to_package() / "data/ontologies/" / obj))
         # mesh.get_material().
 
         #mat = mesh[0].get_materials()[0]

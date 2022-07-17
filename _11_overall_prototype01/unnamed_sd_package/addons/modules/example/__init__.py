@@ -1,13 +1,10 @@
 
-#import 
-from addons.components.sd_generation import sdgen_base
+from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 
 
 class SDGenBaseModule():
-    def onto_to_sd():
+    def onto_to_sd(self, path_to_onto, path_where_to_save_result):
         pass
-
-
 
 
 class SDGenExampleModule(SDGenBaseModule):
@@ -39,7 +36,6 @@ class SDGenExampleModule(SDGenBaseModule):
             sdgen_base.SimpleSegmentationLabelHandler(path_where_to_save_result),
             at_end_of_iteration=True
         )
-
 
         sd_generation_manager.start(5, path_where_to_save_result)
 
