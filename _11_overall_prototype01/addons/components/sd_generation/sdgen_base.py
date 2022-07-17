@@ -135,41 +135,50 @@ class SegmentationLabelHandler(SDGenerationHandler):
         # Set up counter for naming images
         self.__i = 0
 
+        self.__label_type = None
+
     def init(self, onto, generation_scheme_instance, manager):
         self.__generation_scheme_instance = generation_scheme_instance
 
         segmentation_label_individuals = intersection(self.__generation_scheme_instance.Has_Label, onto.search(is_a=onto.SegmentationLabel))
         print(segmentation_label_individuals)
-        for seg_individual in segmentation_label_individuals: # Gibt meistens nur 1 segmantation-label, sodass hier nicht wirklich 3-fache for-Schleife ist. Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
-            for i, object in enumerate(seg_individual.Has_ObjectToRecognize): # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse)
-                for blender_object in object.bp_reference:
-                    #print("LOOOOOL")
-                    blender_object.set_cp("category_id", i + 1) #-> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
-            pass
-        
-        #exit()
-        pass
+        seg_individual = segmentation_label_individuals
+        if len(seg_individual) == 0:
+            return
+        else:
+            seg_individual = seg_individual[0] # Gehe davon aus, dass nur max. 1 segmentation-Individual gibt (mehr auf einmal aktuell nicht unterstützt)
+
+        for i, object in enumerate(seg_individual.Has_ObjectToRecognize): # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse) # Gibt meistens nur 1 segmantation-label, sodass hier nicht wirklich 3-fache for-Schleife ist. Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
+            for blender_object in object.bp_reference:
+                blender_object.set_cp("category_id", i + 1) #-> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
+
+        self.__label_type = seg_individual.Has_SegmentationType
 
     def iteration(self):
         data = self.__generation_scheme_instance.temp_data
 
-        data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"])) # segmentation
+        map_by = []
+        if "SegmentClasses" in self.__label_type:
+            map_by.append("class")
+        if "SegmentInstances" in self.__label_type:
+            map_by.append("instance")
         
-        print(data.keys())
-        #exit()
-        data_image = data["instance_segmaps"]
-        #data_image = data["class_segmaps"]
-        # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
-        for num, single_image in enumerate(data_image):
-            img = Image.fromarray(single_image.astype('uint8'), None)
-            img.save(f"{self.__outf}/{self.__i}_{num}_segmentation.png", "PNG")
+        data.update(bproc.renderer.render_segmap(map_by=map_by)) # render segmentation
+        
+        for el in map_by:
+            data_image = data[el + "_segmaps"] # "instance_segmaps" or "class_segmaps"
 
-            plt.figure()
-            plt.subplot(1, 2, 1)
-            plt.imshow(data_image[0], 'gray', interpolation='none') # alt. zu gray: jet; ggf. kann über echtes Bild drübermalen mit #plt.imshow(masked, 'jet', interpolation='none', alpha=0.7) ? :p
-            plt.subplot(1, 2, 2)
-            plt.show()
-            plt.savefig(f"{self.__outf}/{self.__i}_{num}_segmentation_visualization.png")
+            # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
+            for num, single_image in enumerate(data_image):
+                img = Image.fromarray(single_image.astype('uint8'), None)
+                img.save(f"{self.__outf}/{self.__i}_{num}_{el}.png", "PNG")
+
+                plt.figure()
+                plt.subplot(1, 2, 1)
+                plt.imshow(data_image[0], 'jet', interpolation='none') # alt. zu gray: jet; ggf. kann über echtes Bild drübermalen mit #plt.imshow(masked, 'jet', interpolation='none', alpha=0.7) ? :p
+                plt.subplot(1, 2, 2)
+                plt.show()
+                plt.savefig(f"{self.__outf}/{self.__i}_{num}_{el}_visualization.png")
 
         self.__i += 1
 
