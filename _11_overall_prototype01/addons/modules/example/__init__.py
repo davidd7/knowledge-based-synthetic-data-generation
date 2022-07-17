@@ -28,7 +28,7 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-        sd_generation_manager.start(100, "")
+        sd_generation_manager.start(5, "")
 
 
 

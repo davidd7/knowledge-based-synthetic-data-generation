@@ -745,7 +745,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1_Model">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model"/>
-        <Has_File>media/gear.STL</Has_File>
+        <Has_File>media/untitled.obj</Has_File>
     </owl:NamedIndividual>
     
 
@@ -776,7 +776,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2_Model">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model"/>
-        <Has_File>media/gear.STL</Has_File>
+        <Has_File>media/untitled.obj</Has_File>
     </owl:NamedIndividual>
     
 

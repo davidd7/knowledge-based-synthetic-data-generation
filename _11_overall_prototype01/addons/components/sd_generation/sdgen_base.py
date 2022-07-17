@@ -2,6 +2,8 @@
 from owlready2 import *
 import blenderproc as bproc
 import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
+import numpy as np
+import random
 
 
 class SDGenerationManager():
@@ -13,7 +15,7 @@ class SDGenerationManager():
         pass
 
 class SDGenerationHandler():
-    def init(self, onto, generation_scheme_instance):
+    def init(self, onto, generation_scheme_instance, manager):
         pass
     def iteration(self):
         pass
@@ -39,7 +41,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         # Set up all handlers
         for el in self.__handlers:
-            el.init(ontology, generation_scheme_instance)
+            el.init(ontology, generation_scheme_instance, manager=self)
 
         # Do the iteration
         for i in range(number_of_images):
@@ -56,7 +58,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
 
 class BlenderHandler(SDGenerationHandler):
-    def init(self, onto, generation_scheme_instance):
+    def init(self, onto, generation_scheme_instance, manager):
         bproc.init()
     def iteration(self):
         pass
@@ -68,7 +70,7 @@ class SimpleVolumeHandler(SDGenerationHandler):
     def __init__(self):
         self.__onto = None
 
-    def init(self, onto, generation_scheme_instance):
+    def init(self, onto, generation_scheme_instance, manager):
         # Save reference to ontology
         self.__onto = onto
         self.__generation_scheme_instance = generation_scheme_instance
@@ -92,43 +94,127 @@ class SimpleVolumeHandler(SDGenerationHandler):
 
 
 class SimpleObjectHandler(SDGenerationHandler):
-    def init(self, onto, generation_scheme_instance):
+    def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
         # Save reference to ontology
         self.__onto = onto
         self.__generation_scheme_instance = generation_scheme_instance
 
         # 1. Query all objects
-        for object in self.__generation_scheme_instance.Has_Object: #intersection(self.__generation_scheme_instance.Has_Object, onto.SimpleObject): # <- gibt aktuell noch kein SiomlesObject in Onto
-            create_objects(obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
-
+        res = self.__generation_scheme_instance.Has_Object #intersection(self.__generation_scheme_instance.Has_Object, onto.SimpleObject): # <- gibt aktuell noch kein SiomlesObject in Onto
 
         # 2. Add all objects to scene
+        for object in res:
+            res_objects = create_objects(obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
+            object.bp_reference = res_objects
 
-
-        # 3. Instantiate LocationInfo- and RotationInfo-Handlers
-
-
+            # 3. Instantiate LocationInfo- and RotationInfo-Handlers
+            manager.add(
+                SimpleMultiplicityHandler(object, object.Has_Multiplicity[0])
+            )
+            manager.add(
+                SimpleLocationHandler(object, object.Has_LocationInfo[0])
+            )
+            manager.add(
+                SimpleRotationHandler(object, object.Has_RotationInfo[0])
+            )
 
     def iteration(self):
         pass
+    def end(self, onto):
+        pass
+
+
+
+# class SimpleCameraHandler(SDGenerationHandler):
+#     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
+#         # Save reference to ontology
+#         self.__onto = onto
+#         self.__generation_scheme_instance = generation_scheme_instance
+
+#         # 1. Query all objects
+#         cameras = intersection(self.__generation_scheme_instance.Has_Camera , onto.SimpleCamera) # (Eig. kann in blenderproc nur 1 Kanera geben und mehrere wären mehrere Frames)
+
+#         # 2. Add all objects to scene
+#         for camera in cameras:
+#             # Set first camera pose (= first key frame)
+#             cam_pose = bproc.math.build_transformation_mat( [0, 0, 0], [0, 0, 0] )
+#             bproc.camera.add_camera_pose(cam_pose)
+
+
+
+#             res_objects = create_objects(obj=camera.Has_Model[0].Has_File[0], how_many=camera.Has_Multiplicity[0].Has_MaximumInt[0])
+#             camera.bp_reference = res_objects
+
+#             # 3. Instantiate LocationInfo- and RotationInfo-Handlers
+#             manager.add(
+#                 SimpleMultiplicityHandler(camera, camera.Has_Multiplicity[0])
+#             )
+#             manager.add(
+#                 SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
+#             )
+#             manager.add(
+#                 SimpleRotationHandler(camera, camera.Has_RotationInfo[0])
+#             )
+
+#     def iteration(self):
+#         pass
+#     def end(self, onto):
+#         pass
+
+
+class SimpleMultiplicityHandler(SDGenerationHandler):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+        self.__individual = individual
+
+    def init(self, onto, generation_scheme_instance, manager):
+        pass
+
+    def iteration(self):
+        number = random.randint(self.__individual.Has_MinimumInt[0], self.__individual.Has_MaximumInt[0])
+
+        for count, el in enumerate(self.__handled_object.bp_reference): # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+            if count < number:
+                el.hide(False)
+            else:
+                el.hide(True)
+
     def end(self, onto):
         pass
 
 
 class SimpleLocationHandler(SDGenerationHandler):
-    def init(self, onto, generation_scheme_instance):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+        self.__individual = individual
+
+    def init(self, onto, generation_scheme_instance, manager):
         pass
+
     def iteration(self):
-        pass
+        for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+            location = bproc.sampler.upper_region(
+                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
+                min_height=0, max_height=0) # sobald z_length gibt, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
+            el2.set_location(location)
+
     def end(self, onto):
         pass
 
 
 class SimpleRotationHandler(SDGenerationHandler):
-    def init(self, onto, generation_scheme_instance):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+        self.__individual = individual
+        
+    def init(self, onto, generation_scheme_instance, manager):
         pass
+
     def iteration(self):
-        pass
+        for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+            rotation = bproc.sampler.uniformSO3(True, True, True)
+            el2.set_rotation_euler(rotation)
+
     def end(self, onto):
         pass
 
@@ -196,6 +282,7 @@ def create_objects(obj, how_many=1):
 
     for i in range(how_many):
         #mesh = bproc.loader.load_obj("E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01\\data\\ontologies\\media\\" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
+        #mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
         mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
         # mesh[0].set_location(0,0,0)
         # mesh.get_material().
@@ -203,7 +290,7 @@ def create_objects(obj, how_many=1):
         print(mesh)
 
         #mat = mesh[0].get_materials()[0]
-        mat = mesh[0].new_material()
+        mat = mesh[0].new_material(name="test_material")
         mat.set_principled_shader_value(
             "Metallic", np.random.uniform(0.0, 0.0))
         mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
