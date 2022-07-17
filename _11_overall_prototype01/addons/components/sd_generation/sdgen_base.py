@@ -6,6 +6,7 @@ import numpy as np
 import random
 import os
 from PIL import Image
+import matplotlib.pyplot as plt
 
 
 
@@ -92,6 +93,7 @@ class RealImageRenderingHandler(SDGenerationHandler):
         self.__i = 0
 
     def init(self, onto, generation_scheme_instance, manager):
+        self.__generation_scheme_instance = generation_scheme_instance
         pass
 
     def iteration(self):
@@ -108,8 +110,74 @@ class RealImageRenderingHandler(SDGenerationHandler):
 
         self.__i += 1
 
+        self.__generation_scheme_instance.temp_data = data
+
     def end(self, onto):
         pass
+
+
+
+
+
+
+
+
+class SegmentationLabelHandler(SDGenerationHandler):
+    def __init__(self, outf):
+        # Set up target folder
+        self.__outf = outf
+        if os.path.isdir(self.__outf):
+            print(f'folder {self.__outf}/ exists')
+        else:
+            os.mkdir(self.__outf)
+            print(f'created folder {self.__outf}/')
+
+        # Set up counter for naming images
+        self.__i = 0
+
+    def init(self, onto, generation_scheme_instance, manager):
+        self.__generation_scheme_instance = generation_scheme_instance
+
+        segmentation_label_individuals = intersection(self.__generation_scheme_instance.Has_Label, onto.search(is_a=onto.SegmentationLabel))
+        print(segmentation_label_individuals)
+        for seg_individual in segmentation_label_individuals: # Gibt meistens nur 1 segmantation-label, sodass hier nicht wirklich 3-fache for-Schleife ist. Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
+            for i, object in enumerate(seg_individual.Has_ObjectToRecognize): # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse)
+                for blender_object in object.bp_reference:
+                    #print("LOOOOOL")
+                    blender_object.set_cp("category_id", i + 1) #-> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
+            pass
+        
+        #exit()
+        pass
+
+    def iteration(self):
+        data = self.__generation_scheme_instance.temp_data
+
+        data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"])) # segmentation
+        
+        print(data.keys())
+        #exit()
+        data_image = data["instance_segmaps"]
+        #data_image = data["class_segmaps"]
+        # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
+        for num, single_image in enumerate(data_image):
+            img = Image.fromarray(single_image.astype('uint8'), None)
+            img.save(f"{self.__outf}/{self.__i}_{num}_segmentation.png", "PNG")
+
+            plt.figure()
+            plt.subplot(1, 2, 1)
+            plt.imshow(data_image[0], 'gray', interpolation='none') # alt. zu gray: jet; ggf. kann über echtes Bild drübermalen mit #plt.imshow(masked, 'jet', interpolation='none', alpha=0.7) ? :p
+            plt.subplot(1, 2, 2)
+            plt.show()
+            plt.savefig(f"{self.__outf}/{self.__i}_{num}_segmentation_visualization.png")
+
+        self.__i += 1
+
+
+    def end(self, onto):
+        pass
+
+
 
 
 
@@ -377,13 +445,8 @@ def create_objects(obj, how_many=1):
     res = []
 
     for i in range(how_many):
-        #mesh = bproc.loader.load_obj("E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01\\data\\ontologies\\media\\" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
-        #mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
         mesh = bproc.loader.load_obj("E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/" + obj) # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
-        # mesh[0].set_location(0,0,0)
         # mesh.get_material().
-
-        print(mesh)
 
         #mat = mesh[0].get_materials()[0]
         mat = mesh[0].new_material(name="test_material")

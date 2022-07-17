@@ -35,6 +35,11 @@ class SDGenExampleModule(SDGenBaseModule):
             at_end_of_iteration=True
         )
 
+        sd_generation_manager.add(
+            sdgen_base.SegmentationLabelHandler(path_where_to_save_result),
+            at_end_of_iteration=True
+        )
+
 
         sd_generation_manager.start(5, path_where_to_save_result)
 
