@@ -26,6 +26,11 @@ class SDGenExampleModule(SDGenBaseModule):
             sdgen_base.SimpleObjectHandler()
         )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleCameraHandler()
+        )
+
+
 
 
         sd_generation_manager.start(5, "")

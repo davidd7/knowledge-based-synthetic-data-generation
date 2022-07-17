@@ -67,17 +67,23 @@ class BlenderHandler(SDGenerationHandler):
 
 
 class SimpleVolumeHandler(SDGenerationHandler):
-    def __init__(self):
+    def __init__(self, special_root=None):
         self.__onto = None
+        self.__special_root = special_root
 
     def init(self, onto, generation_scheme_instance, manager):
         # Save reference to ontology
         self.__onto = onto
         self.__generation_scheme_instance = generation_scheme_instance
 
+        if self.__special_root is None:
+            root_node = self.__generation_scheme_instance
+        else:
+            root_node = self.__special_root
+
         # Query all volumes directly connected to generation scheme
-        print(self.__generation_scheme_instance.Has_Volume)
-        for volume in self.__generation_scheme_instance.Has_Volume: #onto.search(iri = list(self.__generation_scheme_instance.Has_Volume)): #    self.__generation_scheme_instance.Has_Volume: #onto.search(self.__generation_scheme_instance.Has_Volume, type=onto.Volume):
+        #print(self.__generation_scheme_instance.Has_Volume)
+        for volume in root_node.Has_Volume: #onto.search(iri = list(self.__generation_scheme_instance.Has_Volume)): #    self.__generation_scheme_instance.Has_Volume: #onto.search(self.__generation_scheme_instance.Has_Volume, type=onto.Volume):
             if not onto.SimpleVolume in volume.is_a: # wär natürlich schöner direkt in Abfrage, aber das kriege mit bisherirgen sparql-Kenntnissen nicht hin (mit search kriege ggf über Schnittmenge der Ergebnis-Lsiten aus 2 Search-Abfragen hin, aber das wär denke icha uch nicht viel besser)
                 continue
             created_volume = create_area(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
@@ -125,41 +131,56 @@ class SimpleObjectHandler(SDGenerationHandler):
 
 
 
-# class SimpleCameraHandler(SDGenerationHandler):
-#     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
-#         # Save reference to ontology
-#         self.__onto = onto
-#         self.__generation_scheme_instance = generation_scheme_instance
+class SimpleCameraHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
+        # Save reference to ontology
+        self.__onto = onto
+        self.__generation_scheme_instance = generation_scheme_instance
 
-#         # 1. Query all objects
-#         cameras = intersection(self.__generation_scheme_instance.Has_Camera , onto.SimpleCamera) # (Eig. kann in blenderproc nur 1 Kanera geben und mehrere wären mehrere Frames)
+        # 1. Query the SimpleCamera-individual (there should only be one)
+        cameras = intersection(self.__generation_scheme_instance.Has_Camera , onto.search(is_a=onto.SimpleCamera)) # (Eig. kann in blenderproc nur 1 Kanera geben und mehrere wären mehrere Frames)
+        camera = cameras[0]
 
-#         # 2. Add all objects to scene
-#         for camera in cameras:
-#             # Set first camera pose (= first key frame)
-#             cam_pose = bproc.math.build_transformation_mat( [0, 0, 0], [0, 0, 0] )
-#             bproc.camera.add_camera_pose(cam_pose)
+        class BlenderCameraWrapper():
+            def set_location(self, location):
+                # print("It's me, Camera Wrapper!")
+                # print(location)
+                # print(b)
+                # Set first camera pose (= first key frame)
+                cam_pose = bproc.math.build_transformation_mat( location, [0, 0, 0] )
+                bproc.camera.add_camera_pose(cam_pose, frame=0) # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
+            # def set_rotation_euler(self, rotation): # TODO: Ich glaube dass das nicht echt euler ist!
+            #     # Set first camera pose (= first key frame)
+            #     cam_pose = bproc.math.build_transformation_mat( self.get_location(), rotation )
+            #     bproc.camera.add_camera_pose(cam_pose, frame=0)
+                pass
+            def set_local2world_mat(self, matrix):
+                bproc.camera.add_camera_pose(matrix, frame=0)
+            def get_location(self):
+                matrix = bproc.camera.get_camera_pose(frame=0)
+                translation = matrix[0:3, 3]#.reshape((-1,1))
+                #translation = 
+                print(matrix)
+                print(translation)
+                
+                return translation
 
 
+        camera.bp_reference = [BlenderCameraWrapper()]
 
-#             res_objects = create_objects(obj=camera.Has_Model[0].Has_File[0], how_many=camera.Has_Multiplicity[0].Has_MaximumInt[0])
-#             camera.bp_reference = res_objects
+        # 3. Instantiate LocationInfo- and RotationInfo-Handlers
+        print(camera.__dict__)
+        manager.add(
+            SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
+        )
+        manager.add(
+            SimpleRotationLookingAtVolumeHandler(camera, camera.Has_RotationInfo[0])
+        )
 
-#             # 3. Instantiate LocationInfo- and RotationInfo-Handlers
-#             manager.add(
-#                 SimpleMultiplicityHandler(camera, camera.Has_Multiplicity[0])
-#             )
-#             manager.add(
-#                 SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
-#             )
-#             manager.add(
-#                 SimpleRotationHandler(camera, camera.Has_RotationInfo[0])
-#             )
-
-#     def iteration(self):
-#         pass
-#     def end(self, onto):
-#         pass
+    def iteration(self):
+        pass
+    def end(self, onto):
+        pass
 
 
 class SimpleMultiplicityHandler(SDGenerationHandler):
@@ -219,14 +240,42 @@ class SimpleRotationHandler(SDGenerationHandler):
         pass
 
 
-# 1. Bereiche hinzufügen
+class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+        self.__individual = individual
+        
+    def init(self, onto, generation_scheme_instance, manager):
+        manager.add(
+            SimpleVolumeHandler(special_root=self.__individual)
+        )
+        pass
+
+    def iteration(self):
+        # Get position of object and random psotion to look at
+        origin = self.__handled_object.bp_reference[0].get_location()
+        target = bproc.sampler.upper_region(
+                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
+                min_height=0, max_height=0) # <- Kandidat für in eigene Helper-Fkt., um DRY zu erfüllen später (so mit height immer passend wählen - sofern überhaupot noch Objekte in Blender als Hilfen verwenden möchte zum samplen anstatt selbst zu machen)
+        
+        print(origin)
+        print(target)
+
+        # Calculate and set rotation
+        rotation_matrix = bproc.camera.rotation_from_forward_vec(target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
+        # Add homog cam pose based on location an rotation
+        print(f"rotation matrix: {rotation_matrix}")
+        cam2world_matrix = bproc.math.build_transformation_mat(origin, rotation_matrix)
+        print( cam2world_matrix )
+        self.__handled_object.bp_reference[0].set_local2world_mat(cam2world_matrix) # Begriff set_local2world_mat von blenderproc gebort, hoffe dass passt
 
 
+        # for el2 in self.__handled_object.bp_reference: # Gehe über alle blender-Modelle. Daher muss nach SimpleObjectHandelr aufgerufen werden
+        #     rotation = bproc.sampler.uniformSO3(True, True, True)
+        #     el2.set_rotation_euler(rotation)
 
-# Boden hinzufügen
-
-
-# 
+    def end(self, onto):
+        pass
 
 
 
