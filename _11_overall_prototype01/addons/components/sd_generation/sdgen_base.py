@@ -4,6 +4,9 @@ import blenderproc as bproc
 import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
 import numpy as np
 import random
+import os
+from PIL import Image
+
 
 
 class SDGenerationManager():
@@ -27,12 +30,19 @@ class SDGenerationHandler():
 
 class SimpleSDGenerationManager(SDGenerationManager):
     def __init__(self, path_to_ontology, generation_scheme_instance_label):
-        self.__handlers: list[SDGenerationHandler] = []
+        self.__handlers_all: list[SDGenerationHandler] = []
+        self.__handlers_iteration_normal: list[SDGenerationHandler] = []
+        self.__handlers_iteration_end: list[SDGenerationHandler] = []
         self.__path_to_ontology: str = path_to_ontology
         self.__generation_scheme_instance_label = generation_scheme_instance_label
 
-    def add(self, handler: SDGenerationHandler):
-        self.__handlers += [handler]
+    def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
+        self.__handlers_all += [handler]
+        if not at_end_of_iteration:
+            self.__handlers_iteration_normal += [handler]
+        else:
+            self.__handlers_iteration_end += [handler]
+
 
     def start(self, number_of_images, target_path):
         # Load ontology
@@ -40,16 +50,18 @@ class SimpleSDGenerationManager(SDGenerationManager):
         generation_scheme_instance = list(ontology.search(label = self.__generation_scheme_instance_label))[0] # Error wenn keines finde hoffentlich
 
         # Set up all handlers
-        for el in self.__handlers:
+        for el in self.__handlers_all:
             el.init(ontology, generation_scheme_instance, manager=self)
 
         # Do the iteration
         for i in range(number_of_images):
-            for el in self.__handlers:
+            for el in self.__handlers_iteration_normal:
+                el.iteration()
+            for el in self.__handlers_iteration_end:
                 el.iteration()
 
         # Clean up all handlers
-        for el in reversed(self.__handlers):
+        for el in reversed(self.__handlers_all):
             el.end(ontology)
 
         # Perhaps remove ontology-connection
@@ -64,6 +76,41 @@ class BlenderHandler(SDGenerationHandler):
         pass
     def end(self, onto):
         pass
+
+
+class RealImageRenderingHandler(SDGenerationHandler):
+    def __init__(self, outf):
+        # Set up target folder
+        self.__outf = outf
+        if os.path.isdir(self.__outf):
+            print(f'folder {self.__outf}/ exists')
+        else:
+            os.mkdir(self.__outf)
+            print(f'created folder {self.__outf}/')
+
+        # Set up counter for naming images
+        self.__i = 0
+
+    def init(self, onto, generation_scheme_instance, manager):
+        pass
+
+    def iteration(self):
+        data = bproc.renderer.render()
+        data_image = data["colors"]  # + data["instance_segmaps"]
+        data_image = np.array(data_image)
+
+        img = None
+
+        # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
+        for num, single_image in enumerate(data_image):
+            img = Image.fromarray(single_image.astype('uint8'), 'RGB')
+            img.save(f"{self.__outf}/{self.__i}_{num}.png", "PNG")
+
+        self.__i += 1
+
+    def end(self, onto):
+        pass
+
 
 
 class SimpleVolumeHandler(SDGenerationHandler):

@@ -25,17 +25,21 @@ import addons.modules.example
 path = pathlib.Path(__file__).parent.resolve() # "C:/Users/david/Git Repositories/MATSE-bachelorarbeit-ss22-tests/_11_overall_prototype01/data/ontologies/sdgen_ontology_1.owl"
 if state == "blender_debug":
     path = pathlib.Path("E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_11_overall_prototype01")
-path = path / "data/ontologies/"
 
-path = path / "sdgen_ontology_1.owl"
-path = f"file://{path}"
-print(path)
-# test = sdgen_base.SimpleSDGenerationManager(path)
 
-# test.start(100, "")
+path_onto = path / "data/ontologies/"
+path_onto = path_onto / "sdgen_ontology_1.owl"
+path_onto = f"file://{path_onto}"
+print(path_onto)
+
+
+path_save = path / "data/generated_training_data/"
+path_save = path_save / "1/"
+#path_save = f"file://{path_onto}"
+print(path_save)
 
 test = addons.modules.example.SDGenExampleModule()
-test.onto_to_sd(path)
+test.onto_to_sd(path_onto, path_save)
 
 
 
