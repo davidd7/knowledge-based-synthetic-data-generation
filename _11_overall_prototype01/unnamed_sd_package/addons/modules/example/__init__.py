@@ -3,6 +3,53 @@ from xml.dom.expatbuilder import parseFragmentString
 from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
 from owlready2 import *
+import itertools
+
+
+
+
+
+class FutureUtilities():
+
+    def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
+        w = World()
+        onto_classes = w.get_ontology(path_to_ontology_classes).load()
+        onto_individuals = w.get_ontology(path_to_ontology_individuals)
+        onto_individuals.imported_ontologies.append(onto_classes)
+        onto_individuals = onto_individuals.load()
+        return onto_classes, onto_individuals
+
+
+    def sys_update_generation_scheme(path_to_ontology_classes, path_to_ontology_individuals):
+        pass
+
+
+    def sys_create_new_generation_scheme(path_to_ontology_classes, path_to_ontology_individuals):
+        # Load settings (later global?)
+        settings = """ { "next_id" : 1 } """
+        parsed_settings = json.loads(settings)
+
+        # Get ontologies
+        onto_classes, onto_individuals = FutureUtilities.load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals)
+
+        # Get new ontology name
+        old_scheme_names = [ individual.name for individual in onto_individuals.search(type=onto_classes.GenerationScheme) ]
+        new_id = parsed_settings["next_id"]
+        while (new_name := f"EGS{new_id:03}") in old_scheme_names: # resulting name is saved in new_id
+            new_id += 1
+
+        # Create new nodes in the ontology
+        SDGenExampleModule.json_to_onto(onto_classes, onto_individuals, new_name)
+
+        onto_individuals.save(file=path_to_ontology_individuals)
+            
+       
+
+
+    def sys_delete_generation_scheme():
+        pass
+
+
 
 
 class SDGenBaseModule():
@@ -45,7 +92,12 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-    def json_to_onto(path_to_ontology_classes, path_to_ontology_individuals):
+
+
+    def json_to_onto(onto_classes, onto_individuals, individual_name):
+        """
+        Overreaching function creates new individual if 
+        """
         # Load user data
         data = """
             {
@@ -64,68 +116,57 @@ class SDGenExampleModule(SDGenBaseModule):
         parsed_data = json.loads(data)
 
 
-        # Load settings (later global?)
-        settings = """
-        {
-            "next_id" : 1
-        }
-        """
-        parsed_settings = json.loads(settings)
+        with onto_individuals:
 
+            new_root = onto_individuals.GenerationScheme(individual_name)
 
         
         # 1) Load ontology
-        #ontology = get_ontology(path_to_ontology_in).load()
-        w = World()
-        onto_classes = w.get_ontology(path_to_ontology_classes)#.load()
-        onto_classes = onto_classes.load()
-        print(list(onto_classes.classes()))
-        onto_individuals = w.get_ontology(path_to_ontology_individuals)#.load()
-        #print(list(onto_individuals.classes()))
-        onto_individuals.imported_ontologies.append(onto_classes)
-        onto_individuals = onto_individuals.load()
-        #print(onto_classes)
-        #exit()
+        # w = World()
+        # onto_classes = w.get_ontology(path_to_ontology_classes).load()
+        # onto_individuals = w.get_ontology(path_to_ontology_individuals)#.load()
+        # onto_individuals.imported_ontologies.append(onto_classes)
+        # onto_individuals = onto_individuals.load()
+
+        # a = onto_individuals.search(type=onto_classes.GenerationScheme)#.contains
+
+        # with onto_individuals:
+            # current_individuals = onto_individuals.search(type=onto_classes.GenerationScheme)
+            # used_individual_names = [ individual.name for individual in current_individuals ]
+            # new_individual_name = f"EGS{parsed_settings.next_id:03}"
 
 
+            # Make sure that next_id is free or otherwise increase next_id
+             # Findet auch die importierten
+            # b = onto_individuals["EGS1"] # Findet nur die Individuals, die wirklich in der Klasse selbst sind ohne importierte
 
-        # print("lol")
-        # print(onto_classes.GenerationScheme)
-        a = onto_individuals.search(type=onto_classes.GenerationScheme)#.contains
 
-        with onto_individuals:
-            # Make sure that next_id is free and otherwise increase next_id
-            a = onto_individuals.search(type=onto_classes.GenerationScheme, _name="EGS1") # Findet auch die importierten
-            b = onto_individuals["EGS1"] # Findet nur die Individuals, die wirklich in der Klasse selbst sind ohne importierte
-
-            res = [ el.name for el in a ]
-
-            print("onto_individuals.search(type=Scheme)")
-            print (a)
-            #a._name
-            print(a[0])
-            print(   a[0]._name)
-            print(res)
-            print("onto_individuals['EGS1']")
-            print(b)
+            # print("onto_individuals.search(type=Scheme)")
+            # print (a)
+            # #a._name
+            # print(a[0])
+            # print(   a[0]._name)
+            # print(res)
+            # print("onto_individuals['EGS1']")
+            # print(b)
 
             #root = onto_individuals.GenerationScheme(f"EGS{1:03}")
 
 
         #print(f"EGS{1:03}")
-        exit()
+        # exit()
 
-        print(onto_classes.individuals())
+        # print(onto_classes.individuals())
         
-        onto_classes.save(path_to_ontology_individuals)
+        # onto_classes.save(path_to_ontology_individuals)
         
 
-        #o1.load()
-        #o2.load()
+        # #o1.load()
+        # #o2.load()
 
-        # Create root
-        print(list(onto_classes.classes()))
-        print(list(onto_individuals.classes()))
+        # # Create root
+        # print(list(onto_classes.classes()))
+        # print(list(onto_individuals.classes()))
 
         #o1 = o1 #.load()
 
@@ -148,7 +189,7 @@ class SDGenExampleModule(SDGenBaseModule):
 
         # 
 
-        onto_classes.save(file = path_to_ontology_individuals)
+        # onto_classes.save(file = path_to_ontology_individuals)
 
 
         print(parsed_data)
