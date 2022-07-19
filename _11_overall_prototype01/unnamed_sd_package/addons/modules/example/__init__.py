@@ -13,8 +13,8 @@ class FutureUtilities():
 
     def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
         w = World()
-        onto_classes = w.get_ontology(path_to_ontology_classes).load()
-        onto_individuals = w.get_ontology(path_to_ontology_individuals)
+        onto_classes = w.get_ontology("file://" + path_to_ontology_classes).load()
+        onto_individuals = w.get_ontology("file://" + path_to_ontology_individuals)
         onto_individuals.imported_ontologies.append(onto_classes)
         onto_individuals = onto_individuals.load()
         return onto_classes, onto_individuals
@@ -118,7 +118,7 @@ class SDGenExampleModule(SDGenBaseModule):
 
         with onto_individuals:
 
-            new_root = onto_individuals.GenerationScheme(individual_name)
+            new_root = onto_classes.GenerationScheme(individual_name)
 
         
         # 1) Load ontology
