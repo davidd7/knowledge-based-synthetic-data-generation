@@ -96,8 +96,6 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-
-
     def json_to_onto(onto_classes, onto_individuals, individual_name):
         """
         Overreaching function creates new individual if 
@@ -107,9 +105,19 @@ class SDGenExampleModule(SDGenBaseModule):
             {
                 "objects_to_recognize": [
                     {
-                    "url": "",
+                    "url": "media/untitled.obj",
                     "min": 3,
                     "max": 4
+                    },
+                    {
+                    "url": "media/untitled.obj",
+                    "min": 3,
+                    "max": 4
+                    },
+                    {
+                    "url": "media/untitled.obj",
+                    "min": 3,
+                    "max": 14
                     }
                 ],
                 "area_length_x": 3,
@@ -119,36 +127,37 @@ class SDGenExampleModule(SDGenBaseModule):
         parsed_data = json.loads(data)
 
 
-        with onto_individuals:
+        
 
+        with onto_individuals:
             # Volumes
             vol_camera = onto_classes.SimpleVolume(
-                Has_XCoordinate = [-150.0],
-                Has_YCoordinate = [-150.0],
-                Has_ZCoordinate = [400.0],
-                Has_XLength = [300.0],
-                Has_YLength = [300.0]
+                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
+                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+                Has_ZCoordinate = [parsed_data["camera_height"]],
+                Has_XLength = [parsed_data["area_length_x"]],
+                Has_YLength = [parsed_data["area_length_y"]]
             )
             vol_ground = onto_classes.SimpleVolume(
-                Has_XCoordinate = [-150.0],
-                Has_YCoordinate = [-150.0],
+                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
+                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
                 Has_ZCoordinate = [0.0],
-                Has_XLength = [300.0],
-                Has_YLength = [300.0]
+                Has_XLength = [parsed_data["area_length_x"]],
+                Has_YLength = [parsed_data["area_length_y"]]
             )
             vol_light = onto_classes.SimpleVolume(
-                Has_XCoordinate = [-150.0],
-                Has_YCoordinate = [-150.0],
+                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
+                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
                 Has_ZCoordinate = [500.0],
-                Has_XLength = [300.0],
-                Has_YLength = [300.0]
+                Has_XLength = [parsed_data["area_length_x"]],
+                Has_YLength = [parsed_data["area_length_y"]]
             )
             vol_objects = onto_classes.SimpleVolume(
-                Has_XCoordinate = [-150.0],
-                Has_YCoordinate = [-150.0],
+                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
+                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
                 Has_ZCoordinate = [100.0],
-                Has_XLength = [300.0],
-                Has_YLength = [300.0]
+                Has_XLength = [parsed_data["area_length_x"]],
+                Has_YLength = [parsed_data["area_length_y"]]
             )
             
             
@@ -170,37 +179,30 @@ class SDGenExampleModule(SDGenBaseModule):
             )
             rot_inf_random = onto_classes.EqualDistributionRandomRotation()
 
-            # Multiplicities
-            mult_obj1 = onto_classes.EqualDistributionRangeMultiplicity(
-                Has_MinimumInt = [0],
-                Has_MaximumInt = [4]
-            )
-            mult_obj2 = onto_classes.EqualDistributionRangeMultiplicity(
-                Has_MinimumInt = [3],
-                Has_MaximumInt = [3]
-            )
+            # Objects and characteristics that are object-specific in this example
+            obj = []
+            for object in parsed_data["objects_to_recognize"]:
+                # Multiplicity
+                mult_obj = onto_classes.EqualDistributionRangeMultiplicity(
+                    Has_MinimumInt = [object["min"]],
+                    Has_MaximumInt = [object["max"]]
+                )
 
-            # Models
-            model_obj1 = onto_classes.Model(
-                Has_File = ["media/untitled.obj"]
-            )
-            model_obj2 = onto_classes.Model(
-                Has_File = ["media/untitled.obj"]
-            )
+                # Model
+                model_obj = onto_classes.Model(
+                    Has_File = [object["url"]]
+                )
 
-            # Objects
-            obj1 = onto_classes.Object(
-                Has_Multiplicity = [mult_obj1],
-                Has_Model = [model_obj1],
-                Has_RotationInfo = [rot_inf_random],
-                Has_LocationInfo = [loc_inf_objects]
-            )
-            obj2 = onto_classes.Object(
-                Has_Multiplicity = [mult_obj2],
-                Has_Model = [model_obj2],
-                Has_RotationInfo = [rot_inf_random],
-                Has_LocationInfo = [loc_inf_objects]
-            )
+                # Object
+                obj.append(
+                    onto_classes.Object(
+                        Has_Multiplicity = [mult_obj],
+                        Has_Model = [model_obj],
+                        Has_RotationInfo = [rot_inf_random],
+                        Has_LocationInfo = [loc_inf_objects]
+                    )
+                )
+
 
             # Camera
             camera = onto_classes.SimpleCamera(
@@ -214,12 +216,12 @@ class SDGenExampleModule(SDGenBaseModule):
             # Physical Plausibility
             effect_physical_plausibility = onto_classes.SimplePhysicalPlausibility(
                 Has_FixedObjects = [ground],
-                Has_FallingObject = [obj1, obj2]
+                Has_FallingObject = obj
             )
 
             # Label
             label = onto_classes.SegmentationLabel(
-                Has_ObjectToRecognize = [obj1, obj2],
+                Has_ObjectToRecognize = obj,
                 Has_SegmentationType = ["SegmentClasses"]
             )
 
@@ -228,7 +230,7 @@ class SDGenExampleModule(SDGenBaseModule):
             new_root = onto_classes.GenerationScheme(
                 individual_name, # <- name of the new individual is first argument
                 Has_Volume = [vol_camera, vol_objects, vol_light],
-                Has_Object = [obj1, obj2],
+                Has_Object = obj,
                 Has_Camera = [camera],
                 Has_Ground = [ground],
                 Has_Effect = [effect_physical_plausibility],
