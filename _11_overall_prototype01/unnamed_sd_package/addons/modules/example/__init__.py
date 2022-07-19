@@ -1,4 +1,6 @@
 
+from re import M
+from socket import has_dualstack_ipv6
 from xml.dom.expatbuilder import parseFragmentString
 from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
@@ -112,90 +114,124 @@ class SDGenExampleModule(SDGenBaseModule):
                 "area_length_y": 7,
                 "camera_height": 5
             }"""
-
         parsed_data = json.loads(data)
 
 
         with onto_individuals:
 
-            new_root = onto_classes.GenerationScheme(individual_name)
+            # Volumes
+            vol_camera = onto_classes.SimpleVolume(
+                Has_XCoordinate = [-150.0],
+                Has_YCoordinate = [-150.0],
+                Has_ZCoordinate = [400.0],
+                Has_XLength = [300.0],
+                Has_YLength = [300.0]
+            )
+            vol_ground = onto_classes.SimpleVolume(
+                Has_XCoordinate = [-150.0],
+                Has_YCoordinate = [-150.0],
+                Has_ZCoordinate = [0.0],
+                Has_XLength = [300.0],
+                Has_YLength = [300.0]
+            )
+            vol_light = onto_classes.SimpleVolume(
+                Has_XCoordinate = [-150.0],
+                Has_YCoordinate = [-150.0],
+                Has_ZCoordinate = [500.0],
+                Has_XLength = [300.0],
+                Has_YLength = [300.0]
+            )
+            vol_objects = onto_classes.SimpleVolume(
+                Has_XCoordinate = [-150.0],
+                Has_YCoordinate = [-150.0],
+                Has_ZCoordinate = [100.0],
+                Has_XLength = [300.0],
+                Has_YLength = [300.0]
+            )
+            
+            
 
+            # Location infos
+            loc_inf_camera = onto_classes.EqualDistributedLocationInVolume(
+                Has_Volume = [vol_camera]
+            )
+            loc_inf_ground = onto_classes.EqualDistributedLocationInVolume( # <- verm. aktuell nicht in Benutzung?
+                Has_Volume = [vol_ground]
+            )
+            loc_inf_objects = onto_classes.EqualDistributedLocationInVolume(
+                Has_Volume = [vol_objects]
+            )
+
+            # Rotation Info
+            rot_inf_at_ground = onto_classes.EqualDistributionRotationLookingAtVolume(
+                Has_Volume = [vol_ground]
+            )
+            rot_inf_random = onto_classes.EqualDistributionRandomRotation()
+
+            # Multiplicities
+            mult_obj1 = onto_classes.EqualDistributionRangeMultiplicity(
+                Has_MinimumInt = [0],
+                Has_MaximumInt = [4]
+            )
+            mult_obj2 = onto_classes.EqualDistributionRangeMultiplicity(
+                Has_MinimumInt = [3],
+                Has_MaximumInt = [3]
+            )
+
+            # Models
+            model_obj1 = onto_classes.Model(
+                Has_File = ["media/untitled.obj"]
+            )
+            model_obj2 = onto_classes.Model(
+                Has_File = ["media/untitled.obj"]
+            )
+
+            # Objects
+            obj1 = onto_classes.Object(
+                Has_Multiplicity = [mult_obj1],
+                Has_Model = [model_obj1],
+                Has_RotationInfo = [rot_inf_random],
+                Has_LocationInfo = [loc_inf_objects]
+            )
+            obj2 = onto_classes.Object(
+                Has_Multiplicity = [mult_obj2],
+                Has_Model = [model_obj2],
+                Has_RotationInfo = [rot_inf_random],
+                Has_LocationInfo = [loc_inf_objects]
+            )
+
+            # Camera
+            camera = onto_classes.SimpleCamera(
+                Has_LocationInfo = [loc_inf_camera],
+                Has_RotationInfo = [rot_inf_at_ground]
+            )
+
+            # Ground
+            ground = onto_classes.SimpleRandomGround()
         
-        # 1) Load ontology
-        # w = World()
-        # onto_classes = w.get_ontology(path_to_ontology_classes).load()
-        # onto_individuals = w.get_ontology(path_to_ontology_individuals)#.load()
-        # onto_individuals.imported_ontologies.append(onto_classes)
-        # onto_individuals = onto_individuals.load()
+            # Physical Plausibility
+            effect_physical_plausibility = onto_classes.SimplePhysicalPlausibility(
+                Has_FixedObjects = [ground],
+                Has_FallingObject = [obj1, obj2]
+            )
 
-        # a = onto_individuals.search(type=onto_classes.GenerationScheme)#.contains
-
-        # with onto_individuals:
-            # current_individuals = onto_individuals.search(type=onto_classes.GenerationScheme)
-            # used_individual_names = [ individual.name for individual in current_individuals ]
-            # new_individual_name = f"EGS{parsed_settings.next_id:03}"
+            # Label
+            label = onto_classes.SegmentationLabel(
+                Has_ObjectToRecognize = [obj1, obj2],
+                Has_SegmentationType = ["SegmentClasses"]
+            )
 
 
-            # Make sure that next_id is free or otherwise increase next_id
-             # Findet auch die importierten
-            # b = onto_individuals["EGS1"] # Findet nur die Individuals, die wirklich in der Klasse selbst sind ohne importierte
-
-
-            # print("onto_individuals.search(type=Scheme)")
-            # print (a)
-            # #a._name
-            # print(a[0])
-            # print(   a[0]._name)
-            # print(res)
-            # print("onto_individuals['EGS1']")
-            # print(b)
-
-            #root = onto_individuals.GenerationScheme(f"EGS{1:03}")
-
-
-        #print(f"EGS{1:03}")
-        # exit()
-
-        # print(onto_classes.individuals())
-        
-        # onto_classes.save(path_to_ontology_individuals)
-        
-
-        # #o1.load()
-        # #o2.load()
-
-        # # Create root
-        # print(list(onto_classes.classes()))
-        # print(list(onto_individuals.classes()))
-
-        #o1 = o1 #.load()
-
-
-        # root = ontology.GenerationScheme("GS2")
-        
-        # root = ontology.GenerationScheme("GS2")
-        
-        # root = ontology.GenerationScheme("GS3")
-
-        # Label
-
-        # Camera
-
-        # Ground
-
-        # Volumes
-    
-        # Objects
-
-        # 
-
-        # onto_classes.save(file = path_to_ontology_individuals)
-
-
-        print(parsed_data)
-
-
-        
+            # Create root
+            new_root = onto_classes.GenerationScheme(
+                individual_name, # <- name of the new individual is first argument
+                Has_Volume = [vol_camera, vol_objects, vol_light],
+                Has_Object = [obj1, obj2],
+                Has_Camera = [camera],
+                Has_Ground = [ground],
+                Has_Effect = [effect_physical_plausibility],
+                Has_Label = [label]
+            )
 
 
 
