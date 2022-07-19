@@ -3,13 +3,109 @@
          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
          xmlns:owl="http://www.w3.org/2002/07/owl#"
-         xml:base="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals"
-         xmlns="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#"
+         xml:base="http://test.org/onto300.owl"
+         xmlns="http://test.org/onto300.owl#"
          xmlns:synt="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#">
 
-<owl:Ontology rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals">
+<owl:Ontology rdf:about="http://test.org/onto300.owl">
   <owl:imports rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation"/>
 </owl:Ontology>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Camera"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Effect"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FallingObject"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Ground"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Label"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Model"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Multiplicity"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Object"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ObjectToRecognize"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_RotationInfo"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Volume"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_File"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MaximumInt"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumInt"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_SegmentationType"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XCoordinate"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YCoordinate"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength"/>
+
+<owl:AnnotationProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ZCoordinate2"/>
+
+
+
+
+
+
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Object"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Model"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SegmentationLabel"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributedLocationInVolume"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRandomRotation"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRotationLookingAtVolume"/>
+
+<owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera"/>
+
+<synt:GenerationScheme rdf:about="#EGS001">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
+
+<synt:GenerationScheme rdf:about="#EGS002">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
+
+<synt:GenerationScheme rdf:about="#EGS003">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
+
+<synt:GenerationScheme rdf:about="#EGS004">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
+
+<synt:GenerationScheme rdf:about="#EGS005">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
+
+<synt:GenerationScheme rdf:about="#EGS006">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:GenerationScheme>
 
 <synt:SimpleVolume rdf:about="#simplevolume1">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
@@ -132,7 +228,7 @@
   <synt:Has_SegmentationType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SegmentClasses</synt:Has_SegmentationType>
 </synt:SegmentationLabel>
 
-<synt:GenerationScheme rdf:about="#EGS001">
+<synt:GenerationScheme rdf:about="#EGS007">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
   <synt:Has_Volume rdf:resource="#simplevolume3"/>
   <synt:Has_Volume rdf:resource="#simplevolume1"/>
@@ -266,10 +362,10 @@
   <synt:Has_SegmentationType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SegmentClasses</synt:Has_SegmentationType>
 </synt:SegmentationLabel>
 
-<synt:GenerationScheme rdf:about="#EGS002">
+<synt:GenerationScheme rdf:about="#EGS008">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <synt:Has_Volume rdf:resource="#simplevolume5"/>
   <synt:Has_Volume rdf:resource="#simplevolume7"/>
+  <synt:Has_Volume rdf:resource="#simplevolume5"/>
   <synt:Has_Volume rdf:resource="#simplevolume8"/>
   <synt:Has_Object rdf:resource="#object4"/>
   <synt:Has_Object rdf:resource="#object3"/>
@@ -277,6 +373,140 @@
   <synt:Has_Ground rdf:resource="#simplerandomground2"/>
   <synt:Has_Effect rdf:resource="#simplephysicalplausibility2"/>
   <synt:Has_Label rdf:resource="#segmentationlabel2"/>
+</synt:GenerationScheme>
+
+<synt:SimpleVolume rdf:about="#simplevolume9">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_XCoordinate>
+  <synt:Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_YCoordinate>
+  <synt:Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">400.0</synt:Has_ZCoordinate>
+  <synt:Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_XLength>
+  <synt:Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_YLength>
+</synt:SimpleVolume>
+
+<synt:SimpleVolume rdf:about="#simplevolume10">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_XCoordinate>
+  <synt:Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_YCoordinate>
+  <synt:Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0</synt:Has_ZCoordinate>
+  <synt:Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_XLength>
+  <synt:Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_YLength>
+</synt:SimpleVolume>
+
+<synt:SimpleVolume rdf:about="#simplevolume11">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_XCoordinate>
+  <synt:Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_YCoordinate>
+  <synt:Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">500.0</synt:Has_ZCoordinate>
+  <synt:Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_XLength>
+  <synt:Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_YLength>
+</synt:SimpleVolume>
+
+<synt:SimpleVolume rdf:about="#simplevolume12">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_XCoordinate>
+  <synt:Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-150.0</synt:Has_YCoordinate>
+  <synt:Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">100.0</synt:Has_ZCoordinate>
+  <synt:Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_XLength>
+  <synt:Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">300.0</synt:Has_YLength>
+</synt:SimpleVolume>
+
+<synt:EqualDistributedLocationInVolume rdf:about="#equaldistributedlocationinvolume7">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Volume rdf:resource="#simplevolume9"/>
+</synt:EqualDistributedLocationInVolume>
+
+<synt:EqualDistributedLocationInVolume rdf:about="#equaldistributedlocationinvolume8">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Volume rdf:resource="#simplevolume10"/>
+</synt:EqualDistributedLocationInVolume>
+
+<synt:EqualDistributedLocationInVolume rdf:about="#equaldistributedlocationinvolume9">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Volume rdf:resource="#simplevolume12"/>
+</synt:EqualDistributedLocationInVolume>
+
+<synt:EqualDistributionRotationLookingAtVolume rdf:about="#equaldistributionrotationlookingatvolume3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Volume rdf:resource="#simplevolume10"/>
+</synt:EqualDistributionRotationLookingAtVolume>
+
+<synt:EqualDistributionRandomRotation rdf:about="#equaldistributionrandomrotation3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:EqualDistributionRandomRotation>
+
+<synt:EqualDistributionRangeMultiplicity rdf:about="#equaldistributionrangemultiplicity5">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</synt:Has_MinimumInt>
+  <synt:Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</synt:Has_MaximumInt>
+</synt:EqualDistributionRangeMultiplicity>
+
+<synt:EqualDistributionRangeMultiplicity rdf:about="#equaldistributionrangemultiplicity6">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</synt:Has_MinimumInt>
+  <synt:Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</synt:Has_MaximumInt>
+</synt:EqualDistributionRangeMultiplicity>
+
+<synt:Model rdf:about="#model5">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_File rdf:datatype="http://www.w3.org/2001/XMLSchema#string">media/untitled.obj</synt:Has_File>
+</synt:Model>
+
+<synt:Model rdf:about="#model6">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_File rdf:datatype="http://www.w3.org/2001/XMLSchema#string">media/untitled.obj</synt:Has_File>
+</synt:Model>
+
+<synt:Object rdf:about="#object5">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Multiplicity rdf:resource="#equaldistributionrangemultiplicity5"/>
+  <synt:Has_Model rdf:resource="#model5"/>
+  <synt:Has_RotationInfo rdf:resource="#equaldistributionrandomrotation3"/>
+  <synt:Has_LocationInfo rdf:resource="#equaldistributedlocationinvolume9"/>
+</synt:Object>
+
+<synt:Object rdf:about="#object6">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Multiplicity rdf:resource="#equaldistributionrangemultiplicity6"/>
+  <synt:Has_Model rdf:resource="#model6"/>
+  <synt:Has_RotationInfo rdf:resource="#equaldistributionrandomrotation3"/>
+  <synt:Has_LocationInfo rdf:resource="#equaldistributedlocationinvolume9"/>
+</synt:Object>
+
+<synt:SimpleCamera rdf:about="#simplecamera3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_LocationInfo rdf:resource="#equaldistributedlocationinvolume7"/>
+  <synt:Has_RotationInfo rdf:resource="#equaldistributionrotationlookingatvolume3"/>
+</synt:SimpleCamera>
+
+<synt:SimpleRandomGround rdf:about="#simplerandomground3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</synt:SimpleRandomGround>
+
+<synt:SimplePhysicalPlausibility rdf:about="#simplephysicalplausibility3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_FallingObject rdf:resource="#object6"/>
+  <synt:Has_FallingObject rdf:resource="#object5"/>
+</synt:SimplePhysicalPlausibility>
+
+<synt:SegmentationLabel rdf:about="#segmentationlabel3">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_ObjectToRecognize rdf:resource="#object6"/>
+  <synt:Has_ObjectToRecognize rdf:resource="#object5"/>
+  <synt:Has_SegmentationType rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SegmentClasses</synt:Has_SegmentationType>
+</synt:SegmentationLabel>
+
+<synt:GenerationScheme rdf:about="#EGS009">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <synt:Has_Volume rdf:resource="#simplevolume11"/>
+  <synt:Has_Volume rdf:resource="#simplevolume12"/>
+  <synt:Has_Volume rdf:resource="#simplevolume9"/>
+  <synt:Has_Object rdf:resource="#object6"/>
+  <synt:Has_Object rdf:resource="#object5"/>
+  <synt:Has_Camera rdf:resource="#simplecamera3"/>
+  <synt:Has_Ground rdf:resource="#simplerandomground3"/>
+  <synt:Has_Effect rdf:resource="#simplephysicalplausibility3"/>
+  <synt:Has_Label rdf:resource="#segmentationlabel3"/>
 </synt:GenerationScheme>
 
 

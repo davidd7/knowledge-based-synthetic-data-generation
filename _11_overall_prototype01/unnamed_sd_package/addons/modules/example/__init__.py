@@ -16,9 +16,9 @@ class FutureUtilities():
     def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
         w = World()
         onto_classes = w.get_ontology("file://" + path_to_ontology_classes).load()
-        onto_individuals = w.get_ontology("file://" + path_to_ontology_individuals)
+        onto_individuals = w.get_ontology("file://" + path_to_ontology_individuals).load()
         onto_individuals.imported_ontologies.append(onto_classes)
-        onto_individuals = onto_individuals.load()
+        #onto_individuals = onto_individuals.load()
         return onto_classes, onto_individuals
 
 
@@ -57,6 +57,8 @@ class FutureUtilities():
 class SDGenBaseModule():
     def onto_to_sd(path_to_onto, path_where_to_save_result):
         pass
+
+
 
 
 class SDGenExampleModule(SDGenBaseModule):
@@ -230,8 +232,10 @@ class SDGenExampleModule(SDGenBaseModule):
                 Has_Camera = [camera],
                 Has_Ground = [ground],
                 Has_Effect = [effect_physical_plausibility],
-                Has_Label = [label]
+                #Has_Label = [label]
             )
+            #new_root.Has_Label = [label]
+            new_root.Has_Label = [label]
 
 
 
