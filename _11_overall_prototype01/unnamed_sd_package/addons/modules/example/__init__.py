@@ -1,4 +1,5 @@
 
+from xml.dom.expatbuilder import parseFragmentString
 from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
 from owlready2 import *
@@ -44,7 +45,8 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-    def json_to_onto(path_to_ontology_in, path_to_ontology_out=None):
+    def json_to_onto(path_to_ontology_classes, path_to_ontology_individuals):
+        # Load user data
         data = """
             {
                 "objects_to_recognize": [
@@ -60,31 +62,70 @@ class SDGenExampleModule(SDGenBaseModule):
             }"""
 
         parsed_data = json.loads(data)
+
+
+        # Load settings (later global?)
+        settings = """
+        {
+            "next_id" : 1
+        }
+        """
+        parsed_settings = json.loads(settings)
+
+
         
         # 1) Load ontology
         #ontology = get_ontology(path_to_ontology_in).load()
         w = World()
-        o1 = w.get_ontology("http://test.org/onto300.owl")
-        o2 = w.get_ontology(path_to_ontology_in).load()
-        o1.imported_ontologies.append(o2)
-        print(o1)
+        onto_classes = w.get_ontology(path_to_ontology_classes)#.load()
+        onto_classes = onto_classes.load()
+        print(list(onto_classes.classes()))
+        onto_individuals = w.get_ontology(path_to_ontology_individuals)#.load()
+        #print(list(onto_individuals.classes()))
+        onto_individuals.imported_ontologies.append(onto_classes)
+        onto_individuals = onto_individuals.load()
+        #print(onto_classes)
         #exit()
 
-        with o1:
-            root = o2.GenerationScheme("EGS1")
 
 
-        print(o1.individuals())
+        # print("lol")
+        # print(onto_classes.GenerationScheme)
+        a = onto_individuals.search(type=onto_classes.GenerationScheme)#.contains
+
+        with onto_individuals:
+            # Make sure that next_id is free and otherwise increase next_id
+            a = onto_individuals.search(type=onto_classes.GenerationScheme, _name="EGS1") # Findet auch die importierten
+            b = onto_individuals["EGS1"] # Findet nur die Individuals, die wirklich in der Klasse selbst sind ohne importierte
+
+            res = [ el.name for el in a ]
+
+            print("onto_individuals.search(type=Scheme)")
+            print (a)
+            #a._name
+            print(a[0])
+            print(   a[0]._name)
+            print(res)
+            print("onto_individuals['EGS1']")
+            print(b)
+
+            #root = onto_individuals.GenerationScheme(f"EGS{1:03}")
+
+
+        #print(f"EGS{1:03}")
+        exit()
+
+        print(onto_classes.individuals())
         
-        o1.save(path_to_ontology_out)
+        onto_classes.save(path_to_ontology_individuals)
         
 
         #o1.load()
         #o2.load()
 
         # Create root
-        print(list(o1.classes()))
-        print(list(o2.classes()))
+        print(list(onto_classes.classes()))
+        print(list(onto_individuals.classes()))
 
         #o1 = o1 #.load()
 
@@ -107,7 +148,7 @@ class SDGenExampleModule(SDGenBaseModule):
 
         # 
 
-        o1.save(file = path_to_ontology_out)
+        onto_classes.save(file = path_to_ontology_individuals)
 
 
         print(parsed_data)

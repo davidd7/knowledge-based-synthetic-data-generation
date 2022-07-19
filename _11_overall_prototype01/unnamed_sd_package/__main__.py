@@ -43,8 +43,8 @@ def generate_data():
 
 def start_json_to_onto():
     # Get path to ontology
-    path_to_ontology_input = f'file://{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_in.owl" }'
-    path_to_ontology_output = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_out.owl" }'
+    path_to_ontology_input = f'file://{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_classes.owl" }'
+    path_to_ontology_output = f'file://{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_individuals.owl" }'
     unnamed_sd_package.addons.modules.example.SDGenExampleModule.json_to_onto(path_to_ontology_input, path_to_ontology_output)
 
 
