@@ -6,6 +6,7 @@ from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
 from owlready2 import *
 import itertools
+from rdflib import *
 
 
 
@@ -100,22 +101,229 @@ class SDGenExampleModule(SDGenBaseModule):
 
     def json_to_onto(onto_classes, onto_individuals, individual_name):
 
-        with onto_classes:
-            x = list(default_world.sparql("""
-                    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-                    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-                    PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
-                    PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
-                    SELECT ?subject ?prop ?object
-                        WHERE { 
-                            { select distinct ?prop {[] ?prop []} }
-                            ?subject ?prop+ ?object
-                }
-                """))
 
-            print(x[:10]  )
+        # graph = default_world.as_rdflib_graph()
+        # print(graph)
+
+        # a = graph.query("""
+        #                 SELECT distinct ?object
+        #                     WHERE {
+        #                        <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#EGS007> (rdfs:subClassOf|!rdfs:subClassOf)* ?object .
+        #                      ?object a ?class .
+        #                      ?class a owl:Class
+        #                 }""")
+
+        # print( a )
+        # i=0
+        # for el in a:
+        #     #print(i)
+        #     print(el)
+        #     i += 1
+        #     #print("end")
+
+
+
+
+        #close_world(onto_individuals)
+        #close_world(onto_classes)
+
+
+        graph = default_world.as_rdflib_graph()
+
+        for s, p, o in graph:
+            print(f"{  s.split('#')[-1]  } {p.split('#')[-1]} {o.split('#')[-1]}")
+        #print(graph.triplelite.__dict__)
+        #print(list(graph.triples("")), None, None)
+        exit()
+
+
+
+
+        # test = graph.query_owlready("""
+        #         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #         PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        #         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        #         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        #         PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+        #         PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+        #                 SELECT distinct ?object
+        #                     WHERE {
+        #                         indiv:EGS007 (rdfs:subClassOf|!rdfs:subClassOf)* ?object .
+        #                         ?object a ?class .
+        #                         ?class a owl:Class
+        #                 }""")
+        print("==> start")
+        # graph.bind("indiv", "http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#")
+        # graph.bind("rdfs", "http://www.w3.org/2000/01/rdf-schema#")
+        # graph.bind("owl", "http://www.w3.org/2002/07/owl#")
+        # test = graph.query_owlready("""
+        # SELECT distinct ?object
+        #     WHERE {
+        #         <%s> (rdfs:subClassOf|!rdfs:subClassOf)* ?object.
+        #         ?object a ?class .
+        #         ?class a owl:Class
+        #     }""" % onto_individuals.EGS006.iri)
+
+
+
+
+        graph.bind("indiv", "http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#")
+        graph.bind("synt", "http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#")
+        graph.bind("rdfs", "http://www.w3.org/2000/01/rdf-schema#")
+        graph.bind("owl", "http://www.w3.org/2002/07/owl#")
+        test = graph.query_owlready("""
+        SELECT distinct ?object
+            WHERE {
+                <%s> (rdfs:subClassOf|!rdfs:subClassOf)\{1\} ?object .
+                ?object a ?class .
+                ?class a owl:Class
+            }""" % onto_individuals.EGS002.iri)
+        #test = [  el[0] for el in test  ]
+#
+
+
+
+        print("start")
+        test = graph.query_owlready("""
+        SELECT distinct ?object
+            WHERE {
+                <%s> (rdfs:subClassOf|!rdfs:subClassOf) / (rdfs:subClassOf|!rdfs:subClassOf) / (rdfs:subClassOf|!rdfs:subClassOf) ?object .
+                ?object a ?class .
+                ?class a owl:Class
+            }""" % onto_individuals.EGS002.iri)
+        for el in test:
+            el = [ str(el2).split(".")[-1] for el2 in el ]
+            print(el)
+
+        print("-----------------------------------")
+
+        test = graph.query_owlready("""
+        SELECT distinct ?object
+            WHERE {
+                <%s> ?prop1 ?obj1 .
+                ?obj1 ?prop2 ?obj2 .
+                ?obj2 ?prop3 ?object .
+                ?object a ?class .
+                ?class a owl:Class
+            }""" % onto_individuals.EGS002.iri)
+        for el in test:
+            el = [ str(el2).split(".")[-1] for el2 in el ]
+            print(el)
+        print("end")
+
+
+
+
+
+        # with onto_classes:
+
+        #     graph = default_world.as_rdflib_graph()
+
+        #     a = graph.query("""                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #                     PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        #                     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        #                     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        #                     PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+        #                     PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+        #                     SELECT distinct ?object
+        #                         WHERE {
+        #                             indiv:EGS004 (owl:Thing|!owl:Thing)* ?object.
+        #                     ?object a ?class .
+        #                     ?class a owl:Class
+        #                     }""")
+
+        #     print( a )
+        #     i=0
+        #     for el in a:
+        #         print(i)
+        #         print(el)
+        #         i += 1
+        #         print("end")
+
+        # test = graph.query_owlready("""                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #                 PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        #                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        #                 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        #                 PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+        #                 PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+        #                 SELECT distinct ?subject ?object
+        #                     WHERE {
+        #                         indiv:EGS004 (owl:Thing|!owl:Thing)* ?object.
+        #                 ?object a ?class .
+        #                 ?class a owl:Class
+        #                 }""")
+
+        # print(list(test))
+
+
+
+
+        exit()
+
+        # r = list(graph.query("""                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #         PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        #         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        #         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        #         PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+        #         PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+        #         SELECT distinct ?subject ?object
+        #             WHERE {
+        #                 indiv:EGS004 (owl:Thing|!owl:Thing)* ?object.
+        #                 ?object a ?class .
+        #                 ?class a owl:Class
+        #         }"""))
+
+
+
+
+
+
+
+        # with onto_individuals:
+        #     default_world.sparql("""
+        #         SELECT distinct ?subject ?object
+        #             WHERE {
+        #                 sdgen_ontology_2_individuals:EGS004 (owl:Thing|!owl:Thing)* ?object.
+        #                 ?object a ?class .
+        #                 ?class a owl:Class
+        #         }
+        #         """)
+
+        # with onto_individuals:
+        #     default_world.sparql("""
+        #         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        #         PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        #         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        #         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        #         PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+        #         PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+        #         SELECT distinct ?subject ?object
+        #             WHERE {
+        #                 indiv:EGS004 (owl:Thing|!owl:Thing)* ?object.
+        #                 ?object a ?class .
+        #                 ?class a owl:Class
+        #         }
+        #         """)
+
+
+        with onto_classes:
+
+            # x = list(default_world.sparql("""
+            #     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            #     PREFIX owl: <http://www.w3.org/2002/07/owl#>
+            #     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            #     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+            #     PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+            #     PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+            #     SELECT distinct ?subject ?object
+            #         WHERE {
+            #             indiv:EGS004 (owl:Thing|!owl:Thing)* ?object.
+            #             ?object a ?class .
+            #             ?class a owl:Class
+            #     }
+            #     """))
+
+            print(x  )
 
             exit()
 
