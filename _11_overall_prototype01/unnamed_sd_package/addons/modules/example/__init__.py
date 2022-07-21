@@ -13,10 +13,11 @@ import itertools
 
 class FutureUtilities():
 
+
     def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
-        w = World()
-        onto_classes = w.get_ontology("file://" + path_to_ontology_classes).load()
-        onto_individuals = w.get_ontology("file://" + path_to_ontology_individuals).load()
+        #w = World()
+        onto_classes = get_ontology("file://" + path_to_ontology_classes).load() # w.
+        onto_individuals = get_ontology("file://" + path_to_ontology_individuals).load() # w.
         onto_individuals.imported_ontologies.append(onto_classes)
         #onto_individuals = onto_individuals.load()
         return onto_classes, onto_individuals
@@ -96,7 +97,30 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
+
     def json_to_onto(onto_classes, onto_individuals, individual_name):
+
+        with onto_classes:
+            x = list(default_world.sparql("""
+                    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+                    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+                    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+                    PREFIX indiv: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals#>
+                    PREFIX synt: <http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#>
+                    SELECT ?subject ?prop ?object
+                        WHERE { 
+                            { select distinct ?prop {[] ?prop []} }
+                            ?subject ?prop+ ?object
+                }
+                """))
+
+            print(x[:10]  )
+
+            exit()
+
+
+
         """
         Overreaching function creates new individual if 
         """

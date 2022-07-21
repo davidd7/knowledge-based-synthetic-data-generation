@@ -1,0 +1,548 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation"
+         xmlns="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#">
+
+<owl:Ontology rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation"/>
+
+<owl:ObjectProperty rdf:about="#Has_Camera">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Camera"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Effect">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Effect"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_FallingObject">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#SimplePhysicalPlausibility"/>
+  <rdfs:range rdf:resource="#Object"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_FixedObject">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#SimplePhysicalPlausibility"/>
+  <rdfs:range rdf:resource="#Object"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Ground">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Ground"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Label">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Label"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Light">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Light"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_LocationInfo">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Camera"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:domain rdf:resource="#SimpleLight"/>
+  <rdfs:range rdf:resource="#LocationInfo"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Model">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:range rdf:resource="#Model"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Multiplicity">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:domain rdf:resource="#SimpleLight"/>
+  <rdfs:range rdf:resource="#Multiplicity"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Object">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Object"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_ObjectToRecognize">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#SegmentationLabel"/>
+  <rdfs:range rdf:resource="#Object"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_RotationInfo">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Camera"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:domain rdf:resource="#SimpleLight"/>
+  <rdfs:range rdf:resource="#RotationInfo"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Scaling">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:range rdf:resource="#Scaling"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Texture">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#Object"/>
+  <rdfs:range rdf:resource="#Texture"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#Has_Volume">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#EqualDistributedLocationInVolume"/>
+  <rdfs:domain rdf:resource="#GenerationScheme"/>
+  <rdfs:range rdf:resource="#Volume"/>
+</owl:ObjectProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_File">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#Model"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_MaximumInt">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#EqualDistributionRangeMultiplicity"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_MinimumInt">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#EqualDistributionRangeMultiplicity"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_SegmentationType">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SegmentationLabel"/>
+  <rdfs:range>
+    <rdfs:Datatype>
+      <owl:oneOf>
+        <rdf:Description>
+      <rdf:first>SegmentClasses</rdf:first>
+        <rdf:rest>
+        <rdf:Description>
+      <rdf:first>SegmentInstances</rdf:first>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:Description>
+        </rdf:rest>
+        </rdf:Description>
+      </owl:oneOf>
+    </rdfs:Datatype>
+  </rdfs:range>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_XCoordinate">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SimpleVolume"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_XLength">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SimpleRandomGround"/>
+  <rdfs:domain rdf:resource="#SimpleVolume"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_YCoordinate">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SimpleVolume"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_YLength">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SimpleRandomGround"/>
+  <rdfs:domain rdf:resource="#SimpleVolume"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdfs:comment>The unit is in millimeters (mm).</rdfs:comment>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#Has_ZCoordinate">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#SimpleVolume"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+</owl:DatatypeProperty>
+
+<owl:Class rdf:about="#GenerationScheme">
+  <rdfs:label>GenerationScheme</rdfs:label>
+</owl:Class>
+
+<owl:Class rdf:about="#Camera"/>
+
+<owl:Class rdf:about="#Effect"/>
+
+<owl:Class rdf:about="#SimplePhysicalPlausibility">
+  <rdfs:subClassOf rdf:resource="#Effect"/>
+</owl:Class>
+
+<owl:Class rdf:about="#Object"/>
+
+<owl:Class rdf:about="#Ground"/>
+
+<owl:Class rdf:about="#Label"/>
+
+<owl:Class rdf:about="#Light"/>
+
+<owl:Class rdf:about="#SimpleLight">
+  <rdfs:subClassOf rdf:resource="#Light"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_LocationInfo"/>
+      <owl:onClass rdf:resource="#LocationInfo"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_Multiplicity"/>
+      <owl:onClass rdf:resource="#Multiplicity"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_RotationInfo"/>
+      <owl:onClass rdf:resource="#RotationInfo"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#LocationInfo"/>
+
+<owl:Class rdf:about="#Model">
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_File"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#Multiplicity"/>
+
+<owl:Class rdf:about="#SegmentationLabel">
+  <rdfs:subClassOf rdf:resource="#Label"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_SegmentationType"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#RotationInfo"/>
+
+<owl:Class rdf:about="#Scaling"/>
+
+<owl:Class rdf:about="#Texture"/>
+
+<owl:Class rdf:about="#EqualDistributedLocationInVolume">
+  <rdfs:subClassOf rdf:resource="#LocationInfo"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_Volume"/>
+      <owl:onClass rdf:resource="#Volume"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#Volume"/>
+
+<owl:Class rdf:about="#EqualDistributionRangeMultiplicity">
+  <rdfs:subClassOf rdf:resource="#Multiplicity"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_MaximumInt"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_MinimumInt"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#SimpleVolume">
+  <rdfs:subClassOf rdf:resource="#Volume"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_XCoordinate"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_XLength"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_YCoordinate"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_YLength"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_ZCoordinate"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#SimpleRandomGround">
+  <rdfs:subClassOf rdf:resource="#Ground"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_XLength"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_YLength"/>
+      <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#EqualDistributionRandomRotation">
+  <rdfs:subClassOf rdf:resource="#RotationInfo"/>
+</owl:Class>
+
+<owl:Class rdf:about="#EqualDistributionRotationLookingAtVolume">
+  <rdfs:subClassOf rdf:resource="#RotationInfo"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_Volume"/>
+      <owl:someValuesFrom rdf:resource="#Volume"/>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#RandomTexture">
+  <rdfs:subClassOf rdf:resource="#Texture"/>
+</owl:Class>
+
+<owl:Class rdf:about="#SimpleCamera">
+  <rdfs:subClassOf rdf:resource="#Camera"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_LocationInfo"/>
+      <owl:onClass rdf:resource="#LocationInfo"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_RotationInfo"/>
+      <owl:onClass rdf:resource="#RotationInfo"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#SimpleFlyingDistractors">
+  <rdfs:subClassOf rdf:resource="#Effect"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_Multiplicity"/>
+      <owl:onClass rdf:resource="#Multiplicity"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#Has_Volume"/>
+      <owl:onClass rdf:resource="#Volume"/>
+      <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+</owl:Class>
+
+<owl:Class rdf:about="#SimpleRandomNoise">
+  <rdfs:subClassOf rdf:resource="#Effect"/>
+</owl:Class>
+
+<GenerationScheme rdf:about="#EGS1">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_Camera rdf:resource="#EGS1_Camera"/>
+  <Has_Effect rdf:resource="#EGS1_SimplePhysicalPlausibility"/>
+  <Has_Ground rdf:resource="#EGS1_RandomPicturesGround"/>
+  <Has_Label rdf:resource="#EGS1_Label"/>
+  <Has_Object rdf:resource="#EGS1_Object1"/>
+  <Has_Object rdf:resource="#EGS1_Object2"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeCamera"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeLight"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeObjectSpawns"/>
+  <rdfs:comment>'EGS1' is short for ExampleGenerationScheme1</rdfs:comment>
+  <rdfs:label>EGS1</rdfs:label>
+</GenerationScheme>
+
+<SimpleCamera rdf:about="#EGS1_Camera">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_LocationInfo rdf:resource="#EGS1_LocationInfoVolumeCamera"/>
+  <Has_RotationInfo rdf:resource="#EGS1_RotationInfoLookingAtGround"/>
+</SimpleCamera>
+
+<SimplePhysicalPlausibility rdf:about="#EGS1_SimplePhysicalPlausibility">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_FallingObject rdf:resource="#EGS1_Object1"/>
+  <Has_FallingObject rdf:resource="#EGS1_Object2"/>
+  <Has_FixedObject rdf:resource="#EGS1_RandomPicturesGround"/>
+</SimplePhysicalPlausibility>
+
+<SimpleRandomGround rdf:about="#EGS1_RandomPicturesGround">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</SimpleRandomGround>
+
+<SegmentationLabel rdf:about="#EGS1_Label">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_ObjectToRecognize rdf:resource="#EGS1_Object1"/>
+  <Has_ObjectToRecognize rdf:resource="#EGS1_Object2"/>
+  <Has_SegmentationType>SegmentClasses</Has_SegmentationType>
+</SegmentationLabel>
+
+<Object rdf:about="#EGS1_Object1">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_LocationInfo rdf:resource="#EGS1_LocationInfoVolumeObjectSpawns"/>
+  <Has_Model rdf:resource="#EGS1_Object1_Model"/>
+  <Has_Multiplicity rdf:resource="#EGS1_Object1_Multiplicity"/>
+  <Has_RotationInfo rdf:resource="#EGS1_RotationInfoRandom"/>
+</Object>
+
+<Object rdf:about="#EGS1_Object2">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_LocationInfo rdf:resource="#EGS1_LocationInfoVolumeObjectSpawns"/>
+  <Has_Model rdf:resource="#EGS1_Object2_Model"/>
+  <Has_Multiplicity rdf:resource="#EGS1_Object2_Multiplicity"/>
+  <Has_RotationInfo rdf:resource="#EGS1_RotationInfoRandom"/>
+</Object>
+
+<SimpleVolume rdf:about="#EGS1_VolumeCamera">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
+  <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
+  <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
+  <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+  <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">400.0</Has_ZCoordinate>
+</SimpleVolume>
+
+<SimpleVolume rdf:about="#EGS1_VolumeLight">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
+  <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
+  <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
+  <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+  <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">500.0</Has_ZCoordinate>
+</SimpleVolume>
+
+<SimpleVolume rdf:about="#EGS1_VolumeObjectSpawns">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
+  <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
+  <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
+  <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+  <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</Has_ZCoordinate>
+</SimpleVolume>
+
+<EqualDistributedLocationInVolume rdf:about="#EGS1_LocationInfoVolumeCamera">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeCamera"/>
+</EqualDistributedLocationInVolume>
+
+<EqualDistributionRotationLookingAtVolume rdf:about="#EGS1_RotationInfoLookingAtGround">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeGround"/>
+</EqualDistributionRotationLookingAtVolume>
+
+<EqualDistributedLocationInVolume rdf:about="#EGS1_LocationInfoVolumeGround">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeGround"/>
+</EqualDistributedLocationInVolume>
+
+<SimpleVolume rdf:about="#EGS1_VolumeGround">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
+  <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
+  <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
+  <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+  <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</Has_ZCoordinate>
+  <rdfs:comment>Volume for where the lamera should look at (same as object spawn area, but at z=0)</rdfs:comment>
+</SimpleVolume>
+
+<EqualDistributedLocationInVolume rdf:about="#EGS1_LocationInfoVolumeObjectSpawns">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_Volume rdf:resource="#EGS1_VolumeObjectSpawns"/>
+</EqualDistributedLocationInVolume>
+
+<Model rdf:about="#EGS1_Object1_Model">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_File>media/untitled.obj</Has_File>
+</Model>
+
+<EqualDistributionRangeMultiplicity rdf:about="#EGS1_Object1_Multiplicity">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</Has_MaximumInt>
+  <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MinimumInt>
+</EqualDistributionRangeMultiplicity>
+
+<EqualDistributionRandomRotation rdf:about="#EGS1_RotationInfoRandom">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</EqualDistributionRandomRotation>
+
+<Model rdf:about="#EGS1_Object2_Model">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_File>media/untitled.obj</Has_File>
+</Model>
+
+<EqualDistributionRangeMultiplicity rdf:about="#EGS1_Object2_Multiplicity">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+  <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MaximumInt>
+  <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MinimumInt>
+</EqualDistributionRangeMultiplicity>
+
+
+</rdf:RDF>

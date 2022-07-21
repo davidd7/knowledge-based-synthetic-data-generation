@@ -52,7 +52,8 @@ def start_json_to_onto():
 if __name__ == "__main__":
     print("start")
 
-    start_json_to_onto()
+    generate_data()
+    #start_json_to_onto()
 
     print("end")
 

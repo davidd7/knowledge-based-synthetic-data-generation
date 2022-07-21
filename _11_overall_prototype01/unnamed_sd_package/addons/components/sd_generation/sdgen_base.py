@@ -1,3 +1,4 @@
+from imp import reload
 from owlready2 import *
 import blenderproc as bproc
 import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
@@ -65,7 +66,18 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self, number_of_images, target_path):
         # Load ontology (note: ontology is not closed or anything at the end at the moment)
-        ontology = get_ontology(self.__path_to_ontology).load() # World().get_ontology(... hat Probleme auch nicht gelöst
+        #print("===> " + self.__path_to_ontology)
+        # try:
+        #     print(ontology)
+        # except:
+        #     print("An exception occurred")
+
+
+        w = World()
+        ontology = w.get_ontology(self.__path_to_ontology).load() # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
+        #ontology.save(f'{ get_path_to_package() / "data/ontologies/" / "start.owl" }')
+
+        #with ontology:
         generation_scheme_instance = list(ontology.search(label=self.__generation_scheme_instance_label))[0]  # Error wenn keines finde hoffentlich
 
         # Set up all handlers
@@ -82,6 +94,9 @@ class SimpleSDGenerationManager(SDGenerationManager):
         # Clean up all handlers
         for el in reversed(self.__handlers_all):
             el.end(ontology)
+
+        ontology.destroy()
+        ontology = None
 
 
 
@@ -249,21 +264,21 @@ class SimpleObjectHandler(SDGenerationHandler):
 
         # 1. Query and iterate over all objects
         res = self.__generation_scheme_instance.Has_Object # There's no SimpleObject class in ontology yet so getting all Objects with Has_Object is enough
-        for object in res:
+        for object_individual in res:
             # Add object to blender
             res_objects = create_objects(
-                obj=object.Has_Model[0].Has_File[0], how_many=object.Has_Multiplicity[0].Has_MaximumInt[0])
-            object.bp_reference = res_objects
+                obj=object_individual.Has_Model[0].Has_File[0], how_many=object_individual.Has_Multiplicity[0].Has_MaximumInt[0])
+            object_individual.bp_reference = res_objects
 
             # 3. Instantiate LocationInfo- and RotationInfo-Handlers
             manager.add(
-                SimpleMultiplicityHandler(object, object.Has_Multiplicity[0])
+                SimpleMultiplicityHandler(object_individual, object_individual.Has_Multiplicity[0])
             )
             manager.add(
-                SimpleLocationHandler(object, object.Has_LocationInfo[0])
+                SimpleLocationHandler(object_individual, object_individual.Has_LocationInfo[0])
             )
             manager.add(
-                SimpleRotationHandler(object, object.Has_RotationInfo[0])
+                SimpleRotationHandler(object_individual, object_individual.Has_RotationInfo[0])
             )
 
     def iteration(self):
