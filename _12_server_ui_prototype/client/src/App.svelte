@@ -52,11 +52,11 @@ let data = JSON.parse(`
 </HeadlinedGroup>
 <HeadlinedGroup headline="Szene modellieren:">
 	<HeadlinedGroup headline="Bereich, in dem alle Objekte erscheinen:">
-		<NumberInput label="Länge in x-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_x"} />
-		<NumberInput label="Länge in y-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_y"} />
+		<NumberInput label="LÃ¤nge in x-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_x"} />
+		<NumberInput label="LÃ¤nge in y-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_y"} />
 	</HeadlinedGroup>
 	<HeadlinedGroup headline="Kamera:">
-		<NumberInput label="Höhe über Tisch:" unitLabel="mm"  data={$store} valueKey={"camera_height"} />
+		<NumberInput label="HÃ¶he Ã¼ber Tisch:" unitLabel="mm"  data={$store} valueKey={"camera_height"} />
 	</HeadlinedGroup>
 </HeadlinedGroup>
 <button on:click={test}>Absenden</button>

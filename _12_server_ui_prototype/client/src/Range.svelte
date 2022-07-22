@@ -15,10 +15,9 @@
 
 	let test = [data[rangeStartKey],data[rangeEndKey]]
 
-
 	$: {
 		data[rangeStartKey] = test[0];
-		console.log("---");
+		//console.log("---");
 	}
 	$: {
 		data[rangeEndKey] = test[1];
@@ -27,7 +26,7 @@
 
 
 <div id="slider2">
-<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label'/>
+<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label' />
 </div>
 {#if debug == true}
 	{JSON.stringify(data)}
