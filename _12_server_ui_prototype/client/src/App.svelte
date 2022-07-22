@@ -41,7 +41,8 @@ let data = JSON.parse(`
 </script>
 
 
-<HeadlinedGroup headline="Objekte, die erkannt werden sollen:">
+<div class="app-container">
+<HeadlinedGroup headline="Zu erkennende Objekte">
 	<Multiple array={$store.objects_to_recognize} newElement={ {url:"", min:3, max:6} }>
 		3D-Modell:
 		<Input3DModel valueKey={"url"} />
@@ -50,16 +51,15 @@ let data = JSON.parse(`
 		<Range minValue={0} maxValue={10} rangeStartKey={"min"} rangeEndKey={"max"} />
 	</Multiple>
 </HeadlinedGroup>
-<HeadlinedGroup headline="Szene modellieren:">
-	<HeadlinedGroup headline="Bereich, in dem alle Objekte erscheinen:">
-		<NumberInput label="Länge in x-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_x"} />
-		<NumberInput label="Länge in y-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_y"} />
-	</HeadlinedGroup>
-	<HeadlinedGroup headline="Kamera:">
-		<NumberInput label="Höhe über Tisch:" unitLabel="mm"  data={$store} valueKey={"camera_height"} />
-	</HeadlinedGroup>
+<HeadlinedGroup headline="Bereich, in dem alle Objekte erscheinen">
+	<NumberInput label="Länge in x-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_x"} />
+	<NumberInput label="Länge in y-Richtung:" unitLabel="mm"  data={$store} valueKey={"area_length_y"} />
 </HeadlinedGroup>
-<button on:click={test}>Absenden</button>
+<HeadlinedGroup headline="Kamera">
+	<NumberInput label="Höhe über Tisch:" unitLabel="mm"  data={$store} valueKey={"camera_height"} />
+</HeadlinedGroup>
+<button on:click={test} class="app-send-button">Absenden</button>
+</div>
 
 
 
@@ -67,8 +67,19 @@ let data = JSON.parse(`
 
 
 
+<style>
+.app-container {
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 60px;
+}
 
+.app-send-button {
+	margin-top: 16px;
+}
 
+</style>
 
 
 

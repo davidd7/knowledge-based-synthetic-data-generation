@@ -11,10 +11,7 @@
 	console.log("Input3DModel initializes");
 	console.log(data);
 	console.log(valueKey);
-	// $: hintText = (data[valueKey] == "") ? "rrr" : hintText = data[valueKey];
-	// let hintText = (data[valueKey] == "") ? "rrr" : hintText = data[valueKey];
 	$: {
-		// data[valueKey] = hintText;
 		data[valueKey] = data[valueKey]
 	}
 	
