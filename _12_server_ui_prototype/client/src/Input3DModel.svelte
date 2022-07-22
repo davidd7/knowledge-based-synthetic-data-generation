@@ -20,43 +20,32 @@
 	
 	let inputFile;
 	let inputText;
-	// console.log(inputFile);
-	// $: if (inputFile != undefined) {
-	// 	console.log(inputFile);
-	// 	/*inputFile.onchange = () => {
-	// 		console.log("==> YEAH")
-	// 		console.log(inputFile.value);
-	// 	}*/
-	// }
 	
 	function fileChanged() {
-			var formData = new FormData()
-			formData.append('file', inputFile.files[0])
+		// Prepare what to send
+		var formData = new FormData()
+		formData.append('file', inputFile.files[0]);
 
-			inputText.value = "";
-			inputText.placeholder = "Lädt...";
-			fetch('/upload', {
-			method: 'POST',
-			body: formData
-			}).then(response => {
-				if (!response.ok) {
-					throw new Error('Something went wrong');
-				}
-				return response.text();
-			}).then(response_data => {
-				if (response_data == "") {
-					throw new Error('Something went wrong');
-				}
+		inputText.value = "";
+		inputText.placeholder = "Lädt...";
 
-				console.log("Received answer!");
-				console.log(response_data);
-				//inputText.value = data;
-				//hintText = data;
-				data[valueKey] = response_data;
-				inputText.placeholder = "Keine Datei hochgeladen";
-			}).catch( (error) => {
-				inputText.placeholder = "Fehler: " + error;
-			} );
+		fetch('/upload', {
+		method: 'POST',
+		body: formData
+		}).then(response => {
+			if (!response.ok) {
+				throw new Error('Something went wrong');
+			}
+			return response.text();
+		}).then(response_data => {
+			if (response_data == "") {
+				throw new Error('Something went wrong');
+			}
+			data[valueKey] = response_data;
+			inputText.placeholder = "Keine Datei hochgeladen";
+		}).catch( (error) => {
+			inputText.placeholder = "Fehler: " + error;
+		} );
 
 
 	}
@@ -69,9 +58,9 @@
 
 <input bind:this={inputText} type="text" disabled="true" placeholder="Keine Datei hochgeladen" value={data[valueKey]} />
 
-<button>Datei auswählen</button>
+<button on:click={()=>inputFile.click()}>Datei auswählen</button>
 
-<input bind:this={inputFile} type="file" label="asdsad" on:change={fileChanged} />
+<input bind:this={inputFile} type="file" on:change={fileChanged}  class={"input-file"} />
 
 
 
@@ -83,6 +72,9 @@
 
 
 <style>
+	.input-file {
+		visibility: hidden;
+	}
 </style>
 
 
