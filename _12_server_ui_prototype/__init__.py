@@ -8,6 +8,7 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import pathlib
 from datetime import datetime
+from generationschemes import simple_page
 
 UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
 ALLOWED_EXTENSIONS = {'obj'}
@@ -18,6 +19,28 @@ ALLOWED_EXTENSIONS = {'obj'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
+
+
+
+
+
+
+from . import db
+db.init_app(app)
+
+# return app
+
+
+
+
+
+
+
+
+
 
 
 def allowed_file(filename):
@@ -58,6 +81,8 @@ def upload_file():
 
 
 
+
+
 # Path for our main Svelte page
 @app.route("/")
 def base():
@@ -69,9 +94,24 @@ def home(path):
     return send_from_directory('client/public', path)
 
 
-# @app.route("/upload")
-# def hello():
-#     return str(random.randint(0, 100))
+
+
+
+# @app.route('/generation-schemes', methods=['GET'])
+# def get_generation_schemes():
+
+app.register_blueprint(simple_page, url_prefix='/generation-schemes')
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
