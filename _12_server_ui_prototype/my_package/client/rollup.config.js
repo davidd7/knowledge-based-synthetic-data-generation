@@ -34,7 +34,8 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/bundle.js'
+		file: 'public/bundle.js',
+		inlineDynamicImports: true // <- this was apparently necessariy ? (https://stackoverflow.com/questions/65690682/why-does-rollup-complain-about-code-splitting-when-i-am-not-code-splitting)
 	},
 	plugins: [
 		svelte({

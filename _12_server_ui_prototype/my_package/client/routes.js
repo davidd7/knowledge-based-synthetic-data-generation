@@ -1,7 +1,7 @@
 
 
 import Home from "./components/Home.svelte";
-import Article from "./components/Article.svelte";
+// import Article from "./components/Article.svelte";
 import NotFound from "./components/NotFound.svelte";
 import GenerationSchemes from "./pages/GenerationSchemes.svelte";
 import NewGenerationScheme from "./pages/NewGenerationScheme.svelte";
@@ -14,7 +14,7 @@ export const routes = {
   "/generation-schemes/new": NewGenerationScheme,
   "/generation-schemes/:id/edit": EditGenerationScheme,
   "/jobs": Jobs,
-  "/jobs/new": Article,
+  "/jobs/new": Jobs,
   "*": NotFound
 };
 

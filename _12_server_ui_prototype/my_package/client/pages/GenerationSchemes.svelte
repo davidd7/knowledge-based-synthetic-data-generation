@@ -2,7 +2,7 @@
     import urlSlug from "url-slug";
 	import { onMount } from 'svelte';
     import Router, { link } from "svelte-spa-router";
-    import { routes } from "../routes.js";
+    // import { routes } from "../routes.js";
     // import { format } from "timeago.js";
     // import Card from "./Card.svelte";
     // import { blogs } from "../data.js";
@@ -51,6 +51,6 @@
 
 {#each datas as el}
     <div>
-        {el.name}, {el.module_name} <button>Edit</button>
+        {el.name}, {el.module_name} <a href={`/generation-schemes/${el.id}/edit`} use:link><button>Edit</button>
     </div>
 {/each}

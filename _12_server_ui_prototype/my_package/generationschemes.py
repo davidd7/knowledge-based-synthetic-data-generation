@@ -84,4 +84,50 @@ def list_schemes():
 
 
 
+@simple_page.route('/<int:scheme_id>', methods=['GET', 'PUT'])
+def single_scheme(scheme_id):
+
+    if request.method == 'PUT':
+        data = request.get_data(as_text=True)
+        db = get_db()
+        cursor = db.cursor()
+        error = None
+
+        if error is None:
+            try:
+                cursor.execute(
+                    "UPDATE generation_schemes SET data = ? WHERE id = ?",
+                    (data, scheme_id),
+                )
+                db.commit()
+            except db.IntegrityError:
+                error = f"User {name} is already registered."
+                return "error"
+            else:
+                # print(cursor.lastrowid)
+
+                # return jsonify( {
+                #     "id" : cursor.lastrowid,
+                #     "name" : name,
+                #     "module_name" : module_name
+                # } )
+                pass
+
+
+    if request.method == 'GET' or request.method == 'PUT': # also make in post so that client gets post as result
+        db = get_db()
+        row = db.execute(
+            'SELECT * FROM generation_schemes WHERE id = ?', (scheme_id,)
+        ).fetchone()
+
+        res =  {
+            "id" : row["id"],
+            "name" : row["name"],
+            "module_name" : row["module_name"],
+            "data" : row["data"]
+        };
+
+        return jsonify(res)
+
+
 

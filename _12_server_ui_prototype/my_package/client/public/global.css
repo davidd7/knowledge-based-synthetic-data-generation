@@ -1,3 +1,9 @@
+
+* {
+	box-sizing: border-box;
+}
+
+
 html, body {
 	position: relative;
 	width: 100%;
@@ -64,6 +70,10 @@ button:focus {
 
 main {
 	max-width: 1024px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 16px;
+	padding-right: 16px;
 }
 
 
