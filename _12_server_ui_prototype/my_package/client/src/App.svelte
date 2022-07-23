@@ -1,25 +1,26 @@
 <script>
     import Router, { link } from "svelte-spa-router";
     import { routes } from "../routes.js";
-  </script>
+</script>
   
-  <main>
-    <div style="display: flex; flex-direction: row; background: lightgrey; padding: 20px;">
-        <div style="flex-grow: 0; ">
-            SDGeneration
-        </div>
-        <div style="flex-grow: 1; text-align: center;">
-            <a href={`/generation-schemes`} use:link>Generierungsschemata</a> - <a href={`/jobs`} use:link>Aufträge</a>
-        </div>
-        <div style="flex-grow: 0;">
+<nav>
+  <div style="display: flex; flex-direction: row; background: lightgrey; padding: 20px;">
+      <div style="flex-grow: 0; ">
+          SDGeneration
+      </div>
+      <div style="flex-grow: 1; text-align: center;">
+          <a href={`/generation-schemes`} use:link>Generierungsschemata</a> - <a href={`/jobs`} use:link>Aufträge</a>
+      </div>
+      <div style="flex-grow: 0;">
 
-        </div>
+      </div>
     </div>
+</nav>
 
+<main>
+  <Router {routes}/>
+</main>
 
-
-    <Router {routes}/>
-  </main>
   
   <style>
     /* @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap"); */

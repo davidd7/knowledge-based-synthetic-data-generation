@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import pathlib
 from datetime import datetime
 from my_package.generationschemes import simple_page
+from my_package.modules import modules_bp
 
 
 
@@ -103,6 +104,7 @@ def create_app(test_config=None):
     # def get_generation_schemes():
 
     app.register_blueprint(simple_page, url_prefix='/generation-schemes')
+    app.register_blueprint(modules_bp, url_prefix='/modules')
 
 
 
@@ -120,7 +122,7 @@ def create_app(test_config=None):
 
 
 
-
+    # Connect to database (use single object for all requests, via factory pattern)
     from my_package import db
     db.init_app(app)
     return app

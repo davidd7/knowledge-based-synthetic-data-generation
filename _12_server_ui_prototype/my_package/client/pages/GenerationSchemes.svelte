@@ -1,6 +1,8 @@
 <script>
     import urlSlug from "url-slug";
 	import { onMount } from 'svelte';
+    import Router, { link } from "svelte-spa-router";
+    import { routes } from "../routes.js";
     // import { format } from "timeago.js";
     // import Card from "./Card.svelte";
     // import { blogs } from "../data.js";
@@ -39,10 +41,14 @@
 
 </script>
     
-YAY
 
 
- <h1>Generierungsschemata</h1>
+<div class="page-header">
+    <h1 style="flex-grow: 1;">Generierungsschemata</h1> 
+    <a href={`/generation-schemes/new`} use:link><button style="flex-grow: 0;" >Neues Schema</button></a>
+</div>
+
+
 {#each datas as el}
     <div>
         {el.name}, {el.module_name} <button>Edit</button>

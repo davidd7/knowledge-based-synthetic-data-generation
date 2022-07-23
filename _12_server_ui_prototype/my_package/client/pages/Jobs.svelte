@@ -3,10 +3,12 @@
     // import { format } from "timeago.js";
     // import Card from "./Card.svelte";
     // import { blogs } from "../data.js";
-    </script>
-    
-<div>
-Aufträge <button>Neuer Auftrag</button>
+</script>
+
+
+<div class="page-header">
+    <h1 style="flex-grow: 1;">Aufträge</h1> 
+    <button style="flex-grow: 0;">Neuer Auftrag</button>
 </div>
 
 <table>

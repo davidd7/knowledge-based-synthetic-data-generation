@@ -60,3 +60,19 @@ button:active {
 button:focus {
 	border-color: #666;
 }
+
+
+main {
+	max-width: 1024px;
+}
+
+
+.page-header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+
+
+

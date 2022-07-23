@@ -27,7 +27,8 @@ simple_page = Blueprint('simple_page', __name__, template_folder='templates')
 
 
 @simple_page.route('/', methods=['GET', 'POST'])
-def show():
+def list_schemes():
+
     if request.method == 'GET':
         db = get_db()
         schemes = db.execute(
@@ -43,7 +44,6 @@ def show():
                 } )
 
         return jsonify(list)
-        #return jsonify([tuple(row) for row in schemes])
 
     if request.method == 'POST':
         name = request.form['name'] # <- Das wift einen error, wenn name nicht gesendet wurde. Ich kapiere nicht, warum wir dann unten prüfen, ob es leer gelassen wurde wnen in dem Fall eh alles mit nem Error abstürzt....
