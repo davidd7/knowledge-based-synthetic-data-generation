@@ -34,12 +34,6 @@
       text-decoration: none;
       color: #551a8b;
     }
-  
-    main {
-      /* max-width: 800px; */
-      /*margin: 0 auto;*/
-      /* font-family: "Montserrat", sans-serif; */
-    }
   </style>
 
 

@@ -74,6 +74,7 @@ main {
 	margin-right: auto;
 	padding-left: 16px;
 	padding-right: 16px;
+	padding-bottom: 60px;
 }
 
 
@@ -81,8 +82,61 @@ main {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	gap: 8px;
 }
 
 
 
 
+
+
+
+
+
+
+
+
+/*https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l:*/
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+	width: 100%;
+}
+.styled-table thead tr {
+	font-weight: 600;
+}
+.styled-table thead tr td {
+	padding-bottom: 10px;
+	color: darkslategrey;
+}
+
+.styled-table tbody {
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+}
+
+.styled-table th, .styled-table td {
+    padding: 4px 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.styled-table tbody tr:last-child {
+    border-bottom: 0px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.styled-table .small-table-column {
+	width:0px;
+}
+
+.styled-table button {
+	margin: 0px;
+	/* font-size: 16px; */
+}

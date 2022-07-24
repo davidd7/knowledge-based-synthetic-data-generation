@@ -2,10 +2,6 @@
     import urlSlug from "url-slug";
 	import { onMount } from 'svelte';
     import Router, { link } from "svelte-spa-router";
-    // import { routes } from "../routes.js";
-    // import { format } from "timeago.js";
-    // import Card from "./Card.svelte";
-    // import { blogs } from "../data.js";
 
     let datas = [];
 
@@ -45,12 +41,49 @@
 
 <div class="page-header">
     <h1 style="flex-grow: 1;">Generierungsschemata</h1> 
-    <a href={`/generation-schemes/new`} use:link><button style="flex-grow: 0;" >Neues Schema</button></a>
+    <a href={`/generation-schemes/new`} use:link>
+		<button style="flex-grow: 0;" >Neues Schema</button>
+	</a>
 </div>
 
 
+<table class="styled-table">
+	<thead>
+		<tr>
+			<td>
+				Name
+			</td>
+			<td>
+				Basis-Modul
+			</td>
+			<td class="small-table-column">
+				Optionen
+			</td>
+		</tr>
+	</thead>
+	<tbody>
 {#each datas as el}
-    <div>
-        {el.name}, {el.module_name} <a href={`/generation-schemes/${el.id}/edit`} use:link><button>Edit</button>
-    </div>
+    <tr>
+        <td>
+			{el.name}
+		</td>
+		<td>
+			{el.module_name}
+		</td>
+		<td class="small-table-column">
+			<a href={`/generation-schemes/${el.id}/edit`} use:link>
+				<button>Bearbeiten</button>
+			</a>
+		</td>
+	</tr>
 {/each}
+	</tbody>
+</table>
+
+
+
+
+
+
+
+

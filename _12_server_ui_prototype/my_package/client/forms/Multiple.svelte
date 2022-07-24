@@ -1,6 +1,7 @@
 
 <script>
 	import ForwardContext from "./ForwardContext.svelte";
+	import { slide, fade } from 'svelte/transition';
 	export let array = [];
 	export let newElement = {};
 	export let debug = false;
@@ -22,12 +23,12 @@
 <div>
 	{#each array as array_element, i (array_element)}
 		<ForwardContext context={array[i]}>
-			<div class={"element-container"} >
-				<div class={"card"}>
+			<div class={"element-container"}  transition:slide|local>
+				<div class={"card"} transition:fade|local>
 					<div style="font-weight: bold; padding-bottom: 6px;">Objekt {i + 1}</div>
 				<slot/>
 			</div>
-				<button on:click={() => {removeElement(i)}} class="button-remove">x</button>
+				<button on:click={() => {removeElement(i)}} class="button-remove" transition:fade|local>x</button>
 			</div>
 		</ForwardContext>
 	{/each}

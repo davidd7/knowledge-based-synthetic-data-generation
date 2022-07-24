@@ -8,7 +8,10 @@
 
 	import { getContext } from 'svelte';
 
-	let data = {};
+	let data;
+	$: {
+		 data = data;
+	}
 
 	let store = getContext('context');
 	store.subscribe(value => {
@@ -76,18 +79,17 @@
 	<HeadlinedGroup headline="Kamera">
 		<NumberInput label="Höhe über Tisch:" unitLabel="mm"  data={data} valueKey={"camera_height"} />
 	</HeadlinedGroup>
-	<!-- <button on:click={test} class="app-send-button">Absenden</button> -->
 </div>
 
 
 
 <style>
-	.app-container {
+	/* .app-container {
 		max-width: 1000px;
 		margin-left: auto;
 		margin-right: auto;
 		padding-bottom: 60px;
-	}
+	} */
 	/* .app-send-button {
 		margin-top: 16px;
 	} */

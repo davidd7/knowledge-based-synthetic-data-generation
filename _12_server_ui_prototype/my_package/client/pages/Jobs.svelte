@@ -1,8 +1,6 @@
 <script>
     import urlSlug from "url-slug";
-    // import { format } from "timeago.js";
-    // import Card from "./Card.svelte";
-    // import { blogs } from "../data.js";
+    
 </script>
 
 
@@ -11,14 +9,62 @@
     <button style="flex-grow: 0;">Neuer Auftrag</button>
 </div>
 
-<table>
 
 
+
+<table class="styled-table">
+	<thead>
+		<tr>
+			<td>
+				ID
+			</td>
+			<td>
+				Schema
+			</td>
+			<td>
+				Datum
+			</td>
+			<td class="small-table-column">
+				Optionen
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+{#each [] as el}
+    <tr>
+        <td>
+			{el.name}
+		</td>
+		<td>
+			{el.module_name}
+		</td>
+		<td class="small-table-column">
+			<a href={`/generation-schemes/${el.id}/edit`} use:link>
+				<button>Bearbeiten</button>
+			</a>
+		</td>
+	</tr>
+{/each}
+	</tbody>
 </table>
 
 
 
-    <!-- <h1>All your traveling tips in one place</h1>
-    {#each blogs as blog, i}
-        <Card title={blog.title} description={blog.content} image={blog.image} publishDate={format(blog.publishDate)}/>
-    {/each} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
