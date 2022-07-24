@@ -4,6 +4,20 @@
     import { push } from "svelte-spa-router";
 	import {writable} from 'svelte/store';
 	import { setContext } from 'svelte';
+
+	// import EinfachesModul from "../forms/EinfachesModul.svelte"
+
+
+
+	const imports = {
+		"EinfachesModul": () => import('../forms/EinfachesModul.svelte')
+	};
+
+	
+	console.log(`../forms/EinfachesModul.svelte`);
+
+
+
     
 	// Export params so that url params are inserted into it
 	export let params;
@@ -44,6 +58,10 @@
 		sendData();
 	}
 
+
+
+
+
     onMount(async () => {
         let response = await fetch(`/generation-schemes/${params.id}`, {
             method: 'GET'
@@ -62,9 +80,21 @@
 
 		$store = JSON.parse(response_data.data);
 
-		Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
+		// Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
+		console.log(`../forms/${response_data.module_name}.svelte`);
+		console.log(`../forms/EinfachesModul.svelte`);
+		// Thing = (await import(`../forms/${response_data.module_name}.svelte`)).default;
+		console.log(await imports[response_data.module_name]());
+		Thing = (await imports[response_data.module_name]()).default;
+		// Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
 	});
     
+
+
+
+
+
+
     async function sendData() {
         feedbackText = "Wird gesendet...";
 		try {
@@ -93,7 +123,7 @@
 	async function reset() {
 		$store = JSON.parse(defaultData);
 		await sendData();
-		Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
+		Thing = (await import(`../forms/EinfachesModul.svelte`)).default;
 		// console.log(`generation-schemes/${params.id}/edit`);
 		// push(`/generation-schemes/${params.id}/edit`);
 	}

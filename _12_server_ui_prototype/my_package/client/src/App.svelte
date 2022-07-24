@@ -4,9 +4,9 @@
 </script>
   
 <nav>
-  <div style="display: flex; flex-direction: row; background: lightgrey; padding: 20px;">
+  <div class="nav-container">
       <div style="flex-grow: 0; ">
-          SDGeneration
+        <a href={`/`} use:link>SDGeneration</a>
       </div>
       <div style="flex-grow: 1; text-align: center;">
           <a href={`/generation-schemes`} use:link>Generierungsschemata</a> - <a href={`/jobs`} use:link>Aufträge</a>
@@ -33,6 +33,18 @@
     :global(a) {
       text-decoration: none;
       color: #551a8b;
+    }
+
+    a {
+      color: black;
+    }
+
+    .nav-container {
+      display: flex;
+      flex-direction: row;
+      background: lightgray;
+      padding: 20px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
     }
   </style>
 
