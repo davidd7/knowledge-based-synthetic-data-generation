@@ -10,6 +10,7 @@ import pathlib
 from datetime import datetime
 from my_package.generationschemes import simple_page
 from my_package.modules import modules_bp
+from my_package.jobs import jobs_bp
 
 
 
@@ -105,6 +106,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(simple_page, url_prefix='/generation-schemes')
     app.register_blueprint(modules_bp, url_prefix='/modules')
+    app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
 
 

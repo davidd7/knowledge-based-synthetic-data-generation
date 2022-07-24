@@ -8,11 +8,13 @@ CREATE TABLE generation_schemes (
   data TEXT NOT NULL
 );
 
-CREATE TABLE post (
+CREATE TABLE generation_jobs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  title TEXT NOT NULL,
-  body TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
-);
+  scheme_id INTEGER NOT NULL,
+  creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  state TEXT NOT NULL,
+  FOREIGN KEY (scheme_id) REFERENCES generation_schemes (id)
+); /* Question: should data / module_name also be saved here, because schemes might change? Or is at least data not importsant, because that data is also stored in ontology anyway after this db entry is created? */
+
+
+

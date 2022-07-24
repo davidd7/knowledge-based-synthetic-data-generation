@@ -24,17 +24,7 @@
 		}).catch( (error) => {
 			// nputText.placeholder = "Fehler: " + error;
 		} );
-
-
-
-
-		// const res = await fetch(`/tutorial/api/album`);
-		// photos = await res.json();
 	});
-    
-		
-
-
 </script>
     
 

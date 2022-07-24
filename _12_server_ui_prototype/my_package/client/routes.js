@@ -7,6 +7,7 @@ import GenerationSchemes from "./pages/GenerationSchemes.svelte";
 import NewGenerationScheme from "./pages/NewGenerationScheme.svelte";
 import EditGenerationScheme from "./pages/EditGenerationScheme.svelte";
 import Jobs from "./pages/Jobs.svelte";
+import JobsNew from "./pages/JobsNew.svelte";
 
 export const routes = {
   "/": Home,
@@ -14,7 +15,7 @@ export const routes = {
   "/generation-schemes/new": NewGenerationScheme,
   "/generation-schemes/:id/edit": EditGenerationScheme,
   "/jobs": Jobs,
-  "/jobs/new": Jobs,
+  "/jobs/new": JobsNew,
   "*": NotFound
 };
 
