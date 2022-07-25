@@ -28,12 +28,12 @@ import unnamed_sd_package.addons.modules.example
 def generate_data():
     # Get path to ontology
     path_to_ontology = get_path_to_package() / "data/ontologies/"
-    path_to_ontology = path_to_ontology / "sdgen_ontology_1.owl"
+    path_to_ontology = path_to_ontology / "sdgen_ontology_2.owl"
     path_to_ontology = f"file://{path_to_ontology}"
 
     # Get path to where the generated data set should be saved
     path_where_to_save_result = get_path_to_package() / "data/generated_training_data/"
-    path_where_to_save_result = path_where_to_save_result / "1/"
+    path_where_to_save_result = path_where_to_save_result / "2/"
 
     # Start the (example) module for data generation
     #example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()
@@ -52,8 +52,8 @@ def start_json_to_onto():
 if __name__ == "__main__":
     print("start")
 
-    #generate_data()
-    start_json_to_onto()
+    generate_data()
+    # start_json_to_onto()
 
     print("end")
 
