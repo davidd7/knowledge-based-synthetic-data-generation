@@ -1,7 +1,8 @@
 import blenderproc as bproc
 import pathlib
 import sys
-ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+# ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
 if MODE == "bp_run":
     new_sys_path = pathlib.Path(__file__).parent
@@ -52,8 +53,8 @@ def start_json_to_onto():
 if __name__ == "__main__":
     print("start")
 
-    generate_data()
-    # start_json_to_onto()
+    start_json_to_onto() # <- Enable to see json_to_onto-test
+    # generate_data() # <- Enable to see data generation test
 
     print("end")
 

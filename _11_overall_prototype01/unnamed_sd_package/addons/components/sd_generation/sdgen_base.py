@@ -8,7 +8,8 @@ import os
 from PIL import Image
 import matplotlib.pyplot as plt
 import pathlib
-ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+# ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
 def get_path_to_package():
     """

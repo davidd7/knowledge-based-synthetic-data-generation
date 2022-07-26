@@ -99,9 +99,10 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-    def json_to_onto(onto_classes, onto_individuals, individual_name):
 
 
+    def delete_existing_tests():
+        
         # graph = default_world.as_rdflib_graph()
         # print(graph)
 
@@ -329,6 +330,10 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
+
+
+
+    def json_to_onto(onto_classes, onto_individuals, individual_name):
         """
         Overreaching function creates new individual if 
         """
