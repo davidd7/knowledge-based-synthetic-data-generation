@@ -670,6 +670,7 @@
         <Has_Effect rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimplePhysicalPlausibility"/>
         <Has_Ground rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround"/>
         <Has_Label rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Label"/>
+        <Has_Light rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLight"/>
         <Has_Object rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
         <Has_Object rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeCamera"/>
@@ -812,6 +813,35 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoRandom">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRandomRotation"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLight -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLight">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleLight"/>
+        <Has_LocationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightLocationInfo"/>
+        <Has_Multiplicity rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightMultiplicity"/>
+        <Has_RotationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoLookingAtGround"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightLocationInfo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightLocationInfo">
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeLight"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightMultiplicity -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightMultiplicity">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</Has_MaximumInt>
+        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</Has_MinimumInt>
     </owl:NamedIndividual>
     
 

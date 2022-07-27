@@ -84,6 +84,10 @@ class SDGenExampleModule(SDGenBaseModule):
         )
 
         sd_generation_manager.add(
+            sdgen_base.SimpleLightHandler()
+        )
+
+        sd_generation_manager.add(
             sdgen_base.RealImageRenderingHandler(path_where_to_save_result),
             at_end_of_iteration=True
         )

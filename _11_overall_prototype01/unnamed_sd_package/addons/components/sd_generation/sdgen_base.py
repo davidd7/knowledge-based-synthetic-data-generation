@@ -8,8 +8,8 @@ import os
 from PIL import Image
 import matplotlib.pyplot as plt
 import pathlib
-# ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
-ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+# ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
 def get_path_to_package():
     """
@@ -335,6 +335,41 @@ class SimpleCameraHandler(SDGenerationHandler):
 
     def iteration(self):
         pass
+
+    def end(self, onto):
+        pass
+
+
+
+class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentlich auch multiplicity-info
+    def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
+        # Save reference to root
+        self.__generation_scheme_instance = generation_scheme_instance
+
+        # Query all SimpleLight-individuals
+        self.__lights = intersection(
+            self.__generation_scheme_instance.Has_Light, onto.search(is_a=onto.SimpleLight))
+
+        # Create lights in blender and extend cached ontology with referencesw to those blender objects
+        for light in self.__lights:
+            blender_light = bproc.types.Light()
+            #light.set_location([2, -2, 0])
+            blender_light.set_energy(300)
+            light.bp_reference = [blender_light]
+
+            # Instantiate LocationInfo- and RotationInfo-Handlers
+            manager.add(
+                SimpleLocationHandler(light, light.Has_LocationInfo[0])
+            )
+            manager.add(
+                SimpleRotationLookingAtVolumeHandler(
+                    light, light.Has_RotationInfo[0])
+            )
+
+    def iteration(self):
+        for light in self.__lights:
+            light.bp_reference[0].set_energy(random.randint(300, 700))
+        # pass
 
     def end(self, onto):
         pass
