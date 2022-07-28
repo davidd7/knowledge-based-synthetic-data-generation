@@ -265,6 +265,7 @@ class SimpleObjectHandler(SDGenerationHandler):
 
         # 1. Query and iterate over all objects
         res = self.__generation_scheme_instance.Has_Object # There's no SimpleObject class in ontology yet so getting all Objects with Has_Object is enough
+        self.__ontology_entities = res
         for object_individual in res:
             # Add object to blender
             res_objects = create_objects(
@@ -283,6 +284,35 @@ class SimpleObjectHandler(SDGenerationHandler):
             )
 
     def iteration(self):
+        for el in self.__ontology_entities:
+            for blender_obj_el in el.bp_reference:
+                texture = bproc.material.create_procedural_texture(random.choice(["CLOUDS"]))
+
+                print(texture.xxxx)
+
+                blender_obj_el.clear_materials()
+                mat = blender_obj_el.new_material(name="test_material")
+                # mat.set_principled_shader_value(
+                #     "Metallic", np.random.uniform(1.0, 1.0))
+                # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
+                # mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
+
+                slot = mat.texture_slots.add()
+                slot.texture = texture
+                blender_obj_el.set_material(0, mat) 
+
+                # mat = blender_obj_el.get_materials()[0]
+
+                # mat = bproc.material.create_material_from_texture(texture, "test_material") #blender_obj_el.new_material(name="test_material")
+                # mat.
+                # mat.set_principled_shader_value(
+                    # "Metallic", np.random.uniform(1.0, 1.0))
+                # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
+
+                # blender_obj_el.set_material(0, mat)
+                # bproc.
+
+
         pass
 
     def end(self, onto):
@@ -356,20 +386,12 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
             for _ in range(light.Has_Multiplicity[0].Has_MaximumInt[0]):
                 blender_light = bproc.types.Light("SPOT")
                 blender_light.set_energy(300)
-
-                # collection = bpy.data.collections.new("MyTestCollection")
-                # bpy.context.scene.collection.children.link(collection)
-                # collection.objects.link(blender_light)
-                # blender_lights.append(collection) # blender_light) #-> diese Lsg bringt ncihts weil a) Light ist kein blender-Objekt, sondern ein blenderProc OBjekt und kann daher nicht in ocllection eingefügt werden, b) Selbst wenn (zbsp kann manuel blener-Obj. erzeugen und Light-Konsturktor übergeben) dann wär trotzdem .hide auch keine blender-Fkt. sondern auch blenderproc und zwar bei meshobjects. Würde also acuh ncihts bringen
                 blender_lights.append(blender_light)
-
 
             light.bp_reference = blender_lights
 
-
             # Instantiate LocationInfo- and RotationInfo-Handlers
-            # obj_ref = blender_light
-            obj_ref_energy = 300#blender_light.get_energy() # obj_ref.get_energy()
+            obj_ref_energy = 300
             def custom_hider(obj_ref, hide):
                 nonlocal obj_ref_energy
                 if hide:
