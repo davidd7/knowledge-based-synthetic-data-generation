@@ -352,12 +352,35 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
 
         # Create lights in blender and extend cached ontology with referencesw to those blender objects
         for light in self.__lights:
-            blender_light = bproc.types.Light()
-            #light.set_location([2, -2, 0])
-            blender_light.set_energy(300)
-            light.bp_reference = [blender_light]
+            blender_lights = []
+            for _ in range(light.Has_Multiplicity[0].Has_MaximumInt[0]):
+                blender_light = bproc.types.Light("SPOT")
+                blender_light.set_energy(300)
+
+                # collection = bpy.data.collections.new("MyTestCollection")
+                # bpy.context.scene.collection.children.link(collection)
+                # collection.objects.link(blender_light)
+                # blender_lights.append(collection) # blender_light) #-> diese Lsg bringt ncihts weil a) Light ist kein blender-Objekt, sondern ein blenderProc OBjekt und kann daher nicht in ocllection eingefügt werden, b) Selbst wenn (zbsp kann manuel blener-Obj. erzeugen und Light-Konsturktor übergeben) dann wär trotzdem .hide auch keine blender-Fkt. sondern auch blenderproc und zwar bei meshobjects. Würde also acuh ncihts bringen
+                blender_lights.append(blender_light)
+
+
+            light.bp_reference = blender_lights
+
 
             # Instantiate LocationInfo- and RotationInfo-Handlers
+            # obj_ref = blender_light
+            obj_ref_energy = 300#blender_light.get_energy() # obj_ref.get_energy()
+            def custom_hider(obj_ref, hide):
+                nonlocal obj_ref_energy
+                if hide:
+                    obj_ref_energy = obj_ref.get_energy()
+                    obj_ref.set_energy(0)
+                else:
+                    if obj_ref.get_energy() == 0:
+                        obj_ref.set_energy(obj_ref_energy)
+            manager.add(
+                SimpleMultiplicityHandler(light, light.Has_Multiplicity[0], custom_hide_function=custom_hider)
+            )
             manager.add(
                 SimpleLocationHandler(light, light.Has_LocationInfo[0])
             )
@@ -368,7 +391,7 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
 
     def iteration(self):
         for light in self.__lights:
-            light.bp_reference[0].set_energy(random.randint(300, 700))
+            light.bp_reference[0].set_energy(random.randint(15, 100)) # in example they used 300, but it's in watt and so 300 is really bright probably
         # pass
 
     def end(self, onto):
@@ -376,9 +399,10 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
 
 
 class SimpleMultiplicityHandler(SDGenerationHandler):
-    def __init__(self, handled_object, individual):
+    def __init__(self, handled_object, individual, custom_hide_function=None):
         self.__handled_object = handled_object
         self.__individual = individual
+        self.__custom_hide_function = custom_hide_function
 
     def init(self, onto, generation_scheme_instance, manager):
         pass
@@ -391,9 +415,16 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
         print(self.__handled_object.bp_reference)
         for count, el in enumerate(self.__handled_object.bp_reference):
             if count < number:
-                el.hide(False)
+                if self.__custom_hide_function == None:
+                    el.hide(False)
+                else:
+                    self.__custom_hide_function(el, False)
             else:
-                el.hide(True)
+                if self.__custom_hide_function == None:
+                    el.hide(True)
+                else:
+                    self.__custom_hide_function(el, True)
+                # el.hide(True)
 
     def end(self, onto):
         pass

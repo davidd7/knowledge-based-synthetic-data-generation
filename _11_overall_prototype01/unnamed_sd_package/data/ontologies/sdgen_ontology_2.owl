@@ -840,7 +840,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLightMultiplicity">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
-        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</Has_MaximumInt>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</Has_MaximumInt>
         <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</Has_MinimumInt>
     </owl:NamedIndividual>
     
