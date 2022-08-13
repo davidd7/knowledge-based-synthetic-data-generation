@@ -282,41 +282,188 @@ class SimpleObjectHandler(SDGenerationHandler):
             manager.add(
                 SimpleRotationHandler(object_individual, object_individual.Has_RotationInfo[0])
             )
+            texture = intersection( object_individual.Has_Texture, onto.search(is_a=onto.RandomTexture))
+            if len(texture) == 1:
+                manager.add(
+                    RandomTextureHandler(object_individual, texture[0])
+                )
+
+
+
+
+
 
     def iteration(self):
-        for el in self.__ontology_entities:
-            for blender_obj_el in el.bp_reference:
-                texture = bproc.material.create_procedural_texture(random.choice(["CLOUDS"]))
+        # for el in self.__ontology_entities:
+        #     for blender_obj_el in el.bp_reference:
+        #         # texture = bproc.material.create_procedural_texture(random.choice(["CLOUDS"]))
 
-                print(texture.xxxx)
+        #         # print(texture.xxxx)
 
-                blender_obj_el.clear_materials()
-                mat = blender_obj_el.new_material(name="test_material")
-                # mat.set_principled_shader_value(
-                #     "Metallic", np.random.uniform(1.0, 1.0))
-                # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
-                # mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
+        #         blender_obj_el.clear_materials()
+        #         mat = blender_obj_el.new_material(name="test_material")
+        #         # mat.set_principled_shader_value(
+        #         #     "Metallic", np.random.uniform(1.0, 1.0))
+        #         # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
+        #         # mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
 
-                slot = mat.texture_slots.add()
-                slot.texture = texture
-                blender_obj_el.set_material(0, mat) 
+        #         # slot = mat.texture_slots.add()
+        #         # slot.texture = texture
+        #         blender_obj_el.set_material(0, mat) 
 
-                # mat = blender_obj_el.get_materials()[0]
+        #         # mat = blender_obj_el.get_materials()[0]
 
-                # mat = bproc.material.create_material_from_texture(texture, "test_material") #blender_obj_el.new_material(name="test_material")
-                # mat.
-                # mat.set_principled_shader_value(
-                    # "Metallic", np.random.uniform(1.0, 1.0))
-                # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
 
-                # blender_obj_el.set_material(0, mat)
-                # bproc.
+        #         # mat.set_principled_shader_value(
+        #         #     "Metallic", np.random.uniform(0.0, 1.0))
+                
+
+        #         mat.set_principled_shader_value( "Metallic", np.random.uniform(0.0, 0.0) )
+        #         mat.set_principled_shader_value( "Transmission", np.random.uniform(0.0, 0.0) )
+
+        #         # obj_mat.set_metallic(0)  # should 0 or 1      
+        #         # obj_mat.set_transmission(0)  # should 0 or 1   
+
+        #         if random.randint(0,2): mat.set_principled_shader_value("Roughness", np.random.uniform(0.9, 1.0) )
+        #         else           : mat.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.1) )
+
+        #         mat.set_principled_shader_value("Base Color", (  np.random.uniform(0.0, 1.0)  , np.random.uniform(0.0, 1.0), np.random.uniform(0.0, 1.0), 1.0))
+
+        #         # blender_obj_el.set_material(0, mat)
+        #         # bproc.
 
 
         pass
 
     def end(self, onto):
         pass
+
+
+
+
+
+
+
+
+
+
+
+class RandomTextureHandler(SDGenerationHandler):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+
+    def init(self, onto, generation_scheme_instance, manager):
+        pass
+
+    def iteration(self):
+        # Iterate over all blender objects accosiated with this object individual
+        for blender_obj_el in self.__handled_object.bp_reference:
+
+                blender_obj_el.clear_materials()
+                mat = blender_obj_el.new_material(name="test_material")
+
+                blender_obj_el.set_material(0, mat)
+                
+                mat.set_principled_shader_value( "Metallic", np.random.uniform(0.0, 0.0) )
+                mat.set_principled_shader_value( "Transmission", np.random.uniform(0.0, 0.0) )
+
+                # obj_mat.set_metallic(0)  # should 0 or 1      
+                # obj_mat.set_transmission(0)  # should 0 or 1   
+
+                if random.randint(0,2): mat.set_principled_shader_value("Roughness", np.random.uniform(0.9, 1.0) )
+                else           : mat.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.1) )
+
+                mat.set_principled_shader_value("Base Color", (  np.random.uniform(0.0, 1.0)  , np.random.uniform(0.0, 1.0), np.random.uniform(0.0, 1.0), 1.0))
+
+
+    def end(self, onto):
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

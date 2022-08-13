@@ -738,6 +738,7 @@
         <Has_Model rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1_Model"/>
         <Has_Multiplicity rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1_Multiplicity"/>
         <Has_RotationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoRandom"/>
+        <Has_Texture rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture"/>
     </owl:NamedIndividual>
     
 
@@ -769,6 +770,7 @@
         <Has_Model rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2_Model"/>
         <Has_Multiplicity rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2_Multiplicity"/>
         <Has_RotationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoRandom"/>
+        <Has_Texture rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture"/>
     </owl:NamedIndividual>
     
 
@@ -796,6 +798,14 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#RandomTexture"/>
     </owl:NamedIndividual>
     
 
