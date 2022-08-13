@@ -485,6 +485,14 @@
     
 
 
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleBoxedPhysicalPlausibility -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleBoxedPhysicalPlausibility">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Effect"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera">
@@ -667,6 +675,7 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#GenerationScheme"/>
         <Has_Camera rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Camera"/>
+        <Has_Effect rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleBoxedPhysicalPlausibility"/>
         <Has_Effect rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimplePhysicalPlausibility"/>
         <Has_Ground rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround"/>
         <Has_Label rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Label"/>
@@ -674,6 +683,7 @@
         <Has_Object rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
         <Has_Object rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeCamera"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeLight"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectSpawns"/>
         <rdfs:comment>&apos;EGS1&apos; is short for ExampleGenerationScheme1</rdfs:comment>
@@ -756,8 +766,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1_Multiplicity">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
-        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</Has_MaximumInt>
-        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MinimumInt>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</Has_MaximumInt>
+        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</Has_MinimumInt>
     </owl:NamedIndividual>
     
 
@@ -788,8 +798,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2_Multiplicity">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
-        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MaximumInt>
-        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MinimumInt>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</Has_MaximumInt>
+        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">33</Has_MinimumInt>
     </owl:NamedIndividual>
     
 
@@ -823,6 +833,17 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoRandom">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRandomRotation"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleBoxedPhysicalPlausibility -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleBoxedPhysicalPlausibility">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleBoxedPhysicalPlausibility"/>
+        <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
+        <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
     </owl:NamedIndividual>
     
 

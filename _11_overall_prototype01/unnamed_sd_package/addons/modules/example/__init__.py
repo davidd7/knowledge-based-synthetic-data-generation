@@ -88,6 +88,11 @@ class SDGenExampleModule(SDGenBaseModule):
         )
 
         sd_generation_manager.add(
+            sdgen_base.SimpleBoxedPhysicalPlausibilityHandler(),
+            at_end_of_iteration=True
+        )
+
+        sd_generation_manager.add(
             sdgen_base.RealImageRenderingHandler(path_where_to_save_result),
             at_end_of_iteration=True
         )
@@ -97,7 +102,7 @@ class SDGenExampleModule(SDGenBaseModule):
             at_end_of_iteration=True
         )
 
-        sd_generation_manager.start(5, path_where_to_save_result)
+        sd_generation_manager.start(1, path_where_to_save_result)
 
 
 

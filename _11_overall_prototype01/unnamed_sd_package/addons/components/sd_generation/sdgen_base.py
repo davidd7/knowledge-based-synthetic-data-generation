@@ -290,9 +290,6 @@ class SimpleObjectHandler(SDGenerationHandler):
 
 
 
-
-
-
     def iteration(self):
         # for el in self.__ontology_entities:
         #     for blender_obj_el in el.bp_reference:
@@ -386,6 +383,105 @@ class RandomTextureHandler(SDGenerationHandler):
 
 
 
+
+
+
+
+
+
+class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance, manager):
+        self.__generation_scheme_instance = generation_scheme_instance
+
+        # Ontology-reference to physical plausibility
+        effects = intersection(
+            self.__generation_scheme_instance.Has_Effect, onto.search(is_a=onto.SimpleBoxedPhysicalPlausibility))
+        # print(effects)
+        # print(len(effects))
+        # exit()
+        if len(effects) == 0:
+            return
+        effect = effects[0]
+
+        # Prepare simulation
+        # bpy.ops.rigidbody.world_remove()
+        if bpy.context.scene.rigidbody_world == None:
+            # this was suggested in https://github.com/DLR-RM/BlenderProc/issues/254 solve certain console errors that I alsow as getting
+            bpy.ops.rigidbody.world_add()
+
+
+        # Find out Base-Area
+        fixed_objects = []
+        base = effect.Has_Volume[0]
+        fixed_objects.append( base.bp_reference )
+        # Create Walls
+        fixed_objects.append( create_rectangular_cuboid(
+            base.Has_XCoordinate[0],
+            base.Has_YCoordinate[0],
+            base.Has_ZCoordinate[0],
+            base.Has_XLength[0],
+            1,
+            500))
+        fixed_objects[-1].hide(True)
+        fixed_objects.append( create_rectangular_cuboid(
+            base.Has_XCoordinate[0],
+            base.Has_YCoordinate[0] + base.Has_YLength[0],
+            base.Has_ZCoordinate[0],
+            base.Has_XLength[0],
+            1,
+            500))
+        fixed_objects[-1].hide(True)
+        fixed_objects.append( create_rectangular_cuboid(
+            base.Has_XCoordinate[0],
+            base.Has_YCoordinate[0],
+            base.Has_ZCoordinate[0],
+            1,
+            base.Has_YLength[0],
+            500))
+        fixed_objects[-1].hide(True)
+        fixed_objects.append( create_rectangular_cuboid(
+            base.Has_XCoordinate[0] + base.Has_XLength[0],
+            base.Has_YCoordinate[0],
+            base.Has_ZCoordinate[0],
+            1,
+            base.Has_YLength[0],
+            500))
+        fixed_objects[-1].hide(True)
+
+        for obj in fixed_objects:
+            # COMPOUND for complex
+            bp_ref = obj 
+            bp_ref.enable_rigidbody(active=False, collision_shape="CONVEX_HULL")
+            #obj.build_convex_decomposition_collision_shape("<Path where to store vhacd>")
+
+
+        # Falling objects herausfinden
+        falling_objects = effect.Has_FallingObject
+        # Adjust some properties for the participating objects
+        # (assumption is here that no other function uses these properties so that they'll stay the same
+        # across iterations)
+        for obj in falling_objects:
+            # COMPOUND for complex
+            for bp_ref in obj.bp_reference:
+                bp_ref.enable_rigidbody(active=True, collision_shape="CONVEX_HULL")
+                #obj.build_convex_decomposition_collision_shape("<Path where to store vhacd>")
+
+
+    def iteration(self):
+        bproc.object.simulate_physics_and_fix_final_poses(
+            min_simulation_time=4,
+            max_simulation_time=20,
+            check_object_interval=1
+        )
+
+        # for el in global_dict_get(key):
+        #     print(objects_to_sample_on)
+        #     location = bproc.sampler.upper_region(objects_to_sample_on=objects_to_sample_on)
+        #     el.set_location(location)
+
+
+    def end(self, onto):
+        pass
 
 
 
