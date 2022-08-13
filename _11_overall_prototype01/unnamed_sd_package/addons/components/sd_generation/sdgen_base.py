@@ -248,7 +248,7 @@ class SimpleVolumeHandler(SDGenerationHandler):
         # Query all volumes directly connected to generation scheme and add them to blender
         for volume in intersection( root_node.Has_Volume, onto.search(is_a=onto.SimpleVolume) ):
             created_volume = create_blender_volume(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
-                                         x_length=volume.Has_XLength[0], y_length=volume.Has_XLength[0], z_length=0)
+                                         x_length=volume.Has_XLength[0], y_length=volume.Has_YLength[0], z_length=0)
             volume.bp_reference = created_volume
 
     def iteration(self):
@@ -342,7 +342,7 @@ class SimpleObjectHandler(SDGenerationHandler):
 
 
 
-
+import colorsys
 
 
 class RandomTextureHandler(SDGenerationHandler):
@@ -370,7 +370,12 @@ class RandomTextureHandler(SDGenerationHandler):
                 if random.randint(0,2): mat.set_principled_shader_value("Roughness", np.random.uniform(0.9, 1.0) )
                 else           : mat.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.1) )
 
-                mat.set_principled_shader_value("Base Color", (  np.random.uniform(0.0, 1.0)  , np.random.uniform(0.0, 1.0), np.random.uniform(0.0, 1.0), 1.0))
+                color = colorsys.hsv_to_rgb(
+                    random.uniform(0,1),
+                    random.uniform(0.7,1),
+                    random.uniform(0.7,1)
+                )
+                mat.set_principled_shader_value("Base Color",  color + (1,) ) #(  np.random.uniform(0.0, 1.0)  , np.random.uniform(0.0, 1.0), np.random.uniform(0.0, 1.0), 1.0))
 
 
     def end(self, onto):
@@ -421,7 +426,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             base.Has_ZCoordinate[0],
             base.Has_XLength[0],
             1,
-            500))
+            1000))
         fixed_objects[-1].hide(True)
         fixed_objects.append( create_rectangular_cuboid(
             base.Has_XCoordinate[0],
@@ -429,7 +434,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             base.Has_ZCoordinate[0],
             base.Has_XLength[0],
             1,
-            500))
+            1000))
         fixed_objects[-1].hide(True)
         fixed_objects.append( create_rectangular_cuboid(
             base.Has_XCoordinate[0],
@@ -437,7 +442,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             base.Has_ZCoordinate[0],
             1,
             base.Has_YLength[0],
-            500))
+            1000))
         fixed_objects[-1].hide(True)
         fixed_objects.append( create_rectangular_cuboid(
             base.Has_XCoordinate[0] + base.Has_XLength[0],
@@ -445,8 +450,18 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             base.Has_ZCoordinate[0],
             1,
             base.Has_YLength[0],
-            500))
+            1000))
         fixed_objects[-1].hide(True)
+        # create roof
+        fixed_objects.append( create_rectangular_cuboid(
+            base.Has_XCoordinate[0],
+            base.Has_YCoordinate[0],
+            base.Has_ZCoordinate[0] + 1000,
+            base.Has_XLength[0],
+            base.Has_YLength[0],
+            1))
+        fixed_objects[-1].hide(True)
+
 
         for obj in fixed_objects:
             # COMPOUND for complex
@@ -468,6 +483,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
 
 
     def iteration(self):
+        # bproc.renderer.render()
         bproc.object.simulate_physics_and_fix_final_poses(
             min_simulation_time=4,
             max_simulation_time=20,
@@ -658,6 +674,23 @@ class SimpleCameraHandler(SDGenerationHandler):
                 camera, camera.Has_RotationInfo[0])
         )
 
+        # bproc.camera.set_intrinsics_from_K_matrix(
+        #     np.array([[3.32584099e+03, 0.00000000e+00, 2.09756825e+03],
+        #     [0.00000000e+00, 3.33641112e+03, 1.55848315e+03],
+        #     [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]]),1024,1024
+        # )
+        # bproc.camera.set_intrinsics_from_K_matrix(
+        #     np.array([[3325.84099, 0.000000000, 2097.56825],
+        #     [0.00000000, 3336.41112, 1558.48315],
+        #     [0.00000000, 0.0000000, 1.00000000]]), int(4032.0/1.0), int(3024.0/1.0)
+        # )
+        
+        bproc.camera.set_intrinsics_from_K_matrix(
+            np.array([[3325.84099*0.1, 0.000000000, 2097.56825*0.1],
+            [0.00000000, 3336.41112*0.1, 1558.48315*0.1],
+            [0.00000000, 0.0000000, 1.00000000]]), int(4032.0*0.1), int(3024.0*0.1)
+        )
+
     def iteration(self):
         pass
 
@@ -708,7 +741,7 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
 
     def iteration(self):
         for light in self.__lights:
-            light.bp_reference[0].set_energy(random.randint(15, 100)) # in example they used 300, but it's in watt and so 300 is really bright probably
+            light.bp_reference[0].set_energy(random.randint(15, 100*0.3)) # in example they used 300, but it's in watt and so 300 is really bright probably
         # pass
 
     def end(self, onto):
@@ -785,6 +818,11 @@ class SimpleRotationHandler(SDGenerationHandler):
         pass
 
 
+
+
+# import mathutils
+from scipy.spatial.transform import Rotation as R
+
 class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):
         self.__handled_object = handled_object
@@ -806,13 +844,49 @@ class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
             min_height=0, max_height=0)
             
         # Calculate and set rotation
-        rotation_matrix = bproc.camera.rotation_from_forward_vec(
-            target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
+        # rotation_matrix = bproc.camera.rotation_from_forward_vec(            target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
+        rotation_matrix = bproc.camera.rotation_from_forward_vec( target - origin)
+        print(rotation_matrix)
+        test = R.from_matrix(rotation_matrix)
+        test = test.as_quat()
+        # test[3] = 1.0
+
+
+        a = 1#np.pi * 0
+        [x, y, z] = target - origin
+        print(target - origin)
+        print(x)
+        rotation_matrix = R.from_quat([np.sin(a/2)*x, np.sin(a/2)*y, np.sin(a/2)*z, np.cos(a/2)]).as_matrix()
+        rotation_matrix = R.from_quat([0, 0, 1, 1]).as_matrix()
+
+        # rotation_matrix = R.from_quat(test).as_matrix()
+        print(rotation_matrix)
+        # exit()
         # Add homog cam pose based on location an rotation
-        cam2world_matrix = bproc.math.build_transformation_mat(
-            origin, rotation_matrix)
+        cam2world_matrix = bproc.math.build_transformation_mat( origin, rotation_matrix )
+        # test = mathutils.Matrix.Rotation(cam2world_matrix)# cam2world_matrix.to_quaternion()
+#        test[0] = 0
+ #       cam2world_matrix = test.to_matrix()
         self.__handled_object.bp_reference[0].set_local2world_mat(
             cam2world_matrix)
+
+        # # obj_camera = bpy.context.scene.camera
+        # # rot = obj_camera.rotation_quaternion
+        # # print(rot)
+        # # # rot[3] = 0
+        # # rot.w = 0
+        # # obj_camera.rotation_quaternion = rot
+        # obj_camera = bpy.context.scene.camera
+        # old_mode = obj_camera.rotation_mode
+        # cam = bpy.data.objects['Camera']
+        # cam.rotation_mode = 'QUATERNION'
+        # obj_camera.rotation_quaternion[0] = 0.0
+        # cam.rotation_mode = old_mode
+        # # rot = obj_camera.rotation_quaternion
+        # # print(rot)
+        # # rot[3] = 0
+        # # rot.w = 0
+        # # obj_camera.rotation_quaternion = rot
 
     def end(self, onto):
         pass
