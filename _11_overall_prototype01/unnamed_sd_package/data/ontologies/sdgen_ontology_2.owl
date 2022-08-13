@@ -677,7 +677,7 @@
         <Has_Camera rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Camera"/>
         <Has_Effect rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleBoxedPhysicalPlausibility"/>
         <Has_Effect rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimplePhysicalPlausibility"/>
-        <Has_Ground rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround"/>
+        <Has_Ground rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleRandomGround"/>
         <Has_Label rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Label"/>
         <Has_Light rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleLight"/>
         <Has_Object rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
@@ -686,6 +686,7 @@
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeLight"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectSpawns"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround"/>
         <rdfs:comment>&apos;EGS1&apos; is short for ExampleGenerationScheme1</rdfs:comment>
         <rdfs:label>EGS1</rdfs:label>
     </owl:NamedIndividual>
@@ -726,7 +727,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_LocationInfoVolumeGround">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributedLocationInVolume"/>
-        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround"/>
     </owl:NamedIndividual>
     
 
@@ -804,14 +805,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround">
-        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomTexture">
@@ -824,7 +817,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoLookingAtGround">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRotationLookingAtVolume"/>
-        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround"/>
     </owl:NamedIndividual>
     
 
@@ -843,7 +836,7 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleBoxedPhysicalPlausibility"/>
         <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
         <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2"/>
-        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround"/>
     </owl:NamedIndividual>
     
 
@@ -883,7 +876,16 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimplePhysicalPlausibility"/>
         <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1"/>
         <Has_FallingObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2"/>
-        <Has_FixedObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RandomPicturesGround"/>
+        <Has_FixedObject rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleRandomGround"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleRandomGround -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_SimpleRandomGround">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleRandomGround"/>
+        <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround"/>
     </owl:NamedIndividual>
     
 
@@ -905,12 +907,11 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeGround">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
-        <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
-        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
-        <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
-        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+        <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-500.0</Has_XCoordinate>
+        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1000.0</Has_XLength>
+        <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-500.0</Has_YCoordinate>
+        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1000.0</Has_YLength>
         <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</Has_ZCoordinate>
-        <rdfs:comment>Volume for where the lamera should look at (same as object spawn area, but at z=0)</rdfs:comment>
     </owl:NamedIndividual>
     
 
@@ -937,6 +938,20 @@
         <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
         <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
         <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">100.0</Has_ZCoordinate>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
+        <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_XCoordinate>
+        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_XLength>
+        <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-150.0</Has_YCoordinate>
+        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">300.0</Has_YLength>
+        <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</Has_ZCoordinate>
+        <rdfs:comment>Volume for where the lamera should look at (same as object spawn area, but at z=0)</rdfs:comment>
     </owl:NamedIndividual>
 </rdf:RDF>
 

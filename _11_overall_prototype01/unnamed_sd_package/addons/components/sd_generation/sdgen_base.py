@@ -509,6 +509,58 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
 
 
 
+class SimpleRandomGroundHandler(SDGenerationHandler):
+    def init(self, onto, generation_scheme_instance, manager):
+        self.__generation_scheme_instance = generation_scheme_instance
+
+        # Ontology-reference to physical plausibility
+        simple_random_ground = intersection(
+            self.__generation_scheme_instance.Has_Ground, onto.search(is_a=onto.SimpleRandomGround))
+        # print(effects)
+        # print(len(effects))
+        # exit()
+        if len(simple_random_ground) == 0:
+            return
+        simple_random_ground = simple_random_ground[0]
+
+        volume = simple_random_ground.Has_Volume[0]
+        self.__ground = create_rectangular_cuboid(
+            volume.Has_XCoordinate[0],
+            volume.Has_YCoordinate[0],
+            volume.Has_ZCoordinate[0]-30,
+            volume.Has_XLength[0],
+            volume.Has_YLength[0],
+            30)
+
+        # Mögliche Bilder laden
+        # images = list(Path(args.image_dir).rglob("material_manipulation_sample_texture*.jpg"))
+        path_to_images = f'{ get_path_to_package() / "addons/components/sd_generation/media/random_images_src" }'
+        self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
+
+
+    def iteration(self):
+        # Load one random image
+        image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
+        # Set it as base color of the current material
+
+
+        self.__ground.clear_materials()
+        mat = self.__ground.new_material(name="test_material2")
+        mat.set_principled_shader_value("Base Color", image)
+
+        self.__ground.set_material(0, mat)
+
+
+
+        # for el in global_dict_get(key):
+        #     print(objects_to_sample_on)
+        #     location = bproc.sampler.upper_region(objects_to_sample_on=objects_to_sample_on)
+        #     el.set_location(location)
+
+
+    def end(self, onto):
+        pass
+
 
 
 

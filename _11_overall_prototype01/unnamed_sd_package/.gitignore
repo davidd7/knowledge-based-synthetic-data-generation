@@ -1,1 +1,3 @@
 data/generated_training_data/**/*.png
+addons/components/sd_generation/media/random_images_src/**/*.jpg
+
