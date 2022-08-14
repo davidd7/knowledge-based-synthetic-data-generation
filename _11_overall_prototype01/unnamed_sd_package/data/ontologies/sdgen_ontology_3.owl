@@ -895,10 +895,10 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeCamera">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleVolume"/>
-        <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-25.0</Has_XCoordinate>
-        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">50.0</Has_XLength>
-        <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-25.0</Has_YCoordinate>
-        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">50.0</Has_YLength>
+        <Has_XCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-10.0</Has_XCoordinate>
+        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</Has_XLength>
+        <Has_YCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">-10.0</Has_YCoordinate>
+        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">20.0</Has_YLength>
         <Has_ZCoordinate rdf:datatype="http://www.w3.org/2001/XMLSchema#float">200.0</Has_ZCoordinate>
     </owl:NamedIndividual>
     

@@ -521,7 +521,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
 
 
 
-
+from mathutils import Vector
 
 
 
@@ -557,21 +557,24 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
     def iteration(self):
         # Load one random image
         image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
-        # Set it as base color of the current material
 
-
-        self.__ground.clear_materials()
         mat = self.__ground.new_material(name="test_material2")
-        mat.set_principled_shader_value("Base Color", image)
 
+        node_texture_coordinate = mat.new_node('ShaderNodeTexCoord')
+        
+        node_mapping = mat.new_node('ShaderNodeMapping')
+        node_mapping.inputs['Scale'].default_value = (1.0, 1.0, 1.0)
+
+        node_base_color = mat.new_node('ShaderNodeTexImage')
+        node_base_color.label = "Base Color"
+        node_base_color.image = image
+
+        node_principled_bsdf = mat.get_the_one_node_with_type("BsdfPrincipled")
+        
+        mat.link(node_base_color.outputs['Color'], node_principled_bsdf.inputs["Base Color"])
+        mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
+        mat.link(node_mapping.outputs["Vector"], node_base_color.inputs["Vector"])
         self.__ground.set_material(0, mat)
-
-
-
-        # for el in global_dict_get(key):
-        #     print(objects_to_sample_on)
-        #     location = bproc.sampler.upper_region(objects_to_sample_on=objects_to_sample_on)
-        #     el.set_location(location)
 
 
     def end(self, onto):

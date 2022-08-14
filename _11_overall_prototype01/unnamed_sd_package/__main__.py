@@ -43,7 +43,7 @@ def generate_data():
 
     # Get path to where the generated data set should be saved
     path_where_to_save_result = get_path_to_package() / "data/generated_training_data/"
-    path_where_to_save_result = path_where_to_save_result / "3/"
+    path_where_to_save_result = path_where_to_save_result / "4/"
 
     # Start the (example) module for data generation
     #example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()
