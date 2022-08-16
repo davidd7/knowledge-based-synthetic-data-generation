@@ -3,11 +3,13 @@
     <uri id="Imports Wizard Entry" name="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2_classes.owl"/>
     <uri id="Imports Wizard Entry" name="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2_in.owl"/>
     <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="http://test.org/onto300.owl" uri="sdgen_ontology_2_individuals_XXX.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_1.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2_classes.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="start.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1660332469728" name="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals" uri="sdgen_ontology_2_individuals.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="http://test.org/onto300.owl" uri="sdgen_ontology_2_individuals_XXX.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_1.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_2_classes.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="sdgen_ontology_3.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="start.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals" uri="bsp_fuer_grafik_20.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1660640732091" name="duplicate:http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals" uri="sdgen_ontology_2_individuals.owl"/>
     </group>
 </catalog>
