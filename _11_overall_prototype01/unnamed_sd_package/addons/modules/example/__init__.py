@@ -106,7 +106,7 @@ class SDGenExampleModule(SDGenBaseModule):
             at_end_of_iteration=True
         )
 
-        sd_generation_manager.start(1, path_where_to_save_result)
+        sd_generation_manager.start(100, path_where_to_save_result)
 
 
 

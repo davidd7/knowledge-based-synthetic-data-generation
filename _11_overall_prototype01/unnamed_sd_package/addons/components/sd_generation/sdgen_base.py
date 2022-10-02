@@ -573,6 +573,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager):
         self.__generation_scheme_instance = generation_scheme_instance
         self.__active = True
+        self.__last_random_image = None
 
         # Ontology-reference to physical plausibility
         simple_random_ground = intersection(
@@ -598,11 +599,6 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         # images = list(Path(args.image_dir).rglob("material_manipulation_sample_texture*.jpg"))
         path_to_images = f'{ get_path_to_package() / "addons/components/sd_generation/media/random_images_src" }'
         self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
-
-
-
-
-
 
 
         
@@ -632,9 +628,12 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         if not self.__active:
             return
 
+        if self.__last_random_image is not None:
+            bpy.data.images.remove(self.__last_random_image)
 
         # Load one random image
         image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
+        self.__last_random_image = image
 
         mat = self.__ground.new_material(name="test_material2")
 
