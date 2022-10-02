@@ -77,55 +77,6 @@ class SDGenBaseModule():
 
 
 class SDGenExampleModule(SDGenBaseModule):
-    def onto_to_sd(path_to_onto, path_where_to_save_result):
-        sd_generation_manager = sdgen_base.SimpleSDGenerationManager(path_to_onto, "EGS1")
-
-        sd_generation_manager.add(
-            sdgen_base.BlenderHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleVolumeHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleObjectHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleCameraHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleLightHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleRandomGroundHandler()
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleBoxedPhysicalPlausibilityHandler(),
-            at_end_of_iteration=True
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.RealImageRenderingHandler(path_where_to_save_result),
-            at_end_of_iteration=True
-        )
-
-        sd_generation_manager.add(
-            sdgen_base.SimpleSegmentationLabelHandler(path_where_to_save_result),
-            at_end_of_iteration=True
-        )
-
-        sd_generation_manager.start(10, path_where_to_save_result)
-
-
-
-
-
-
 
     def delete_existing_tests():
         
@@ -357,8 +308,6 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
-
-
     def json_to_onto(onto_classes, onto_individuals, individual_name):
         """
         Overreaching function creates new individual if 
@@ -502,12 +451,49 @@ class SDGenExampleModule(SDGenBaseModule):
 
 
 
+    def onto_to_sd(path_to_onto, path_where_to_save_result):
+        sd_generation_manager = sdgen_base.SimpleSDGenerationManager(path_to_onto, "EGS1")
 
+        sd_generation_manager.add(
+            sdgen_base.BlenderHandler()
+        )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleVolumeHandler()
+        )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleObjectHandler()
+        )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleCameraHandler()
+        )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleLightHandler()
+        )
 
+        sd_generation_manager.add(
+            sdgen_base.SimpleRandomGroundHandler()
+        )
+
+        sd_generation_manager.add(
+            sdgen_base.SimpleBoxedPhysicalPlausibilityHandler(),
+            at_end_of_iteration=True
+        )
+
+        sd_generation_manager.add(
+            sdgen_base.RealImageRenderingHandler(path_where_to_save_result),
+            at_end_of_iteration=True
+        )
+
+        sd_generation_manager.add(
+            sdgen_base.SimpleSegmentationLabelHandler(path_where_to_save_result),
+            at_end_of_iteration=True
+        )
+
+        sd_generation_manager.start()
 
 
 

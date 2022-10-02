@@ -67,18 +67,20 @@ class SimpleSDGenerationManager(SDGenerationManager):
         else:
             self.__handlers_iteration_end.append(handler)
 
-    def start(self, number_of_images, target_path):
+    def start(self):
         w = World()
         ontology = w.get_ontology(self.__path_to_ontology).load() # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
 
         generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")
-        generation_scheme_instance = generation_scheme_instances_list[0]
+        root_individual = generation_scheme_instances_list[0]
+
+        number_of_images = root_individual.Has_NumberOfImagesToRender[0]
 
         # Set up all handlers
         for el in self.__handlers_all:
-            el.init(ontology, generation_scheme_instance, manager=self)
+            el.init(ontology, root_individual, manager=self)
 
         # Do the iteration
         for i in range(number_of_images):
