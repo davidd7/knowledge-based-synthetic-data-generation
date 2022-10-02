@@ -73,8 +73,12 @@ def create_job():
     ).fetchall()[0]
 
 
-    os.system("blenderproc run bproc_area/__main__.py")
-
+    print("SDGen: Starting blenderproc")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print(dir_path) 
+    # os.system("blenderproc run bproc_area/__main__.py")
+    subprocess.run(["blenderproc", "run", "bproc_area/__main__.py"], cwd=dir_path)
+    print("SDGen: Finished with starting blenderproc")
 
     return jsonify( row_to_dict(new_job_row) )
 
