@@ -1,3 +1,4 @@
+import os
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
 from flask.cli import with_appcontext
@@ -72,7 +73,7 @@ def create_job():
     ).fetchall()[0]
 
 
-    os.system("bproc_area/__main__.py")
+    os.system("blenderproc run bproc_area/__main__.py")
 
 
     return jsonify( row_to_dict(new_job_row) )
