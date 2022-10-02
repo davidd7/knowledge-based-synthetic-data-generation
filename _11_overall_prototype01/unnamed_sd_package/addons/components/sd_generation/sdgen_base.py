@@ -137,6 +137,71 @@ class BlenderCameraWrapper():
 
 
 
+
+
+
+def create_rectangular_cuboid(x=None, y=None, z=None,
+                              x_length=None, y_length=None, z_length=None):
+    """
+    x, y, z, x_length, y_length, z_length should all be given in Millimeters (mm)
+    """
+    # Create cube
+    blender_object = bproc.object.create_primitive(shape="CUBE")
+
+    # Set dimensions of cube (Default cube in blender has a size of 2m x 2m x 2m. A scale factor of 10 in one direction thus means a 20m length in this direction)
+    blender_object.set_scale([
+        x_length/2/1000,
+        y_length/2/1000,
+        z_length/2/1000])
+
+    # Set position of cube (location is in relation to the objects center. This might be cool for models, but for a rectangle it would be easier measure sizes in reality not from their center, which is why this is adapted)
+    blender_object.set_location([
+        x/1000 + x_length/2/1000, 
+        y/1000 + y_length/2/1000,
+        z/1000 + z_length/2/1000])
+
+    return blender_object
+
+
+def create_blender_volume(x=None, y=None, z=None,
+                x_length=None, y_length=None, z_length=None):
+    # Create volume (i.e. create a cuboid)
+    blender_object = create_rectangular_cuboid(x, y, z, x_length, y_length, z_length)
+    blender_object.hide(True) # volumes should not be visible in rendering
+    return blender_object
+
+
+def intersection(lst1, lst2): # hybrid method from https://www.geeksforgeeks.org/python-intersection-two-lists/
+    temp = set(lst2)
+    lst3 = [value for value in lst1 if value in temp]
+    return lst3
+
+
+def create_objects(obj_file_path, how_many=1):
+    res = []
+
+    for _ in range(how_many):
+        mesh_list = bproc.loader.load_obj( str(get_path_to_package() / "data/ontologies/" / obj_file_path) ) # returns a list with the loaded object as its only element
+        res += mesh_list # merge the two lists
+
+    return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # HANDLER
 
 
@@ -322,7 +387,7 @@ class SimpleObjectHandler(SDGenerationHandler):
         for object_individual in res:
             # Add object to blender
             res_objects = create_objects(
-                obj=object_individual.Has_Model[0].Has_File[0], how_many=object_individual.Has_Multiplicity[0].Has_MaximumInt[0])
+                obj_file_path=object_individual.Has_Model[0].Has_File[0], how_many=object_individual.Has_Multiplicity[0].Has_MaximumInt[0])
             object_individual.bp_reference = res_objects
 
             # 3. Instantiate LocationInfo- and RotationInfo-Handlers
@@ -714,6 +779,7 @@ class SimpleLightHandler(SDGenerationHandler):
             )
 
     def iteration(self):
+        # Randomize strength of each light source
         for light_individual in self.__lights:
             for light_reference in light_individual.bp_reference:
                 light_reference.set_energy(random.randint(15, 100*0.3)) # in example they used 300, but it's in watt and so 300 is really bright
@@ -738,8 +804,7 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
         number = random.randint(
             self.__individual.Has_MinimumInt[0], self.__individual.Has_MaximumInt[0])
 
-        # Iterate over all blender objects accosiated with this object individual. Show and hide the randomly chosen number of objects
-        print(self.__handled_object.bp_reference)
+        # Iterate over all blender objects associated with this object individual. Show and hide the randomly chosen number of objects
         for count, el in enumerate(self.__handled_object.bp_reference):
             if count < number:
                 if self.__custom_hide_function == None:
@@ -751,7 +816,6 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
                     el.hide(True)
                 else:
                     self.__custom_hide_function(el, True)
-                # el.hide(True)
 
     def end(self, onto):
         pass
@@ -772,13 +836,15 @@ class SimpleLocationHandler(SDGenerationHandler):
         # Iterate over all blender objects accosiated with this object individual
         for blender_object in self.__handled_object.bp_reference:
             location = bproc.sampler.upper_region(
-                objects_to_sample_on=[
-                    self.__individual.Has_Volume[0].bp_reference],
-                min_height=0, max_height=0)  # sobald z_length gibt, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
+                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
+                min_height=0,
+                max_height=0)  # if z_length is introduced one day, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
             blender_object.set_location(location)
 
     def end(self, onto):
         pass
+
+
 
 
 class SimpleRotationHandler(SDGenerationHandler):
@@ -789,7 +855,7 @@ class SimpleRotationHandler(SDGenerationHandler):
         pass
 
     def iteration(self):
-        # Iterate over all blender objects accosiated with this object individual
+        # Iterate over all blender objects handled by this handler
         for blender_object in self.__handled_object.bp_reference:
             rotation = bproc.sampler.uniformSO3(True, True, True)
             blender_object.set_rotation_euler(rotation)
@@ -815,105 +881,58 @@ class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
         pass
 
     def iteration(self):
-        # Get position of object and random position to look at
+        # Get position of object
         origin = self.__handled_object.bp_reference[0].get_location()
+
+        # Get a random position onto which the object should "look at" (i.e. onto which it should be orientated)
         target = bproc.sampler.upper_region(
-            objects_to_sample_on=[
-                self.__individual.Has_Volume[0].bp_reference],
-            min_height=0, max_height=0)
+            objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
+            min_height=0,
+            max_height=0)
             
         # Calculate and set rotation
-        # rotation_matrix = bproc.camera.rotation_from_forward_vec(            target - origin, inplane_rot=np.random.uniform(-3.14159, 3.14159))
-        rotation_matrix = bproc.camera.rotation_from_forward_vec( target - origin)
-        print(rotation_matrix)
+        rotation_matrix = bproc.camera.rotation_from_forward_vec(target - origin)
+
+        # Calculations that are currently not used
         test = R.from_matrix(rotation_matrix)
         test = test.as_quat()
-        # test[3] = 1.0
-
-
-        a = 1#np.pi * 0
+        a = 1
         [x, y, z] = target - origin
-        print(target - origin)
-        print(x)
         rotation_matrix = R.from_quat([np.sin(a/2)*x, np.sin(a/2)*y, np.sin(a/2)*z, np.cos(a/2)]).as_matrix()
+
+        # Calculation that "looks down" straight
         rotation_matrix = R.from_quat([0, 0, 1, 1]).as_matrix()
 
-        # rotation_matrix = R.from_quat(test).as_matrix()
-        print(rotation_matrix)
-        # exit()
-        # Add homog cam pose based on location an rotation
+        # Add homog cam pose based on location and rotation
         cam2world_matrix = bproc.math.build_transformation_mat( origin, rotation_matrix )
-        # test = mathutils.Matrix.Rotation(cam2world_matrix)# cam2world_matrix.to_quaternion()
-#        test[0] = 0
- #       cam2world_matrix = test.to_matrix()
-        self.__handled_object.bp_reference[0].set_local2world_mat(
-            cam2world_matrix)
 
-        # # obj_camera = bpy.context.scene.camera
-        # # rot = obj_camera.rotation_quaternion
-        # # print(rot)
-        # # # rot[3] = 0
-        # # rot.w = 0
-        # # obj_camera.rotation_quaternion = rot
-        # obj_camera = bpy.context.scene.camera
-        # old_mode = obj_camera.rotation_mode
-        # cam = bpy.data.objects['Camera']
-        # cam.rotation_mode = 'QUATERNION'
-        # obj_camera.rotation_quaternion[0] = 0.0
-        # cam.rotation_mode = old_mode
-        # # rot = obj_camera.rotation_quaternion
-        # # print(rot)
-        # # rot[3] = 0
-        # # rot.w = 0
-        # # obj_camera.rotation_quaternion = rot
+        # Add calculated rotation to the instance
+        self.__handled_object.bp_reference[0].set_local2world_mat(cam2world_matrix)
+
 
     def end(self, onto):
         pass
 
 
-def create_rectangular_cuboid(x=None, y=None, z=None,
-                              x_length=None, y_length=None, z_length=None):
-    """
-    x, y, z, x_length, y_length, z_length should all be given in Millimeters (mm)
-    """
-    blender_object = bproc.object.create_primitive(shape="CUBE")
-    # Cube ist standardmäßig 2m x 2m x 2m groß. Scale von 10 in einer Richtung führt also zu 20m Länge in dieser Richtung
-    blender_object.set_scale([x_length/2/1000, y_length/2/1000, z_length/2/1000])
-    blender_object.set_location([x/1000 + x_length/2/1000,  y/1000 +
-                      y_length/2/1000,  z/1000 + z_length/2/1000]) # location bezieht auf Mittelpunkt des Objektes. Das ist für Modelle ggf. oft cool, für Rechteck wär aber auch cool genau ausmessen zu können, weswegen anpassen werde
-    return blender_object
 
 
-def create_blender_volume(x=None, y=None, z=None,
-                x_length=None, y_length=None, z_length=None):
-    blender_object = create_rectangular_cuboid(x, y, z, x_length, y_length, z_length)
-    blender_object.hide(True) # volumes should not be visible in rendering
-    return blender_object
 
 
-def intersection(lst1, lst2):  # from https://www.geeksforgeeks.org/python-intersection-two-lists/
-    # Use of hybrid method
-    temp = set(lst2)
-    lst3 = [value for value in lst1 if value in temp]
-    return lst3
 
 
-def create_objects(obj, how_many=1):
-    res = []
 
-    for i in range(how_many):
-        # returned liste, eigentliches Objekt leigt dann glaube ich in mesh[0]
-        mesh = bproc.loader.load_obj(
-            str(get_path_to_package() / "data/ontologies/" / obj))
-        # mesh.get_material().
 
-        # #mat = mesh[0].get_materials()[0]
-        # mat = mesh[0].new_material(name="test_material")
-        # mat.set_principled_shader_value(
-        #     "Metallic", np.random.uniform(1.0, 1.0))
-        # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
-        # mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
 
-        res += mesh # works only because mesh is a list (containing only the 1 created mesh)
 
-    return res
+
+
+
+
+
+
+
+
+
+
+
+
