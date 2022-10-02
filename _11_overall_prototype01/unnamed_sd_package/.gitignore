@@ -1,3 +1,4 @@
 data/generated_training_data/**/*.png
+data/ontologies/media/**/*.obj
 addons/components/sd_generation/media/random_images_src/**/*.jpg
 

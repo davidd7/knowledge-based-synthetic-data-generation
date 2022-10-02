@@ -38,12 +38,12 @@ def start_json_to_onto():
 def generate_data():
     # Get path to ontology
     path_to_ontology = get_path_to_package() / "data/ontologies/"
-    path_to_ontology = path_to_ontology / "sdgen_ontology_3.owl"
+    path_to_ontology = path_to_ontology / "u1_ba_balls1.owl"
     path_to_ontology = f"file://{path_to_ontology}"
 
     # Get path to where the generated data set should be saved
     path_where_to_save_result = get_path_to_package() / "data/generated_training_data/"
-    path_where_to_save_result = path_where_to_save_result / "4/"
+    path_where_to_save_result = path_where_to_save_result / "u1_ba_balls1/"
 
     # Start the (example) module for data generation
     #example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()

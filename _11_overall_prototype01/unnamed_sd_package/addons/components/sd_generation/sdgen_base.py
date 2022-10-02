@@ -205,26 +205,52 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
         if "SegmentInstances" in self.__label_type:
             map_by.append("instance")
 
-        # Render segmentation label(s) for current image
-        data.update(bproc.renderer.render_segmap(map_by=map_by))
+
+        error_occured = False
+        try:
+            # Render segmentation label(s) for current image
+            data.update(bproc.renderer.render_segmap(map_by=map_by))
+
+        except ValueError:
+            for label_type in map_by:
+                # "instance_segmaps" or "class_segmaps"
+                data[label_type + "_segmaps"] = [ np.zeros( (image_height, image_width) ) ] * len(data["colors"]) # Note: will lead to error if multiple keyframes. Will also not work if no color image is present
+
+                if len(data["colors"]) != 1:
+                    raise ValueError('Empty segmentation mask lead to error in blenderproc. More than one keyframe was requested but in case of this error not all keyframes can be reconstructed.')
+
+
+            # for keyframe, single_image in enumerate(data_image):
+
+
+
+
+            # error_occured = True
 
         # Save rendered images in files
         for label_type in map_by:
             # "instance_segmaps" or "class_segmaps"
             data_image = data[label_type + "_segmaps"]
+            # print(data_image.shape)
+            # exit()
 
             # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
             for keyframe, single_image in enumerate(data_image):
+
                 # Save image for label
+                # if error_occured:
+                #     single_image = 
+
+
                 img = Image.fromarray(single_image.astype('uint8'), None)
                 img.save(f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}.png", "PNG")
 
-                # Save a second image highlighting the label for human eyes
-                plt.figure()
-                plt.subplot(1, 1, 1)
-                plt.imshow(data_image[0], 'jet', interpolation='none')
-                plt.savefig(
-                    f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}_visualization.png")
+                # # Save a second image highlighting the label for human eyes
+                # plt.figure()
+                # plt.subplot(1, 1, 1)
+                # plt.imshow(data_image[0], 'jet', interpolation='none')
+                # plt.savefig(
+                #     f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}_visualization.png")
 
         self.__generation_index += 1
 
@@ -397,6 +423,7 @@ class RandomTextureHandler(SDGenerationHandler):
 class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager):
         self.__generation_scheme_instance = generation_scheme_instance
+        self.__active = True
 
         # Ontology-reference to physical plausibility
         effects = intersection(
@@ -405,6 +432,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
         # print(len(effects))
         # exit()
         if len(effects) == 0:
+            self.__active = False
             return
         effect = effects[0]
 
@@ -471,18 +499,34 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
 
 
         # Falling objects herausfinden
-        falling_objects = effect.Has_FallingObject
+        self.__falling_objects = effect.Has_FallingObject
         # Adjust some properties for the participating objects
         # (assumption is here that no other function uses these properties so that they'll stay the same
         # across iterations)
-        for obj in falling_objects:
+        for obj in self.__falling_objects:
             # COMPOUND for complex
             for bp_ref in obj.bp_reference:
-                bp_ref.enable_rigidbody(active=True, collision_shape="CONVEX_HULL")
+                # bp_ref.enable_rigidbody(active=True, collision_shape="CONVEX_HULL")
+                # if bp_ref.blender_obj.hide_render:
+                #     bp_ref.disable_rigidbody()
+                # else:
+                    bp_ref.enable_rigidbody(active=True, collision_shape="CONVEX_HULL")
                 #obj.build_convex_decomposition_collision_shape("<Path where to store vhacd>")
 
 
     def iteration(self):
+        if not self.__active:
+            return
+
+        for obj in self.__falling_objects:
+            # COMPOUND for complex
+            for bp_ref in obj.bp_reference:
+                if bp_ref.blender_obj.hide_render and bp_ref.has_rigidbody_enabled():
+                    bp_ref.disable_rigidbody()
+                elif (not bp_ref.blender_obj.hide_render) and (not bp_ref.has_rigidbody_enabled()):
+                    bp_ref.enable_rigidbody(active=True, collision_shape="CONVEX_HULL")
+                #obj.build_convex_decomposition_collision_shape("<Path where to store vhacd>")
+
         # bproc.renderer.render()
         bproc.object.simulate_physics_and_fix_final_poses(
             min_simulation_time=4,
@@ -528,6 +572,7 @@ from mathutils import Vector
 class SimpleRandomGroundHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager):
         self.__generation_scheme_instance = generation_scheme_instance
+        self.__active = True
 
         # Ontology-reference to physical plausibility
         simple_random_ground = intersection(
@@ -536,6 +581,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         # print(len(effects))
         # exit()
         if len(simple_random_ground) == 0:
+            self.__active = False
             return
         simple_random_ground = simple_random_ground[0]
 
@@ -554,7 +600,39 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
 
 
+
+
+
+
+
+        
+        # # Load one random image
+        # image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
+
+        # mat = self.__ground.new_material(name="test_material2")
+
+        # node_texture_coordinate = mat.new_node('ShaderNodeTexCoord')
+        
+        # node_mapping = mat.new_node('ShaderNodeMapping')
+        # node_mapping.inputs['Scale'].default_value = (1.0, 1.0, 1.0)
+
+        # self.__node_base_color = mat.new_node('ShaderNodeTexImage')
+        # self.__node_base_color.label = "Base Color"
+        # self.__node_base_color.image = image
+
+        # node_principled_bsdf = mat.get_the_one_node_with_type("BsdfPrincipled")
+        
+        # mat.link(self.__node_base_color.outputs['Color'], node_principled_bsdf.inputs["Base Color"])
+        # mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
+        # mat.link(node_mapping.outputs["Vector"], self.__node_base_color.inputs["Vector"])
+        # self.__ground.set_material(0, mat)
+
+
     def iteration(self):
+        if not self.__active:
+            return
+
+
         # Load one random image
         image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
 
@@ -575,6 +653,28 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
         mat.link(node_mapping.outputs["Vector"], node_base_color.inputs["Vector"])
         self.__ground.set_material(0, mat)
+
+
+        # # Load one random image
+        # image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
+
+        # # mat = self.__ground.new_material(name="test_material2")
+
+        # # node_texture_coordinate = mat.new_node('ShaderNodeTexCoord')
+        
+        # # node_mapping = mat.new_node('ShaderNodeMapping')
+        # # node_mapping.inputs['Scale'].default_value = (1.0, 1.0, 1.0)
+
+        # # node_base_color = mat.new_node('ShaderNodeTexImage')
+        # # node_base_color.label = "Base Color"
+        # self.__node_base_color.image = image
+
+        # # node_principled_bsdf = mat.get_the_one_node_with_type("BsdfPrincipled")
+        
+        # # mat.link(node_base_color.outputs['Color'], node_principled_bsdf.inputs["Base Color"])
+        # # mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
+        # # mat.link(node_mapping.outputs["Vector"], node_base_color.inputs["Vector"])
+        # # self.__ground.set_material(0, mat)
 
 
     def end(self, onto):
@@ -653,7 +753,8 @@ class BlenderCameraWrapper():
         translation = matrix[0:3, 3]
         return translation
 
-
+image_width = int(4032.0*0.1)
+image_height = int(3024.0*0.1)
 
 class SimpleCameraHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
@@ -691,7 +792,7 @@ class SimpleCameraHandler(SDGenerationHandler):
         bproc.camera.set_intrinsics_from_K_matrix(
             np.array([[3325.84099*0.1, 0.000000000, 2097.56825*0.1],
             [0.00000000, 3336.41112*0.1, 1558.48315*0.1],
-            [0.00000000, 0.0000000, 1.00000000]]), int(4032.0*0.1), int(3024.0*0.1)
+            [0.00000000, 0.0000000, 1.00000000]]), image_width, image_height
         )
 
     def iteration(self):
@@ -931,12 +1032,12 @@ def create_objects(obj, how_many=1):
             str(get_path_to_package() / "data/ontologies/" / obj))
         # mesh.get_material().
 
-        #mat = mesh[0].get_materials()[0]
-        mat = mesh[0].new_material(name="test_material")
-        mat.set_principled_shader_value(
-            "Metallic", np.random.uniform(1.0, 1.0))
-        mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
-        mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
+        # #mat = mesh[0].get_materials()[0]
+        # mat = mesh[0].new_material(name="test_material")
+        # mat.set_principled_shader_value(
+        #     "Metallic", np.random.uniform(1.0, 1.0))
+        # mat.set_principled_shader_value("Base Color", (0.0, 1.0, 0.0, 1.0))
+        # mesh[0].set_material(0, mat) # (i don't know yet what index does, but this works). Also not sure why material is not added without this stept (perhaps existing material with higher priority overriding it?)
 
         res += mesh # works only because mesh is a list (containing only the 1 created mesh)
 
