@@ -1,4 +1,4 @@
-import blenderproc as bproc
+import blenderproc as bproc # this import is required even if its not used in this file
 import pathlib
 import sys
 ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
@@ -28,18 +28,19 @@ import unnamed_sd_package.addons.modules.example
 
 
 def start_json_to_onto():
-    # Get path to ontology
+    # Define necessary paths
     path_to_ontology_input = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_classes.owl" }'
     path_to_ontology_output = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_individuals.owl" }'
-    #unnamed_sd_package.addons.modules.example.SDGenExampleModule.json_to_onto(path_to_ontology_input, path_to_ontology_output)
-    unnamed_sd_package.addons.modules.example.FutureUtilities.sys_create_new_generation_scheme(path_to_ontology_input, path_to_ontology_output)
+
+    # Start json_to_onto
+    unnamed_sd_package.addons.modules.example.FutureUtilities.sys_create_new_generation_scheme(path_to_ontology_input, path_to_ontology_output) # need also to specify which module is meant one day (e.g. unnamed_sd_package.addons.modules.example.SDGenExampleModule)
 
 
 def generate_data():
     # Get path to ontology
     path_to_ontology = get_path_to_package() / "data/ontologies/"
-    # path_to_ontology = path_to_ontology / "u1_ba_balls1.owl"
-    path_to_ontology = path_to_ontology / "sdgen_ontology_t6_ba_6_fullwidth.owl"
+    # path_to_ontology = path_to_ontology / "sdgen_ontology_t6_ba_6_fullwidth.owl"
+    path_to_ontology = path_to_ontology / "debug01.owl"
     path_to_ontology = f"file://{path_to_ontology}"
 
     # Get path to where the generated data set should be saved
@@ -47,8 +48,6 @@ def generate_data():
     path_where_to_save_result = path_where_to_save_result / "debug01/"
 
     # Start the (example) module for data generation
-    #example_module = unnamed_sd_package.addons.modules.example.SDGenExampleModule()
-    #example_module.onto_to_sd(path_to_ontology, path_where_to_save_result)
     unnamed_sd_package.addons.modules.example.SDGenExampleModule.onto_to_sd(path_to_ontology, path_where_to_save_result)
 
 
@@ -58,8 +57,8 @@ def generate_data():
 if __name__ == "__main__":
     print("start")
 
-    # start_json_to_onto() # <- Enable to see json_to_onto-test
-    generate_data() # <- Enable to see data generation test
+    # start_json_to_onto() # <- uncomment to see json_to_onto-test
+    generate_data() # <- uncomment to see data generation test
 
     print("end")
 

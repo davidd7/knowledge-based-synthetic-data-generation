@@ -39,7 +39,7 @@ class FutureUtilities():
         # Get new ontology name
         old_scheme_names = [ individual.name for individual in onto_individuals.search(type=onto_classes.GenerationScheme) ]
         new_id = parsed_settings["next_id"]
-        while (new_name := f"EGS{new_id:03}") in old_scheme_names: # resulting name is saved in new_id
+        while (new_name := f"EGS{new_id:03}") in old_scheme_names: # resulting name is saved in new_name
             new_id += 1
 
         # Create new nodes in the ontology
@@ -52,6 +52,19 @@ class FutureUtilities():
 
     def sys_delete_generation_scheme():
         pass
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -106,7 +119,7 @@ class SDGenExampleModule(SDGenBaseModule):
             at_end_of_iteration=True
         )
 
-        sd_generation_manager.start(100, path_where_to_save_result)
+        sd_generation_manager.start(10, path_where_to_save_result)
 
 
 
@@ -484,10 +497,8 @@ class SDGenExampleModule(SDGenBaseModule):
                 Has_Camera = [camera],
                 Has_Ground = [ground],
                 Has_Effect = [effect_physical_plausibility],
-                #Has_Label = [label]
+                Has_Label = [label]
             )
-            #new_root.Has_Label = [label]
-            new_root.Has_Label = [label]
 
 
 
