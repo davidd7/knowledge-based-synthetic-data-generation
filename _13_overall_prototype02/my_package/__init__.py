@@ -1,22 +1,18 @@
-#from flask import Flask, send_from_directory
-#from flask import Flask, flash, request, redirect, url_for
 import random
-
 import os
 import string
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import pathlib
 from datetime import datetime
-from my_package.generationschemes import simple_page
+from my_package.generationschemes import generationschemes_bp
 from my_package.modules import modules_bp
 from my_package.jobs import jobs_bp
 
 
 
-
-
-
+UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
+ALLOWED_EXTENSIONS = {'obj'}
 
 
 def create_app(test_config=None):
@@ -42,25 +38,34 @@ def create_app(test_config=None):
         pass
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Connect to database (use single object for all requests, via factory pattern)
+    from my_package import db
+    db.init_app(app)
 
 
     def allowed_file(filename):
         return '.' in filename and \
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
+    # ROUTES
+
+
+    # Path for our main Svelte page
+    @app.route("/")
+    def base():
+        return send_from_directory('client/public', 'index.html')
+
+
+
+
+    # Path for all the static files (compiled JS/CSS, etc.)
+    @app.route("/<path:path>")
+    def home(path):
+        return send_from_directory('client/public', path)
+
+
 
     @app.route('/upload', methods=['POST'])
     def upload_file():
@@ -91,42 +96,17 @@ def create_app(test_config=None):
             #return redirect(url_for('download_file', name=filename))
         return ""
 
-    # Path for our main Svelte page
-    @app.route("/")
-    def base():
-        return send_from_directory('client/public', 'index.html')
 
-    # Path for all the static files (compiled JS/CSS, etc.)
-    @app.route("/<path:path>")
-    def home(path):
-        return send_from_directory('client/public', path)
+    app.register_blueprint(generationschemes_bp, url_prefix='/generation-schemes')
 
-    # @app.route('/generation-schemes', methods=['GET'])
-    # def get_generation_schemes():
-
-    app.register_blueprint(simple_page, url_prefix='/generation-schemes')
     app.register_blueprint(modules_bp, url_prefix='/modules')
+
     app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    # Connect to database (use single object for all requests, via factory pattern)
-    from my_package import db
-    db.init_app(app)
     return app
 
 
@@ -138,42 +118,3 @@ def create_app(test_config=None):
 
 
 
-
-UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
-ALLOWED_EXTENSIONS = {'obj'}
-
-#app = Flask(__name__)
-#app.config.from_object(__name__)
-
-
-
-
-
-
-
-
-
-
-# return app
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)

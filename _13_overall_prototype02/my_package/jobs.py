@@ -7,8 +7,25 @@ import sqlite3
 from my_package.db import get_db
 
 
-
+# Create Blueprint
 jobs_bp = Blueprint('jobs_bp', __name__, template_folder='templates')
+
+
+
+# Helper functions
+def row_to_dict(row):
+    return {
+        "id" : row["id"],
+        "scheme_id" : row["scheme_id"],
+        "creation_date" : row["creation_date"],
+        "status" : row["state"],
+        "scheme_name" : row["scheme_name"]
+    }
+
+
+
+# ROUTES
+
 
 @jobs_bp.route('/', methods=['GET', 'POST'])
 def list_jobs():
@@ -55,14 +72,6 @@ def list_jobs():
 
 
 
-def row_to_dict(row):
-    return {
-        "id" : row["id"],
-        "scheme_id" : row["scheme_id"],
-        "creation_date" : row["creation_date"],
-        "status" : row["state"],
-        "scheme_name" : row["scheme_name"]
-    }
 
 
 

@@ -14,7 +14,7 @@ CREATE TABLE generation_jobs (
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   state TEXT NOT NULL,
   FOREIGN KEY (scheme_id) REFERENCES generation_schemes (id)
-); /* Question: should data / module_name also be saved here, because schemes might change? Or is at least data not importsant, because that data is also stored in ontology anyway after this db entry is created? */
+); /* Question: should data / module_name also be saved here, because schemes might change? Or is at least data not important, because that data is also stored in ontology anyway after this db entry is created? */
 
 
 
