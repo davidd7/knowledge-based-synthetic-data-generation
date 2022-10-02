@@ -671,7 +671,7 @@ class SimpleCameraHandler(SDGenerationHandler):
 
 
 
-class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentlich auch multiplicity-info
+class SimpleLightHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
         # Save reference to root
         self.__generation_scheme_instance = generation_scheme_instance
@@ -680,17 +680,17 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
         self.__lights = intersection(
             self.__generation_scheme_instance.Has_Light, onto.search(is_a=onto.SimpleLight))
 
-        # Create lights in blender and extend cached ontology with referencesw to those blender objects
-        for light in self.__lights:
-            blender_lights = []
-            for _ in range(light.Has_Multiplicity[0].Has_MaximumInt[0]):
+        # Create lights in blender and extend cached ontology with references to those blender objects
+        for light_individual in self.__lights:
+            bp_lights = []
+            for _ in range(light_individual.Has_Multiplicity[0].Has_MaximumInt[0]):
                 blender_light = bproc.types.Light("SPOT")
                 blender_light.set_energy(300)
-                blender_lights.append(blender_light)
+                bp_lights.append(blender_light)
+            light_individual.bp_reference = bp_lights
 
-            light.bp_reference = blender_lights
 
-            # Instantiate LocationInfo- and RotationInfo-Handlers
+            # Create local function that turns lights off for multiplicityhandler
             obj_ref_energy = 300
             def custom_hider(obj_ref, hide):
                 nonlocal obj_ref_energy
@@ -700,21 +700,23 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
                 else:
                     if obj_ref.get_energy() == 0:
                         obj_ref.set_energy(obj_ref_energy)
+
+            # Instantiate Multiplicity, LocationInfo- and RotationInfo-Handlers
             manager.add(
-                SimpleMultiplicityHandler(light, light.Has_Multiplicity[0], custom_hide_function=custom_hider)
+                SimpleMultiplicityHandler(light_individual, light_individual.Has_Multiplicity[0], custom_hide_function=custom_hider)
             )
             manager.add(
-                SimpleLocationHandler(light, light.Has_LocationInfo[0])
+                SimpleLocationHandler(light_individual, light_individual.Has_LocationInfo[0])
             )
             manager.add(
                 SimpleRotationLookingAtVolumeHandler(
-                    light, light.Has_RotationInfo[0])
+                    light_individual, light_individual.Has_RotationInfo[0])
             )
 
     def iteration(self):
-        for light in self.__lights:
-            light.bp_reference[0].set_energy(random.randint(15, 100*0.3)) # in example they used 300, but it's in watt and so 300 is really bright probably
-        # pass
+        for light_individual in self.__lights:
+            for light_reference in light_individual.bp_reference:
+                light_reference.set_energy(random.randint(15, 100*0.3)) # in example they used 300, but it's in watt and so 300 is really bright
 
     def end(self, onto):
         pass
