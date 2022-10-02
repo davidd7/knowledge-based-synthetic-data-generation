@@ -1,4 +1,6 @@
+import importlib
 import os
+import pathlib
 import subprocess
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
@@ -21,7 +23,8 @@ def row_to_dict(row):
         "scheme_id" : row["scheme_id"],
         "creation_date" : row["creation_date"],
         "status" : row["state"],
-        "scheme_name" : row["scheme_name"]
+        "scheme_name" : row["scheme_name"],
+        "module_name" : row["module_name"]
     }
 
 
@@ -70,9 +73,26 @@ def create_job():
 
     new_id = cursor.lastrowid
     new_job_row = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?', (new_id,)
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?', (new_id,)
     ).fetchall()[0]
+    new_job_dict = row_to_dict(new_job_row)
 
+    print(new_job_dict)
+    path = pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" #/ new_job_dict["module_name"]
+    print(path)
+
+    spec = importlib.util.spec_from_file_location(new_job_dict["module_name"], path)
+    print(spec)
+    foo = importlib.util.module_from_spec(spec)
+
+
+    # mod = importlib.import_module(  str(path)  ) # TODO: immer prüfen, dass module_name wirklich Ordner ist
+    return
+    met = getattr(mod, "SDGenModule")
+
+    print(met)
+
+    return
 
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
