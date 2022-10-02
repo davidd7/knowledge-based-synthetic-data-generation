@@ -1,4 +1,5 @@
 import os
+import subprocess
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
 from flask.cli import with_appcontext
@@ -77,7 +78,8 @@ def create_job():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
     # os.system("blenderproc run bproc_area/__main__.py")
-    subprocess.run(["blenderproc", "run", "bproc_area/__main__.py"], cwd=dir_path)
+    # subprocess.run(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path)
+    pid = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path).pid
     print("SDGen: Finished with starting blenderproc")
 
     return jsonify( row_to_dict(new_job_row) )
