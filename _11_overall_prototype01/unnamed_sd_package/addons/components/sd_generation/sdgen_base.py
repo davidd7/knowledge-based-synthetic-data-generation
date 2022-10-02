@@ -8,6 +8,7 @@ import os
 from PIL import Image
 import colorsys
 from mathutils import Vector
+from scipy.spatial.transform import Rotation as R
 import matplotlib.pyplot as plt
 import pathlib
 ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
@@ -115,6 +116,27 @@ class Utility():
 
 
 
+class BlenderCameraWrapper():
+    """
+    Makes camera methods available in a way similar to how objects are manipulated. The camera is normally manipulated differently in blender, but it's advantageous to be able to change location/rotation of camera and objects in a similar way.
+    """
+    def set_location(self, location):
+        # Set first camera pose (= first key frame)
+        cam_pose = bproc.math.build_transformation_mat(location, [0, 0, 0])
+        # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
+        bproc.camera.add_camera_pose(cam_pose, frame=0)
+
+    def set_local2world_mat(self, matrix):
+        bproc.camera.add_camera_pose(matrix, frame=0)
+
+    def get_location(self):
+        matrix = bproc.camera.get_camera_pose(frame=0)
+        translation = matrix[0:3, 3]
+        return translation
+
+
+
+
 # HANDLER
 
 
@@ -206,6 +228,20 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
 
         self.__label_type = seg_individual.Has_SegmentationType
 
+
+        # Query the ImageProperties-individual, which is needed to know the image size when no objects to recognize are visible in an image
+        image_properties = intersection(
+            seg_individual.Has_ImageProperties, onto.search(is_a=onto.ImageProperties))
+        if len(image_properties) == 0:
+            self.__image_width = int(4032.0 * 0.1)
+            self.__image_height = int(3024.0 * 0.1)
+        else:
+            image_properties = image_properties[0]
+            scale_factor = image_properties.Has_ScaleFactor[0]
+            self.__image_width = int(image_properties.Has_XLength[0] * scale_factor)
+            self.__image_height = int(image_properties.Has_YLength[0] * scale_factor)
+
+
     def iteration(self):
         data = self.__generation_scheme_instance.temp_data
 
@@ -224,7 +260,7 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
         except ValueError:
             for label_type in map_by:
                 # "instance_segmaps" or "class_segmaps"
-                data[label_type + "_segmaps"] = [ np.zeros( (image_height, image_width) ) ] * len(data["colors"]) # Note: will lead to error if multiple keyframes. Will also not work if no color image is present
+                data[label_type + "_segmaps"] = [ np.zeros( (self.__image_height, self.__image_width) ) ] * len(data["colors"]) # Note: will lead to error if multiple keyframes. Will also not work if no color image is present
 
                 if len(data["colors"]) != 1:
                     raise ValueError('Empty segmentation mask lead to error in blenderproc. More than one keyframe was requested but in case of this error not all keyframes can be reconstructed.')
@@ -490,9 +526,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         # Ontology-reference to physical plausibility
         simple_random_ground = intersection(
             self.__generation_scheme_instance.Has_Ground, onto.search(is_a=onto.SimpleRandomGround))
-        # print(effects)
-        # print(len(effects))
-        # exit()
+
         if len(simple_random_ground) == 0:
             self.__active = False
             return
@@ -507,39 +541,17 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
             volume.Has_YLength[0],
             30)
 
-        # Mögliche Bilder laden
-        # images = list(Path(args.image_dir).rglob("material_manipulation_sample_texture*.jpg"))
+        # Load paths to images of image pool
         path_to_images = f'{ get_path_to_package() / "addons/components/sd_generation/media/random_images_src" }'
         self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
 
-
-        
-        # # Load one random image
-        # image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
-
-        # mat = self.__ground.new_material(name="test_material2")
-
-        # node_texture_coordinate = mat.new_node('ShaderNodeTexCoord')
-        
-        # node_mapping = mat.new_node('ShaderNodeMapping')
-        # node_mapping.inputs['Scale'].default_value = (1.0, 1.0, 1.0)
-
-        # self.__node_base_color = mat.new_node('ShaderNodeTexImage')
-        # self.__node_base_color.label = "Base Color"
-        # self.__node_base_color.image = image
-
-        # node_principled_bsdf = mat.get_the_one_node_with_type("BsdfPrincipled")
-        
-        # mat.link(self.__node_base_color.outputs['Color'], node_principled_bsdf.inputs["Base Color"])
-        # mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
-        # mat.link(node_mapping.outputs["Vector"], self.__node_base_color.inputs["Vector"])
-        # self.__ground.set_material(0, mat)
 
 
     def iteration(self):
         if not self.__active:
             return
 
+        # Clean last random image from memory
         if self.__last_random_image is not None:
             bpy.data.images.remove(self.__last_random_image)
 
@@ -566,28 +578,6 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
         self.__ground.set_material(0, mat)
 
 
-        # # Load one random image
-        # image = bpy.data.images.load(filepath=str(random.choice(self.__images)))
-
-        # # mat = self.__ground.new_material(name="test_material2")
-
-        # # node_texture_coordinate = mat.new_node('ShaderNodeTexCoord')
-        
-        # # node_mapping = mat.new_node('ShaderNodeMapping')
-        # # node_mapping.inputs['Scale'].default_value = (1.0, 1.0, 1.0)
-
-        # # node_base_color = mat.new_node('ShaderNodeTexImage')
-        # # node_base_color.label = "Base Color"
-        # self.__node_base_color.image = image
-
-        # # node_principled_bsdf = mat.get_the_one_node_with_type("BsdfPrincipled")
-        
-        # # mat.link(node_base_color.outputs['Color'], node_principled_bsdf.inputs["Base Color"])
-        # # mat.link(node_texture_coordinate.outputs['UV'], node_mapping.inputs["Vector"])
-        # # mat.link(node_mapping.outputs["Vector"], node_base_color.inputs["Vector"])
-        # # self.__ground.set_material(0, mat)
-
-
     def end(self, onto):
         pass
 
@@ -610,63 +600,6 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class BlenderCameraWrapper():
-    """
-    Makes camera methods available in a way similar to how objects are manipulated. The camera is normally manipulated differently in blender, but it's advantageous to be able to change location/rotation of camera and objects in a similar way.
-    """
-    def set_location(self, location):
-        # Set first camera pose (= first key frame)
-        cam_pose = bproc.math.build_transformation_mat(location, [
-                                                        0, 0, 0])
-        # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
-        bproc.camera.add_camera_pose(cam_pose, frame=0)
-
-    def set_local2world_mat(self, matrix):
-        bproc.camera.add_camera_pose(matrix, frame=0)
-
-    def get_location(self):
-        matrix = bproc.camera.get_camera_pose(frame=0)
-        translation = matrix[0:3, 3]
-        return translation
-
-image_width = int(4032.0*0.1)
-image_height = int(3024.0*0.1)
-
 class SimpleCameraHandler(SDGenerationHandler):
     def init(self, onto, generation_scheme_instance, manager: SDGenerationManager = None):
         # Save reference to root
@@ -676,6 +609,26 @@ class SimpleCameraHandler(SDGenerationHandler):
         cameras = intersection(
             self.__generation_scheme_instance.Has_Camera, onto.search(is_a=onto.SimpleCamera))
         camera = cameras[0]
+
+        # Query the ImageProperties-individual
+        image_properties = intersection(
+            camera.Has_ImageProperties, onto.search(is_a=onto.ImageProperties))
+        if len(image_properties) == 0:
+            kmatrix = np.array([
+                [3325.84099 * 0.1,  0.000000000,        2097.56825 * 0.1],
+                [0.00000000,        3336.41112 * 0.1,   1558.48315 * 0.1],
+                [0.00000000,        0.0000000,          1.00000000]])
+            image_width = int(4032.0 * 0.1)
+            image_height = int(3024.0 * 0.1)
+        else:
+            image_properties = image_properties[0]
+            scale_factor = image_properties.Has_ScaleFactor[0]
+            kmatrix = np.array([
+                [image_properties.Has_FX[0] * scale_factor, 0.000000000, image_properties.Has_CX[0] * scale_factor],
+                [0.00000000, image_properties.Has_FY[0] * scale_factor, image_properties.Has_CY[0] * scale_factor],
+                [0.00000000, 0.0000000, 1.00000000]])
+            image_width = int(image_properties.Has_XLength[0] * scale_factor)
+            image_height = int(image_properties.Has_YLength[0] * scale_factor)
 
         # Add reference to CameraWrapper
         camera.bp_reference = [BlenderCameraWrapper()]
@@ -689,21 +642,10 @@ class SimpleCameraHandler(SDGenerationHandler):
                 camera, camera.Has_RotationInfo[0])
         )
 
-        # bproc.camera.set_intrinsics_from_K_matrix(
-        #     np.array([[3.32584099e+03, 0.00000000e+00, 2.09756825e+03],
-        #     [0.00000000e+00, 3.33641112e+03, 1.55848315e+03],
-        #     [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]]),1024,1024
-        # )
-        # bproc.camera.set_intrinsics_from_K_matrix(
-        #     np.array([[3325.84099, 0.000000000, 2097.56825],
-        #     [0.00000000, 3336.41112, 1558.48315],
-        #     [0.00000000, 0.0000000, 1.00000000]]), int(4032.0/1.0), int(3024.0/1.0)
-        # )
-        
+        # fx, fx, cx, cy, imagewidth, imageheight, scalefactor
+        # Set up intrinsics matrix
         bproc.camera.set_intrinsics_from_K_matrix(
-            np.array([[3325.84099*0.1, 0.000000000, 2097.56825*0.1],
-            [0.00000000, 3336.41112*0.1, 1558.48315*0.1],
-            [0.00000000, 0.0000000, 1.00000000]]), image_width, image_height
+            kmatrix, image_width, image_height
         )
 
     def iteration(self):
@@ -711,6 +653,21 @@ class SimpleCameraHandler(SDGenerationHandler):
 
     def end(self, onto):
         pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -763,6 +720,9 @@ class SimpleLightHandler(SDGenerationHandler): # TODO: Simple light hat eigentli
         pass
 
 
+
+
+
 class SimpleMultiplicityHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual, custom_hide_function=None):
         self.__handled_object = handled_object
@@ -793,6 +753,9 @@ class SimpleMultiplicityHandler(SDGenerationHandler):
 
     def end(self, onto):
         pass
+
+
+
 
 
 class SimpleLocationHandler(SDGenerationHandler):
@@ -835,8 +798,7 @@ class SimpleRotationHandler(SDGenerationHandler):
 
 
 
-# import mathutils
-from scipy.spatial.transform import Rotation as R
+
 
 class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):

@@ -71,6 +71,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ImageProperties -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ImageProperties">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#ImageProperties"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Label -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_Label">
@@ -198,6 +207,42 @@
     
 
 
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CX -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CX">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CY -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CY">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FX -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FX">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FY -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FY">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_File -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_File">
@@ -240,6 +285,15 @@
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumSimulationTime -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_MinimumSimulationTime">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ScaleFactor -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ScaleFactor">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     </owl:DatatypeProperty>
@@ -424,6 +478,62 @@
     
 
 
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#ImageProperties -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#ImageProperties">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CX"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_CY"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FX"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_FY"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ScaleFactor"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_XLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_YLength"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Label"/>
@@ -515,6 +625,13 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Camera"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_ImageProperties"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#ImageProperties"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#Has_LocationInfo"/>
@@ -716,8 +833,24 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Camera">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#SimpleCamera"/>
+        <Has_ImageProperties rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_ImageProperties1"/>
         <Has_LocationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_LocationInfoVolumeCamera"/>
         <Has_RotationInfo rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_RotationInfoLookingAtGround"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_ImageProperties1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_ImageProperties1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#ImageProperties"/>
+        <Has_CX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">2097.5684</Has_CX>
+        <Has_CY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1558.4832</Has_CY>
+        <Has_FX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3325.841</Has_FX>
+        <Has_FY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3336.4111</Has_FY>
+        <Has_ScaleFactor rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</Has_ScaleFactor>
+        <Has_XLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">4032.0</Has_XLength>
+        <Has_YLength rdf:datatype="http://www.w3.org/2001/XMLSchema#float">3024.0</Has_YLength>
     </owl:NamedIndividual>
     
 
@@ -786,8 +919,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object1_Multiplicity">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
-        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MaximumInt>
-        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MinimumInt>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MaximumInt>
+        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MinimumInt>
     </owl:NamedIndividual>
     
 
@@ -818,8 +951,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_Object2_Multiplicity">
         <rdf:type rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EqualDistributionRangeMultiplicity"/>
-        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MaximumInt>
-        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</Has_MinimumInt>
+        <Has_MaximumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MaximumInt>
+        <Has_MinimumInt rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</Has_MinimumInt>
     </owl:NamedIndividual>
     
 
