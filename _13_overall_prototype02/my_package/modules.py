@@ -1,3 +1,5 @@
+import os
+import pathlib
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
 from flask.cli import with_appcontext
@@ -16,16 +18,16 @@ modules_bp = Blueprint('modules_bp', __name__, template_folder='templates')
 
 
 @modules_bp.route('/', methods=['GET'])
-def list_schemes():
+def list_modules():
+    folders = [ f for f in os.scandir(path=pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" ) if f.is_dir() ]
 
-    if request.method == 'GET':
-        fake_result = [ # TODO: Später ersetzen durch Code, der in Verzeichnis Module sucht
-            {
-                "name" : "EinfachesModul"
-            }
-        ]
+    result = []    
+    for folder in folders:
+        result.append({
+            "name" : folder.name
+        })
 
-        return jsonify(fake_result)
+    return jsonify(result)
 
 
 
