@@ -27,45 +27,56 @@ def row_to_dict(row):
 # ROUTES
 
 
-@jobs_bp.route('/', methods=['GET', 'POST'])
+@jobs_bp.route('/', methods=['GET'])
 def list_jobs():
+    db = get_db()
+    jobs = db.execute(
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id ORDER BY j.id DESC', ()
+    ).fetchall()
 
-    if request.method == 'GET':
-        db = get_db()
-        jobs = db.execute(
-            'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id ORDER BY j.id DESC', ()
-        ).fetchall()
+    list = []
+    for row in jobs:
+        list.append( row_to_dict(row) )
+    return jsonify(list)
 
-        list = []
-        for row in jobs:
-            list.append( row_to_dict(row) )
-        return jsonify(list)
 
-    if request.method == 'POST':
-        generation_scheme_id = request.form['generation_scheme_id']
-        db = get_db()
-        cursor = db.cursor()
-        error = None
-        if not generation_scheme_id:
-            error = 'generation_scheme_id is required.'
 
-        if error is None:
-            try:
-                cursor.execute(
-                    "INSERT INTO generation_jobs (scheme_id, state) VALUES (?, 'active')",
-                    (generation_scheme_id,),
-                )
-                db.commit()
-            except db.IntegrityError:
-                error = f"User {name} is already registered."
-            else:
-                new_id = cursor.lastrowid
-                new_job_row = db.execute(
-                    'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?', (new_id,)
-                ).fetchall()[0]
-            return jsonify( row_to_dict(new_job_row) )
+@jobs_bp.route('/', methods=['POST'])
+def create_job():
+    generation_scheme_id = request.form['generation_scheme_id']
+    db = get_db()
+    cursor = db.cursor()
+    error = None
+    if not generation_scheme_id:
+        error = 'generation_scheme_id is required.'
 
+    if error is not None:
         return "error"
+
+    try:
+        cursor.execute(
+            "INSERT INTO generation_jobs (scheme_id, state) VALUES (?, 'active')",
+            (generation_scheme_id,),
+        )
+        db.commit()
+    except db.IntegrityError:
+        error = f"User {name} is already registered."
+        return "error"
+    except:
+        return "error"
+
+
+    new_id = cursor.lastrowid
+    new_job_row = db.execute(
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?', (new_id,)
+    ).fetchall()[0]
+
+
+    os.system("bproc_area/__main__.py")
+
+
+    return jsonify( row_to_dict(new_job_row) )
+
 
 
 
