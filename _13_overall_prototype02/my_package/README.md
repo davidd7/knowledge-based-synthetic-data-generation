@@ -26,6 +26,9 @@ flask run
 npm run dev
 
 # Todo: Using Svelte for the first time
+(navigate to _13_overall_prototype02/my_package/client/ in terminal)
+npm install
+
 
 
 
