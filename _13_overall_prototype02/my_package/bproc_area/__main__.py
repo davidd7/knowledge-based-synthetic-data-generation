@@ -1,14 +1,15 @@
 import blenderproc as bproc # this import is required even if its not used in this file
+import importlib
 import pathlib
 import sys
-ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
-# ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
-MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
-if MODE == "bp_run":
-    new_sys_path = pathlib.Path(__file__).parent
-    sys.path.append(str(new_sys_path)) # works only with str()!
-elif MODE == "bp_debug":
-    sys.path.append(ABSOLUTE_PATH_TO_PACKAGE) # Das ist doch nötig, wenn man blenderproc mit debug-Argument aufruft
+# ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+# # ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
+# MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
+# if MODE == "bp_run":
+#     new_sys_path = pathlib.Path(__file__).parent
+#     sys.path.append(str(new_sys_path)) # works only with str()!
+# elif MODE == "bp_debug":
+#     sys.path.append(ABSOLUTE_PATH_TO_PACKAGE) # Das ist doch nötig, wenn man blenderproc mit debug-Argument aufruft
 
 
 
@@ -22,18 +23,8 @@ def get_path_to_package():
         return pathlib.Path(ABSOLUTE_PATH_TO_PACKAGE) / "unnamed_sd_package"
 
 
-import unnamed_sd_package.addons.modules.example
+# import unnamed_sd_package.addons.modules.example
 
-
-
-
-def start_json_to_onto():
-    # Define necessary paths
-    path_to_ontology_input = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_classes.owl" }'
-    path_to_ontology_output = f'{ get_path_to_package() / "data/ontologies/" / "sdgen_ontology_2_individuals.owl" }'
-
-    # Start json_to_onto
-    unnamed_sd_package.addons.modules.example.FutureUtilities.sys_create_new_generation_scheme(path_to_ontology_input, path_to_ontology_output) # need also to specify which module is meant one day (e.g. unnamed_sd_package.addons.modules.example.SDGenExampleModule)
 
 
 def generate_data():
@@ -57,8 +48,29 @@ def generate_data():
 if __name__ == "__main__":
     print("start")
 
-    # start_json_to_onto() # <- uncomment to see json_to_onto-test
+    print(sys.argv)
+
+    path_to_package = sys.argv[1]
+    job_id = sys.argv[2]
     # generate_data() # <- uncomment to see data generation test
+
+
+    # Import my_package
+    sys.path.append(path_to_package)
+    
+    import util
+    from datascientist_addons.generation_components import onto_to_sd
+
+    onto_to_sd( path_to_package / "generated_datasets" / str(job_id) / "individuals.owl", path_to_package / "generated_datasets" / str(job_id)  )
+
+
+
+
+    # path = pathlib.Path(path_to_package) / "bp_executor.py"
+    # spec = importlib.util.spec_from_file_location("xyz", path)
+    # module = importlib.util.module_from_spec(spec)
+    # spec.loader.exec_module(module)
+
 
     print("end")
 

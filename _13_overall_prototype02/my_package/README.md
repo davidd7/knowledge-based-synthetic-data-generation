@@ -31,6 +31,11 @@ npm install
 
 
 
+# Other steps:
+(might be problem when job creation says no file found)
+(outside of venv?)
+pip install blenderproc
+blenderproc pip install Owlready2
 
 
 

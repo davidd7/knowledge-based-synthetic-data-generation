@@ -24,9 +24,6 @@ def row_to_dict(row):
     for key in row.keys():
         res[key] = row[key]
 
-    # return {
-    #     "json_data" : row["data"]
-    # }
     return res
 
 
@@ -88,7 +85,7 @@ def create_job():
 
 
     start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"])
-    # start_onto_to_sd()
+    start_onto_to_sd(new_job_dict["id"])
 
     return jsonify( row_to_dict(new_job_row) )
 
@@ -132,16 +129,15 @@ def start_json_to_onto(loaded_class, job_id, json_data):
     onto_individuals.save(file=path_to_ontology_individuals)
 
 
-def start_onto_to_sd():
-    pass
-    return
-    # Onto_to_SD
+
+def start_onto_to_sd(job_id):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
     # os.system("blenderproc run bproc_area/__main__.py")
     # subprocess.run(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path)
-    pid = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path).pid
+    # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", "-o", "abcd"], cwd=dir_path).pid
+    pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
     print("SDGen: Finished with starting blenderproc")
         
     

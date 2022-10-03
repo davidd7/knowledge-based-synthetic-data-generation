@@ -106,12 +106,16 @@ def create_app(test_config=None):
 
     app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
-
-    prepare_datascientist_addons()
+    if False: # TODO: In Produktion sollte bei jedem Start svelte-Formulare laden !!
+        prepare_datascientist_addons()
 
 
 
     return app
+
+
+
+
 
 
 def prepare_datascientist_addons():
