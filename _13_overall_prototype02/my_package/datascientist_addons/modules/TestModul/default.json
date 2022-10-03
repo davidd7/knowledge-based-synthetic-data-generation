@@ -1,0 +1,22 @@
+ {
+		"objects_to_recognize": [
+			{
+				"url": "media/untitled.obj",
+				"min": 2,
+				"max": 5
+			},
+			{
+				"url": "media/untitled.obj",
+				"min": 3,
+				"max": 6
+			},
+			{
+				"url": "",
+				"min": 3,
+				"max": 3
+			}
+		],
+			"area_length_x": 3,
+			"area_length_y": 7,
+			"camera_height": 5
+	}

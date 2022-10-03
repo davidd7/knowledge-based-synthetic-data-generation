@@ -1,27 +1,11 @@
 <script>
-    import urlSlug from "url-slug";
 	import { onMount } from 'svelte';
-    import { push } from "svelte-spa-router";
 	import {writable} from 'svelte/store';
 	import { setContext } from 'svelte';
 
-	// import EinfachesModul from "../forms/EinfachesModul.svelte"
-
-
-
-	const imports = {
-		// "EinfachesModul": () => import('../forms/EinfachesModul.svelte')
-		"EinfachesModul": (a) => import(`../forms/${a}.svelte`) // ....
-	};
-
-	
-	console.log(`../forms/EinfachesModul.svelte xxx`);
-
-
-
-    
 	// Export params so that url params are inserted into it
 	export let params;
+
 	let feedbackText = "";
 
 	let generation_scheme_data = { "name..." : "Loading"};
@@ -31,35 +15,9 @@
 	$store = {};
 	setContext('context', store)
 
-
-	let defaultData = ` {
-		"objects_to_recognize": [
-			{
-				"url": "media/untitled.obj",
-				"min": 2,
-				"max": 5
-			},
-			{
-				"url": "media/untitled.obj",
-				"min": 3,
-				"max": 6
-			},
-			{
-				"url": "",
-				"min": 3,
-				"max": 3
-			}
-		],
-			"area_length_x": 3,
-			"area_length_y": 7,
-			"camera_height": 5
-	}`;
-
 	function handleSendButtonClick() {
 		sendData();
 	}
-
-
 
 
 
@@ -78,20 +36,8 @@
 		let response_data = await response.json();
 
 		generation_scheme_data = response_data;
-
-		console.log(response_data)
-
 		$store = JSON.parse(response_data.data);
-
-		// Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
-		console.log(`../forms/${response_data.module_name}.svelte`);
-		console.log(`../forms/EinfachesModul.svelte`);
-		// Thing = (await import(`../forms/${response_data.module_name}.svelte`)).default;
-		// console.log(await imports[response_data.module_name]());
-		// Thing = (await imports[response_data.module_name]()).default;
-		// Thing = (await imports[response_data.module_name](response_data.module_name)).default;
 		Thing = (   await import(`../forms/${response_data.module_name}.svelte`)  ).default;
-
 	});
     
 
@@ -125,15 +71,12 @@
 		}
     }
 
-	async function reset() {
-		$store = JSON.parse(defaultData);
-		await sendData();
-		// Thing = (await import(`../forms/EinfachesModul.svelte`)).default;
-
-		// Thing = (await imports[response_data.module_name](response_data.module_name)).default;
-		
-
-	}
+	// async function reset() {
+	// 	$store = JSON.parse(defaultData);
+	// 	await sendData();
+	// 	// Thing = (await imports[response_data.module_name](response_data.module_name)).default;
+	// }
+	
 </script>
     
 
@@ -141,7 +84,7 @@
     <h1 style="flex-grow: 1;">
 		{generation_scheme_data.name} ({generation_scheme_data.module_name})
 	</h1>
-	<button on:click={reset}>Reset</button>
+	<!-- <button on:click={reset}>Reset</button> -->
 	<button on:click={handleSendButtonClick}>Speichern</button>
 </div>
 

@@ -20,8 +20,8 @@ modules_bp = Blueprint('modules_bp', __name__, template_folder='templates')
 
 @modules_bp.route('/', methods=['GET'])
 def list_modules():
-    folders = util.get_datascientist_modules_files() # [ f for f in os.scandir(path=pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" ) if f.is_dir() ]
-
+    folders = util.get_datascientist_modules_files()
+    
     result = []    
     for folder in folders:
         result.append({

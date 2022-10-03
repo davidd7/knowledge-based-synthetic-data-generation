@@ -1,4 +1,6 @@
+from pathlib import Path
 from unicodedata import name
+from . import util
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
 from flask.cli import with_appcontext
 import click
@@ -47,18 +49,25 @@ def create_scheme():
         error = 'name is required.'
     elif not module_name:
         error = 'module_name is required.'
+    elif not module_name in util.get_data_scientist_module_filenames():
+        error = 'invalid module name'
     if error is not None:
         return "error"
+
+    # Read default json-data for this module
+    data = Path( util.get_path_to_package() / "datascientist_addons" / "modules" / module_name / "default.json" ).read_text()
 
     # Connect to DB
     db = get_db()
     cursor = db.cursor()
 
+
+
     # 
     try:
         cursor.execute(
-            "INSERT INTO generation_schemes (name, module_name, data) VALUES (?, ?, '{}')",
-            (name, module_name),
+            "INSERT INTO generation_schemes (name, module_name, data) VALUES (?, ?, ?)",
+            (name, module_name, data),
         )
         db.commit()
     except db.IntegrityError:

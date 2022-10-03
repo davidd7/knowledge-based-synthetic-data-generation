@@ -1,68 +1,24 @@
 <script>
+	// Import general components
+	import { getContext } from 'svelte';
+	// Import form elements
 	import Multiple from '../form_elements/Multiple.svelte';
 	import Range from '../form_elements/Range.svelte';
 	import HeadlinedGroup from '../form_elements/HeadlinedGroup.svelte';
 	import NumberInput from '../form_elements/NumberInput.svelte';
 	import Input3DModel from '../form_elements/Input3DModel.svelte';
 
-
-	import { getContext } from 'svelte';
-
 	let data;
-	$: {
-		 data = data;
-	}
+	$: { data = data; }
 
 	let store = getContext('context');
 	store.subscribe(value => {
-		console.log(value);
 		data = value;
-		console.log(data);
-		// data = data;
 	})
-
-
-// $: 	console.log(store);
-
-
-
-	// import {writable} from 'svelte/store';
-	// let store = writable('store');
-		
-	// let data = JSON.parse(` {
-	// 	"objects_to_recognize": [
-	// 		{
-	// 			"url": "media/untitled.obj",
-	// 			"min": 2,
-	// 			"max": 5
-	// 		},
-	// 		{
-	// 			"url": "media/untitled.obj",
-	// 			"min": 3,
-	// 			"max": 6
-	// 		},
-	// 		{
-	// 			"url": "",
-	// 			"min": 3,
-	// 			"max": 3
-	// 		}
-	// 	],
-	// 		"area_length_x": 3,
-	// 		"area_length_y": 7,
-	// 		"camera_height": 5
-	// }`);
-	
-	// $store = data;
-	
-	// function test() {
-	// 	alert(JSON.stringify($store));
-	// }
-	
 </script>
 
 
 <div class="app-container">
-	<!-- {JSON.stringify(data)} -->
 	<HeadlinedGroup headline="Zu erkennende Objekte">
 		<Multiple array={data.objects_to_recognize} newElement={ {url:"", min:3, max:6} }>
 			3D-Modell:
@@ -82,18 +38,6 @@
 </div>
 
 
-
-<style>
-	/* .app-container {
-		max-width: 1000px;
-		margin-left: auto;
-		margin-right: auto;
-		padding-bottom: 60px;
-	} */
-	/* .app-send-button {
-		margin-top: 16px;
-	} */
-</style>
 
 
 

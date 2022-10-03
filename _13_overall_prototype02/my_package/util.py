@@ -3,7 +3,7 @@ import pathlib
 
 
 def get_data_scientist_module_filenames():
-    return [ f.name for f in os.scandir(path=pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" ) if f.is_dir() ]
+    return [ f.name for f in os.scandir(path=pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "datascientist_addons" / "modules" ) if f.is_dir() ]
 
 
 
