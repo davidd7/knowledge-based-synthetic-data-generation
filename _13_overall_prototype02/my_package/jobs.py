@@ -10,6 +10,7 @@ import json
 import sqlite3
 from my_package.db import get_db
 from owlready2 import *
+from . import util
 
 
 # Create Blueprint
@@ -103,16 +104,12 @@ def create_job():
 
 
 
-def get_data_scientist_modules():
-    return [ f.name for f in os.scandir(path=pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" ) if f.is_dir() ]
-
-
 
 
 
 def load_data_scientist_module_by_name(module_name):
     # Check that parameter really references a module
-    if not module_name in get_data_scientist_modules():
+    if not module_name in get_data_scientist_module_filenames():
         return "error"
 
     # Import the module
@@ -125,17 +122,15 @@ def load_data_scientist_module_by_name(module_name):
     return getattr(module, "SDGenModule")
 
 
-def get_path_to_package():
-    return pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
 
 
 def start_json_to_onto(loaded_class, job_id):
     # 1. Create directory
-    job_path = get_path_to_package() / "generated_datasets" / str(job_id)
+    job_path = util.get_path_to_package() / "generated_datasets" / str(job_id)
     job_path.mkdir(parents=True, exist_ok=True)
 
     # Define necessary paths
-    path_to_ontology_classes = f'{ get_path_to_package() / "ontology_classes" / "main.owl" }'
+    path_to_ontology_classes = f'{ util.get_path_to_package() / "ontology_classes" / "main.owl" }'
     path_to_ontology_individuals = f'{ job_path / "individuals.owl" }'
 
     # Get ontologies

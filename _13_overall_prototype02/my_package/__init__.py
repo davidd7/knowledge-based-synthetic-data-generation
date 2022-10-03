@@ -8,6 +8,8 @@ from datetime import datetime
 from my_package.generationschemes import generationschemes_bp
 from my_package.modules import modules_bp
 from my_package.jobs import jobs_bp
+from . import util
+import pathlib
 
 
 
@@ -66,13 +68,6 @@ def create_app(test_config=None):
         return send_from_directory('client/public', path)
 
 
-    # # Trying what happens if serve .svelte over internet:
-    # @app.route("/forms/<path:path>")
-    # def trying(path):
-    #     return send_from_directory('client/forms', path)
-    # # Answer: Yes, now it can fetch the .svelte-files. However, because it needs the compiled files (or rather: needs to know which fiels might be there during compilation), this is not the solution to the problem.
-
-
     @app.route('/upload', methods=['POST'])
     def upload_file():
         # check if the post request has the file part
@@ -110,13 +105,29 @@ def create_app(test_config=None):
     app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
 
+    prepare_datascientist_addons()
 
 
 
     return app
 
 
+def prepare_datascientist_addons():
 
+    # 1. Module-Forms
+    # 1.1 Delete existing forms
+    folder_path = util.get_path_to_package() / "client" / "forms"
+    for f in os.listdir( folder_path ):
+        if not f.endswith(".svelte"):
+            continue
+        print(f)
+        os.remove(os.path.join(folder_path, f))
+
+
+    files = util.get_datascientist_modules_files()
+    for el in files:
+        print( pathlib.Path(el.path) / "lol.svelte")
+    print(files)
 
 
 
