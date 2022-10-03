@@ -2,11 +2,11 @@
 from re import M
 from socket import has_dualstack_ipv6
 from xml.dom.expatbuilder import parseFragmentString
-from unnamed_sd_package.addons.components.sd_generation import sdgen_base
+# from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
-from owlready2 import *
+# from owlready2 import *
 import itertools
-from rdflib import *
+# from rdflib import *
 
 
 

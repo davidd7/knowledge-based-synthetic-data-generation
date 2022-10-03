@@ -73,24 +73,29 @@ def create_job():
 
     new_id = cursor.lastrowid
     new_job_row = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?', (new_id,)
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?',
+        (new_id,)
     ).fetchall()[0]
     new_job_dict = row_to_dict(new_job_row)
 
-    print(new_job_dict)
-    path = pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" #/ new_job_dict["module_name"]
-    print(path)
+    # print(os.path.realpath(__file__))
+    # path = pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" #/ new_job_dict["module_name"]
+    path = pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" / new_job_dict["module_name"] / "__init__.py"
+    # print(path)
 
     spec = importlib.util.spec_from_file_location(new_job_dict["module_name"], path)
-    print(spec)
-    foo = importlib.util.module_from_spec(spec)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    print(module)
 
 
     # mod = importlib.import_module(  str(path)  ) # TODO: immer prüfen, dass module_name wirklich Ordner ist
-    return
-    met = getattr(mod, "SDGenModule")
+    # return ""
+    print(dir(module))
+    loaded_class = getattr(module, "SDGenModule")
+    loaded_class.json_to_onto("", "", "")
 
-    print(met)
+    print(loaded_class)
 
     return
 
