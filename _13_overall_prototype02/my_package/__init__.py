@@ -66,6 +66,12 @@ def create_app(test_config=None):
         return send_from_directory('client/public', path)
 
 
+    # # Trying what happens if serve .svelte over internet:
+    # @app.route("/forms/<path:path>")
+    # def trying(path):
+    #     return send_from_directory('client/forms', path)
+    # # Answer: Yes, now it can fetch the .svelte-files. However, because it needs the compiled files (or rather: needs to know which fiels might be there during compilation), this is not the solution to the problem.
+
 
     @app.route('/upload', methods=['POST'])
     def upload_file():

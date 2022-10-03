@@ -10,7 +10,8 @@
 
 
 	const imports = {
-		"EinfachesModul": () => import('../forms/EinfachesModul.svelte')
+		// "EinfachesModul": () => import('../forms/EinfachesModul.svelte')
+		"EinfachesModul": (a) => import(`../forms/${a}.svelte`)
 	};
 
 	
@@ -78,14 +79,17 @@
 
 		generation_scheme_data = response_data;
 
+		console.log(response_data)
+
 		$store = JSON.parse(response_data.data);
 
 		// Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
 		console.log(`../forms/${response_data.module_name}.svelte`);
 		console.log(`../forms/EinfachesModul.svelte`);
 		// Thing = (await import(`../forms/${response_data.module_name}.svelte`)).default;
-		console.log(await imports[response_data.module_name]());
-		Thing = (await imports[response_data.module_name]()).default;
+		// console.log(await imports[response_data.module_name]());
+		// Thing = (await imports[response_data.module_name]()).default;
+		Thing = (await imports[response_data.module_name](response_data.module_name)).default;
 		// Thing = (await import(`../forms/Einfaches-Modul.svelte`)).default;
 	});
     
@@ -110,7 +114,7 @@
 				throw new Error('Something went wrong');
 			}
 			const response_data=await response.json();
-			// KÖnnte hier noch vgl machen, dass alle werte passen, aber wär eh zu spät
+			// Könnte hier noch vgl machen, dass alle werte passen, aber wär eh zu spät
 			console.log(response_data.id);
 			console.log("Data was saved");
 			feedbackText="Eingaben wurden gespeichert.";

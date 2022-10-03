@@ -57,7 +57,7 @@ def create_scheme():
     # 
     try:
         cursor.execute(
-            "INSERT INTO generation_schemes (name, module_name, data) VALUES (?, ?, '')",
+            "INSERT INTO generation_schemes (name, module_name, data) VALUES (?, ?, '{}')",
             (name, module_name),
         )
         db.commit()
