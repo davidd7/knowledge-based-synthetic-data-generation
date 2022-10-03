@@ -1,5 +1,6 @@
 import random
 import os
+import shutil
 import string
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -116,22 +117,23 @@ def prepare_datascientist_addons():
 
     # 1. Module-Forms
     # 1.1 Delete existing forms
-    folder_path = util.get_path_to_package() / "client" / "forms"
-    for f in os.listdir( folder_path ):
+    path_client_forms = util.get_path_to_package() / "client" / "forms"
+    for f in os.listdir( path_client_forms ):
         if not f.endswith(".svelte"):
             continue
-        print(f)
-        os.remove(os.path.join(folder_path, f))
+        os.remove(os.path.join(path_client_forms, f))
 
-
+    # 1.2 Copy 
     files = util.get_datascientist_modules_files()
     for el in files:
-        print( pathlib.Path(el.path) / "lol.svelte")
-    print(files)
+        path_to_svelte_form = pathlib.Path(el.path) / "Form.svelte"
+        shutil.copyfile(path_to_svelte_form, path_client_forms / (el.name + ".svelte") )
 
 
+    # 2. Form-elements (TODO, currently the form elements are directly placed into the target folder)
 
 
+    # 3. Call "npm run" to compile svelte-forms
 
 
 
