@@ -20,14 +20,14 @@ jobs_bp = Blueprint('jobs_bp', __name__, template_folder='templates')
 
 # Helper functions
 def row_to_dict(row):
-    return {
-        "id" : row["id"],
-        "scheme_id" : row["scheme_id"],
-        "creation_date" : row["creation_date"],
-        "status" : row["state"],
-        "scheme_name" : row["scheme_name"],
-        "module_name" : row["module_name"]
-    }
+    res = {}
+    for key in row.keys():
+        res[key] = row[key]
+
+    # return {
+    #     "json_data" : row["data"]
+    # }
+    return res
 
 
 
@@ -38,7 +38,7 @@ def row_to_dict(row):
 def list_jobs():
     db = get_db()
     jobs = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id ORDER BY j.id DESC', ()
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id ORDER BY j.id DESC', ()
     ).fetchall()
 
     list = []
@@ -76,7 +76,7 @@ def create_job():
     # Query the just created job out of the DB
     new_id = cursor.lastrowid
     new_job_row = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?',
+        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name, s.data as json_data FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?',
         (new_id,)
     ).fetchall()[0]
     new_job_dict = row_to_dict(new_job_row)
@@ -87,18 +87,8 @@ def create_job():
 
 
 
-    start_json_to_onto(loaded_class, new_job_dict["id"])
-
-    return ""
-
-    # Onto_to_SD
-    print("SDGen: Starting blenderproc")
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(dir_path) 
-    # os.system("blenderproc run bproc_area/__main__.py")
-    # subprocess.run(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path)
-    pid = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path).pid
-    print("SDGen: Finished with starting blenderproc")
+    start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"])
+    # start_onto_to_sd()
 
     return jsonify( row_to_dict(new_job_row) )
 
@@ -109,11 +99,11 @@ def create_job():
 
 def load_data_scientist_module_by_name(module_name):
     # Check that parameter really references a module
-    if not module_name in get_data_scientist_module_filenames():
+    if not module_name in util.get_data_scientist_module_filenames():
         return "error"
 
     # Import the module
-    path = pathlib.Path(os.path.dirname(os.path.realpath(__file__))) / "data_scientist_modules" / module_name / "__init__.py"
+    path = util.get_path_to_package() / "datascientist_addons" / "modules" / module_name / "__init__.py"
     spec = importlib.util.spec_from_file_location(module_name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -124,7 +114,7 @@ def load_data_scientist_module_by_name(module_name):
 
 
 
-def start_json_to_onto(loaded_class, job_id):
+def start_json_to_onto(loaded_class, job_id, json_data):
     # 1. Create directory
     job_path = util.get_path_to_package() / "generated_datasets" / str(job_id)
     job_path.mkdir(parents=True, exist_ok=True)
@@ -137,12 +127,22 @@ def start_json_to_onto(loaded_class, job_id):
     onto_classes, onto_individuals = load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals)
 
     # Create new nodes in the ontology
-    loaded_class.json_to_onto(onto_classes, onto_individuals, "abc_xyz", "") # TODO: Muss echte JSON-Daten übergeben
+    loaded_class.json_to_onto(onto_classes, onto_individuals, "abc_xyz", json_data)
 
     onto_individuals.save(file=path_to_ontology_individuals)
 
 
-
+def start_onto_to_sd():
+    pass
+    return
+    # Onto_to_SD
+    print("SDGen: Starting blenderproc")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print(dir_path) 
+    # os.system("blenderproc run bproc_area/__main__.py")
+    # subprocess.run(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path)
+    pid = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path).pid
+    print("SDGen: Finished with starting blenderproc")
         
     
 

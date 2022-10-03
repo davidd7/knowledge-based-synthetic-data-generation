@@ -75,34 +75,8 @@ class SDGenModule(SDGenBaseModule):
         """
         Overreaching function creates new individual if 
         """
-        # Load user data
-        data = """
-            {
-                "objects_to_recognize": [
-                    {
-                    "url": "media/untitled.obj",
-                    "min": 3,
-                    "max": 4
-                    },
-                    {
-                    "url": "media/untitled.obj",
-                    "min": 3,
-                    "max": 4
-                    },
-                    {
-                    "url": "media/untitled.obj",
-                    "min": 3,
-                    "max": 14
-                    }
-                ],
-                "area_length_x": 3,
-                "area_length_y": 7,
-                "camera_height": 5
-            }"""
+
         parsed_data = json.loads(data)
-
-
-        
 
         with onto_individuals:
             # Volumes
