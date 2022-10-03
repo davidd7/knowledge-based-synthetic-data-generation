@@ -60,8 +60,34 @@ if __name__ == "__main__":
     
     import util
     from datascientist_addons.generation_components import onto_to_sd
+    from datascientist_addons.generation_components import *
 
-    onto_to_sd( path_to_package / "generated_datasets" / str(job_id) / "individuals.owl", path_to_package / "generated_datasets" / str(job_id)  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Get path to ontology
+    path_to_ontology = pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) / "individuals.owl"
+    path_to_ontology = f"file://{path_to_ontology}"
+
+
+
+    path_to_onto_classes = pathlib.Path(path_to_package) / "ontology_classes" / "main.owl"
+    path_to_onto_classes = f"file://{path_to_onto_classes}"
+
+
+
+    onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) , path_to_onto_classes )
 
 
 

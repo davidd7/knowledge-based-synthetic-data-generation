@@ -53,12 +53,13 @@ class SDGenerationHandler():
 # MANAGER
 
 class SimpleSDGenerationManager(SDGenerationManager):
-    def __init__(self, path_to_ontology, generation_scheme_instance_label):
+    def __init__(self, path_to_ontology, generation_scheme_instance_label, path_to_onto_classes):
         self.__handlers_all: list[SDGenerationHandler] = []
         self.__handlers_iteration_normal: list[SDGenerationHandler] = []
         self.__handlers_iteration_end: list[SDGenerationHandler] = []
         self.__path_to_ontology: str = path_to_ontology
         self.__generation_scheme_instance_label: str = generation_scheme_instance_label
+        self.__path_to_onto_classes = path_to_onto_classes
 
     def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
         self.__handlers_all.append(handler)
@@ -69,9 +70,11 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self):
         w = World()
+        ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
         ontology = w.get_ontology(self.__path_to_ontology).load() # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
 
-        generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
+        # generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
+        generation_scheme_instances_list = list(ontology.search(is_a=ontology_classes.GenerationScheme))
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")
         root_individual = generation_scheme_instances_list[0]
@@ -214,7 +217,7 @@ def create_objects(obj_file_path, how_many=1):
 class BlenderHandler(SDGenerationHandler):
     """General blenderproc-specific preperations"""
     def init(self, onto, generation_scheme_instance, manager):
-        bproc.init()
+        bproc.init() # compute_device="CPU")
 
     def iteration(self):
         pass
