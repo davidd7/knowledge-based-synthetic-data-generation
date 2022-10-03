@@ -14,6 +14,7 @@ import pathlib
 ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 # ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
+import util
 def get_path_to_package():
     """
     Returns path object containing the path that should lead to the root of this package
@@ -69,12 +70,33 @@ class SimpleSDGenerationManager(SDGenerationManager):
             self.__handlers_iteration_end.append(handler)
 
     def start(self):
+        # ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
+        # onto_path.append( str(util.get_path_to_package() / "ontology_classes/" ))
+        # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/" )
+        # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/main.owl" )
+        # onto_path.append( "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_13_overall_prototype02\\my_package\\ontology_classes" )
+        # onto_path.append( "e:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes" )
+        # onto_path.append( "file://E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes\\" )
+        # onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes\\" )
+        onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes" )
+        # onto_path.append( """e:/atest""" )
+        # onto_path.append( """e:\\atest""" )
+        # onto_path.append( """E:\\atest""" )
+        # onto_path.append( "." )
+        print(onto_path)
+        print(self.__path_to_onto_classes)
         w = World()
-        ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
-        ontology = w.get_ontology(self.__path_to_ontology).load() # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
+        # w.
+        ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
+        print(ontology.imported_ontologies)
+        # ontology.imported_ontologies.append(ontology_classes)
+        # ontology = ontology.load()
+        # ontology = ontology_classes.
 
         # generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
-        generation_scheme_instances_list = list(ontology.search(is_a=ontology_classes.GenerationScheme))
+        generation_scheme_instances_list = list(ontology.search(is_a=ontology.GenerationScheme))
+        # generation_scheme_instances_list = list(ontology.search())
+                                                    # onto.search(is_a=onto.SiGenerationSchemempleVolume)
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")
         root_individual = generation_scheme_instances_list[0]

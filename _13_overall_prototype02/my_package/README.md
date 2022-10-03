@@ -29,6 +29,7 @@ npm run dev
 (navigate to _13_overall_prototype02/my_package/client/ in terminal)
 npm install
 
+npm install @rollup/plugin-dynamic-import-vars --save-dev
 
 
 # Other steps:

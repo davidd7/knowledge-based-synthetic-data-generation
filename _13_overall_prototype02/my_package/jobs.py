@@ -162,7 +162,9 @@ def start_onto_to_sd(job_id):
 def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
     #w = World()
     onto_classes = get_ontology("file://" + path_to_ontology_classes).load() # w.
-    onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
+    # onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
+    # onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
+    onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals") #.load() # "file://" + path_to_ontology_individuals).load() # w.
     onto_individuals.imported_ontologies.append(onto_classes)
     #onto_individuals = onto_individuals.load()
     return onto_classes, onto_individuals
