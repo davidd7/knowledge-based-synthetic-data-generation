@@ -4,7 +4,7 @@ from socket import has_dualstack_ipv6
 from xml.dom.expatbuilder import parseFragmentString
 # from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
-# from owlready2 import *
+from owlready2 import *
 import itertools
 # from rdflib import *
 
@@ -55,25 +55,9 @@ class FutureUtilities():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class SDGenBaseModule():
     def onto_to_sd(path_to_onto, path_where_to_save_result):
         pass
-
-
 
 
 class SDGenModule(SDGenBaseModule):
@@ -304,10 +288,6 @@ class SDGenModule(SDGenBaseModule):
             print(x  )
 
             exit()
-
-
-
-
 
 
 

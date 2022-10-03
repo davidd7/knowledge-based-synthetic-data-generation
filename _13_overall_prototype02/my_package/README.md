@@ -9,6 +9,10 @@ $env:FLASK_ENV = "development"
 flask init-db
 flask run
 
+
+pip install Owlready2
+
+
 # Starting the Flask server
 (navigate to _13_overall_prototype02/ in terminal)
 Set-ExecutionPolicy Unrestricted -Scope Process
