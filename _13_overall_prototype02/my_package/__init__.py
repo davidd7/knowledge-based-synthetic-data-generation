@@ -2,6 +2,7 @@ import random
 import os
 import shutil
 import string
+import subprocess
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import pathlib
@@ -123,6 +124,7 @@ def prepare_datascientist_addons():
             continue
         os.remove(os.path.join(path_client_forms, f))
 
+
     # 1.2 Copy 
     files = util.get_datascientist_modules_files()
     for el in files:
@@ -134,6 +136,7 @@ def prepare_datascientist_addons():
 
 
     # 3. Call "npm run" to compile svelte-forms
+    subprocess.run(["npm", "run", "build"], cwd=util.get_path_to_package() / "client/", shell=True )
 
 
 

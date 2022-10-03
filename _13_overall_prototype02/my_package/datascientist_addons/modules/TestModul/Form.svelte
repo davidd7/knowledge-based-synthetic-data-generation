@@ -1,9 +1,9 @@
 <script>
-	import Multiple from './Multiple.svelte';
-	import Range from './Range.svelte';
-	import HeadlinedGroup from './HeadlinedGroup.svelte';
-	import NumberInput from './NumberInput.svelte';
-	import Input3DModel from './Input3DModel.svelte';
+	import Multiple from '../form_elements/Multiple.svelte';
+	import Range from '../form_elements/Range.svelte';
+	import HeadlinedGroup from '../form_elements/HeadlinedGroup.svelte';
+	import NumberInput from '../form_elements/NumberInput.svelte';
+	import Input3DModel from '../form_elements/Input3DModel.svelte';
 
 
 	import { getContext } from 'svelte';
