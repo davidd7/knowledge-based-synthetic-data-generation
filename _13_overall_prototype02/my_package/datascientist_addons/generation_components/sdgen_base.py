@@ -70,7 +70,6 @@ class SimpleSDGenerationManager(SDGenerationManager):
             self.__handlers_iteration_end.append(handler)
 
     def start(self):
-        # ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
         # onto_path.append( str(util.get_path_to_package() / "ontology_classes/" ))
         # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/" )
         # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/main.owl" )
@@ -88,6 +87,12 @@ class SimpleSDGenerationManager(SDGenerationManager):
         w = World()
         # w.
         ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
+        ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
+        print(list(w.classes()))
+        print(w["GenerationScheme"]) # -> None
+        w.main.GenerationScheme # -> AttributeError
+        w.GenerationScheme # -> AttributeError
+   # main.GenerationScheme
         print(ontology.imported_ontologies)
         for el in ontology.imported_ontologies:
             print(dir(el))
