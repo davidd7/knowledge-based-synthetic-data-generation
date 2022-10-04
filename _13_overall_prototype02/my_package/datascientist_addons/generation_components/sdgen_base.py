@@ -89,6 +89,10 @@ class SimpleSDGenerationManager(SDGenerationManager):
         # w.
         ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
         print(ontology.imported_ontologies)
+        for el in ontology.imported_ontologies:
+            print(dir(el))
+            print(dir(el.individuals))
+            print(dir(el.classes))
         # ontology.imported_ontologies.append(ontology_classes)
         # ontology = ontology.load()
         # ontology = ontology_classes.

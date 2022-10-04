@@ -71,6 +71,8 @@ class SimpleSDGenerationManager(SDGenerationManager):
         w = World()
         ontology = w.get_ontology(self.__path_to_ontology).load() # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
 
+        print("debug: "+ str(ontology.imported_ontologies))
+
         generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")

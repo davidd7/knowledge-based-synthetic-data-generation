@@ -839,7 +839,7 @@
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeLight"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectSpawns"/>
         <Has_Volume rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation#EGS1_VolumeObjectsGround"/>
-        <Has_NumberOfImagesToRender rdf:datatype="http://www.w3.org/2001/XMLSchema#int">17</Has_NumberOfImagesToRender>
+        <Has_NumberOfImagesToRender rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</Has_NumberOfImagesToRender>
         <rdfs:comment>&apos;EGS1&apos; is short for ExampleGenerationScheme1</rdfs:comment>
         <rdfs:label>EGS1</rdfs:label>
     </owl:NamedIndividual>
