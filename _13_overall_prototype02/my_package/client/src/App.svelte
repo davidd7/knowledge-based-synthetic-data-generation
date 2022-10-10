@@ -23,8 +23,6 @@
 
   
   <style>
-    /* @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap"); */
-  
     :global(body) {
       margin: 0;
       padding: 0px;

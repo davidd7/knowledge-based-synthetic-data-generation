@@ -2,10 +2,6 @@ from pathlib import Path
 from unicodedata import name
 from . import util
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
-from flask.cli import with_appcontext
-import click
-import json
-import sqlite3
 from my_package.db import get_db
 
 
@@ -42,7 +38,7 @@ def list_schemes():
 @generationschemes_bp.route('/', methods=['POST'])
 def create_scheme():
     # Check that the right parameters were sent
-    name = request.form['name'] # <- Das wift einen error, wenn name nicht gesendet wurde. Ich kapiere nicht, warum wir dann unten prüfen, ob es leer gelassen wurde wnen in dem Fall eh alles mit nem Error abstürzt....
+    name = request.form['name'] # <- Throws an error if nothing was sent. Why do we have to check that the value is not empty if it will not work in this case anyway?
     module_name = request.form['module_name']
     error = None
     if not name:

@@ -1,4 +1,3 @@
-from imp import reload
 from owlready2 import *
 import blenderproc as bproc
 import bpy  # this package is related to blender functionalities and is only available from within the blender python environment
@@ -7,23 +6,9 @@ import random
 import os
 from PIL import Image
 import colorsys
-from mathutils import Vector
 from scipy.spatial.transform import Rotation as R
-import matplotlib.pyplot as plt
 import pathlib
-ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
-# ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
-MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
 import util
-# def get_path_to_package():
-#     """
-#     Returns path object containing the path that should lead to the root of this package
-#     """
-#     if MODE == "":
-#         return pathlib.Path(__file__).parent.resolve()
-#     elif MODE == "bp_run" or MODE == "bp_debug":
-#         return pathlib.Path(ABSOLUTE_PATH_TO_PACKAGE) / "unnamed_sd_package"
-
 
 
 # INTERFACES
@@ -68,12 +53,11 @@ class OntoWrapper():
 # MANAGER
 
 class SimpleSDGenerationManager(SDGenerationManager):
-    def __init__(self, path_to_ontology, generation_scheme_instance_label, path_to_onto_classes):
+    def __init__(self, path_to_ontology, path_to_onto_classes):
         self.__handlers_all: list[SDGenerationHandler] = []
         self.__handlers_iteration_normal: list[SDGenerationHandler] = []
         self.__handlers_iteration_end: list[SDGenerationHandler] = []
         self.__path_to_ontology: str = path_to_ontology
-        self.__generation_scheme_instance_label: str = generation_scheme_instance_label
         self.__path_to_onto_classes = path_to_onto_classes
 
     def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
@@ -101,14 +85,6 @@ class SimpleSDGenerationManager(SDGenerationManager):
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")
         root_individual = generation_scheme_instances_list[0]
-
-        # print(len(generation_scheme_instances_list) )
-        # print(root_individual.name)
-        # print(root_individual.is_a)
-        # print(self.__path_to_onto_classes)
-        # print(self.__path_to_ontology)
-        # print(root_individual.get_class_properties())
-        # return
 
         number_of_images = root_individual.Has_NumberOfImagesToRender[0]
 
@@ -159,8 +135,7 @@ class BlenderCameraWrapper():
     def set_location(self, location):
         # Set first camera pose (= first key frame)
         cam_pose = bproc.math.build_transformation_mat(location, [0, 0, 0])
-        # ohne frame=0 wird in jeder iteration neuer Frame hinzugefügt. Ggf. kann. i.wann wie in Blenderproc-Bsp ausnutzen und zbsp 10 Frames pro generierte Szene, damit einmal platzierte Objekte mehrfach verwendet. ggf. könnte dazu vershcieddene Kamera-Isntanzen dann doch auch machen. Einiges an Aufwand daher eher unattraktiv in Arbeit und ja auch unnötiger Optimierungs-Grad für mich.
-        bproc.camera.add_camera_pose(cam_pose, frame=0)
+        bproc.camera.add_camera_pose(cam_pose, frame=0) # Without frame=0 every method call adds a new frame (which would make an additional photo in each iteration of the same scene from another position)
 
     def set_local2world_mat(self, matrix):
         bproc.camera.add_camera_pose(matrix, frame=0)
@@ -248,7 +223,7 @@ def create_objects(obj_file_path, how_many=1):
 class BlenderHandler(SDGenerationHandler):
     """General blenderproc-specific preperations"""
     def init(self, onto, generation_scheme_instance, manager):
-        bproc.init() # compute_device="CPU")
+        bproc.init()
 
     def iteration(self):
         pass
@@ -279,7 +254,7 @@ class RealImageRenderingHandler(SDGenerationHandler):
         data_image = data["colors"]
         data_image = np.array(data_image)
 
-        # Für jeden keyframe wurde ein Bild gerendert; diese Bilder werden hier durchgelaufen
+        # For every keyframe in the scene, one image was created in this iteration. All these created images are now iterated
         for keyframe, single_image in enumerate(data_image):
             img = Image.fromarray(single_image.astype('uint8'), 'RGB')
             img.save(f"{self.__outf}/{self.__generation_index}_{keyframe}.png", "PNG")
@@ -322,8 +297,8 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
 
         seg_individual = seg_individual[0] # Assumption: There is at most 1 segmentation individual (rendering multiple segmentation individuals at once is not supported at the moment)
 
-        for i, object in enumerate(seg_individual.Has_ObjectToRecognize):  # --> macht automatisch, dass jedes Modell eigene Klasse ist (Multiplizitätm eines OBjekts zählt alles zur selben Klasse)  Im PÖrinzip sollte o(k) sein, wobei k die Anzahl an Objekten im Blender ist, die erkannt werden sollen (weil inneren beiden Schleifen nur Weg sind um alle Objekte auszuwählen)
-            for blender_object in object.bp_reference:
+        for i, object in enumerate(seg_individual.Has_ObjectToRecognize): # --> add all instances of the same ontology instance to the same segmentation label class (multiple instances of same object will have the same class tag)
+            for blender_object in object.bp_reference: # nested for loop, but should only be O(k) where k is the number of objects loaded in blender
                 # -> must be +1, because 0 ist background I think (although 0 is used in their own example...?)
                 blender_object.set_cp("category_id", i + 1)
 
@@ -372,7 +347,7 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
             # "instance_segmaps" or "class_segmaps"
             data_image = data[label_type + "_segmaps"]
 
-            # Für jeden keyframe wurde ien Bild gerendert; diese Bilder werden hier durchgelaufen
+            # For every keyframe in the scene, one image was created in this iteration. All these created images are now iterated
             for keyframe, single_image in enumerate(data_image):
                 img = Image.fromarray(single_image.astype('uint8'), None)
                 img.save(f"{self.path_where_to_save_result}/{self.__generation_index}_{keyframe}_{label_type}.png", "PNG")
@@ -517,7 +492,6 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             self.__maximum_simulation_time = 20.0
 
         # Prepare simulation
-        # bpy.ops.rigidbody.world_remove()
         if bpy.context.scene.rigidbody_world == None:
             # this was suggested in https://github.com/DLR-RM/BlenderProc/issues/254 to solve certain console errors that I also was getting
             bpy.ops.rigidbody.world_add()
@@ -562,7 +536,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             1000))
         fixed_objects[-1].hide(True)
 
-        # create roof
+        # Create roof
         fixed_objects.append( create_rectangular_cuboid(
             base.Has_XCoordinate[0],
             base.Has_YCoordinate[0],
@@ -878,7 +852,7 @@ class SimpleLocationHandler(SDGenerationHandler):
             location = bproc.sampler.upper_region(
                 objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
                 min_height=0,
-                max_height=0)  # if z_length is introduced one day, muss max_height zu z_length geändert werden vermute ich. Ggf. muss min_height dann auch stattdessen manuell zu unterkante des OBjekte gemacht werden?
+                max_height=0)  # if z_length is introduced one day, max_height needs to be set to z_length. Perhaps min_height then also has to be set to the lower boundary of the object manually
             blender_object.set_location(location)
 
     def end(self, onto):

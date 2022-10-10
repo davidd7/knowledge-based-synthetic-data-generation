@@ -7,7 +7,6 @@ import GenerationSchemeNew from "./pages/GenerationSchemeNew.svelte";
 import GenerationSchemeEdit from "./pages/GenerationSchemeEdit.svelte";
 import Jobs from "./pages/JobsOverview.svelte";
 import JobsNew from "./pages/JobsNew.svelte";
-import ImportForms from "./pages/ImportForms.svelte";
 
 export const routes = {
   "/": Home,
@@ -16,8 +15,7 @@ export const routes = {
   "/generation-schemes/:id/edit": GenerationSchemeEdit,
   "/jobs": Jobs,
   "/jobs/new": JobsNew,
-  "*": NotFound,
-  "/hidden": ImportForms
+  "*": NotFound
 };
 
 

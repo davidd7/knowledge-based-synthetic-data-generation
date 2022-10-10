@@ -1,13 +1,8 @@
 import importlib
 import os
-import pathlib
 import subprocess
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
-from flask.cli import with_appcontext
-import click
-import json
-import sqlite3
 from my_package.db import get_db
 from owlready2 import *
 from . import util
@@ -17,7 +12,6 @@ from . import util
 jobs_bp = Blueprint('jobs_bp', __name__, template_folder='templates')
 
 
-
 # Helper functions
 def row_to_dict(row):
     res = {}
@@ -25,7 +19,6 @@ def row_to_dict(row):
         res[key] = row[key]
 
     return res
-
 
 
 # ROUTES
@@ -42,7 +35,6 @@ def list_jobs():
     for row in jobs:
         list.append( row_to_dict(row) )
     return jsonify(list)
-
 
 
 @jobs_bp.route('/', methods=['POST'])
@@ -78,11 +70,7 @@ def create_job():
     ).fetchall()[0]
     new_job_dict = row_to_dict(new_job_row)
 
-
-
     loaded_class = load_data_scientist_module_by_name(new_job_dict["module_name"])
-
-
 
     start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"])
     start_onto_to_sd(new_job_dict["id"])
@@ -134,9 +122,6 @@ def start_onto_to_sd(job_id):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
-    # os.system("blenderproc run bproc_area/__main__.py")
-    # subprocess.run(["blenderproc", "debug", "bproc_area/__main__.py"], cwd=dir_path)
-    # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", "-o", "abcd"], cwd=dir_path).pid
     pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
     print("SDGen: Finished with starting blenderproc")
         

@@ -106,7 +106,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
-    if True: # TODO: In Produktion sollte bei jedem Start svelte-Formulare laden !!
+    if True: # TODO: In production user modules should be loaded on every startup
         prepare_datascientist_addons()
 
 

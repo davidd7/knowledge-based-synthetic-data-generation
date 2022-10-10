@@ -8,16 +8,15 @@
 
 	let data = context_data;
 
-	export let rangeStartKey = 0; //data["minKey"];
-	export let rangeEndKey = 0; //data["minKey"];
-	export let minValue = 0; //data["minKey"];
-	export let maxValue = 0; //data["minKey"];
+	export let rangeStartKey = 0;
+	export let rangeEndKey = 0;
+	export let minValue = 0;
+	export let maxValue = 0;
 
 	let test = [data[rangeStartKey],data[rangeEndKey]]
 
 	$: {
 		data[rangeStartKey] = test[0];
-		//console.log("---");
 	}
 	$: {
 		data[rangeEndKey] = test[1];
@@ -40,9 +39,9 @@
 	#slider2 {
 		--matse-color: rgb(0,127,194);
 		--slider-color: var(--matse-color);
-	 --range-handle-inactive: var(--slider-color); /* inactive handle color */
-	 --range-handle:          var(--slider-color); /* non-focussed handle color */
-	 --range-handle-focus:    var(--slider-color); /* focussed handle color */
+		--range-handle-inactive: var(--slider-color); /* inactive handle color */
+		--range-handle:          var(--slider-color); /* non-focussed handle color */
+		--range-handle-focus:    var(--slider-color); /* focussed handle color */
 	}
 	
 </style>

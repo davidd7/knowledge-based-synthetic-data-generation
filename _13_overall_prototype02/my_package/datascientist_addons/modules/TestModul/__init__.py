@@ -1,17 +1,5 @@
-
-import copy
-from re import M
-from socket import has_dualstack_ipv6
-from xml.dom.expatbuilder import parseFragmentString
-# from unnamed_sd_package.addons.components.sd_generation import sdgen_base
 import json
 from owlready2 import *
-import itertools
-# from rdflib import *
-
-
-
-
 
 
 
@@ -59,8 +47,6 @@ class SDGenModule(SDGenBaseModule):
                 Has_XLength = [parsed_data["area_length_x"]],
                 Has_YLength = [parsed_data["area_length_y"]]
             )
-            # vol_objects_ground = copy.copy(vol_objects_spawns)
-            # vol_objects_ground.ZCoordinate = [0.0]
             vol_objects_ground = onto_classes.SimpleVolume(
                 Has_XCoordinate = [-parsed_data["area_length_x"]/2],
                 Has_YCoordinate = [-parsed_data["area_length_y"]/2],
@@ -74,9 +60,6 @@ class SDGenModule(SDGenBaseModule):
             # Location infos
             loc_inf_camera = onto_classes.EqualDistributedLocationInVolume(
                 Has_Volume = [vol_camera]
-            )
-            loc_inf_ground = onto_classes.EqualDistributedLocationInVolume( # <- verm. aktuell nicht in Benutzung?
-                Has_Volume = [vol_ground]
             )
             loc_inf_objects = onto_classes.EqualDistributedLocationInVolume(
                 Has_Volume = [vol_objects_spawns]
@@ -125,12 +108,6 @@ class SDGenModule(SDGenBaseModule):
             # Ground
             simple_random_ground = onto_classes.SimpleRandomGround(
                 Has_Volume = [vol_ground]
-            )
-        
-            # Physical Plausibility
-            effect_physical_plausibility = onto_classes.SimplePhysicalPlausibility(
-                Has_FixedObjects = [simple_random_ground],
-                Has_FallingObject = obj
             )
 
             # Label

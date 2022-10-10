@@ -21,7 +21,11 @@
 
 
 
-    onMount(async () => {
+    onMount( overrideCurrentDataWithDataFromServer );
+    
+
+
+	async function overrideCurrentDataWithDataFromServer() {
         let response = await fetch(`/generation-schemes/${params.id}`, {
             method: 'GET'
 		}).catch( (error) => {
@@ -38,10 +42,7 @@
 		generation_scheme_data = response_data;
 		$store = JSON.parse(response_data.data);
 		Thing = (   await import(`../forms/${response_data.module_name}.svelte`)  ).default;
-	});
-    
-
-
+	}
 
 
 
@@ -61,7 +62,7 @@
 				throw new Error('Something went wrong');
 			}
 			const response_data=await response.json();
-			// Könnte hier noch vgl machen, dass alle werte passen, aber wär eh zu spät
+			// 
 			console.log(response_data.id);
 			console.log("Data was saved");
 			feedbackText="Eingaben wurden gespeichert.";
@@ -71,11 +72,9 @@
 		}
     }
 
-	// async function reset() {
-	// 	$store = JSON.parse(defaultData);
-	// 	await sendData();
-	// 	// Thing = (await imports[response_data.module_name](response_data.module_name)).default;
-	// }
+	async function reset() {
+		overrideCurrentDataWithDataFromServer();
+	}
 	
 </script>
     
@@ -84,7 +83,7 @@
     <h1 style="flex-grow: 1;">
 		{generation_scheme_data.name} ({generation_scheme_data.module_name})
 	</h1>
-	<!-- <button on:click={reset}>Reset</button> -->
+	<button on:click={reset}>Reset</button>
 	<button on:click={handleSendButtonClick}>Speichern</button>
 </div>
 
