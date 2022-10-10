@@ -15,14 +15,14 @@ ABSOLUTE_PATH_TO_PACKAGE = "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22
 # ABSOLUTE_PATH_TO_PACKAGE = "C:\\Users\\david\\Git Repositories\\MATSE-bachelorarbeit-ss22-tests\\_11_overall_prototype01"
 MODE = "bp_debug" # options: "normal", "bp_run", "bp_debug"
 import util
-def get_path_to_package():
-    """
-    Returns path object containing the path that should lead to the root of this package
-    """
-    if MODE == "":
-        return pathlib.Path(__file__).parent.resolve()
-    elif MODE == "bp_run" or MODE == "bp_debug":
-        return pathlib.Path(ABSOLUTE_PATH_TO_PACKAGE) / "unnamed_sd_package"
+# def get_path_to_package():
+#     """
+#     Returns path object containing the path that should lead to the root of this package
+#     """
+#     if MODE == "":
+#         return pathlib.Path(__file__).parent.resolve()
+#     elif MODE == "bp_run" or MODE == "bp_debug":
+#         return pathlib.Path(ABSOLUTE_PATH_TO_PACKAGE) / "unnamed_sd_package"
 
 
 
@@ -51,6 +51,20 @@ class SDGenerationHandler():
 
 
 
+class OntoWrapper():
+    def __init__(self, onto_classes, onto_individuals):
+        self.__onto_classes = onto_classes
+        self.__onto_individuals = onto_individuals
+
+    @property
+    def classes(self):
+        return self.__onto_classes
+
+    @property
+    def individuals(self):
+        return self.__onto_individuals
+
+
 # MANAGER
 
 class SimpleSDGenerationManager(SDGenerationManager):
@@ -70,51 +84,37 @@ class SimpleSDGenerationManager(SDGenerationManager):
             self.__handlers_iteration_end.append(handler)
 
     def start(self):
-        # onto_path.append( str(util.get_path_to_package() / "ontology_classes/" ))
-        # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/" )
-        # onto_path.append( "E:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/main.owl" )
-        # onto_path.append( "E:\\David (HDD)\\projects\\MATSE-bachelorarbeit-ss22-tests\\_13_overall_prototype02\\my_package\\ontology_classes" )
-        # onto_path.append( "e:/David (HDD)/projects/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes" )
-        # onto_path.append( "file://E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes\\" )
-        # onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes\\" )
+
         onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes" )
-        # onto_path.append( """e:/atest""" )
-        # onto_path.append( """e:\\atest""" )
-        # onto_path.append( """E:\\atest""" )
-        # onto_path.append( "." )
+
         print(onto_path)
         print(self.__path_to_onto_classes)
         w = World()
-        # w.
+
         ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
         ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
-        print(list(w.classes()))
-        print(w["GenerationScheme"]) # -> None
-        w.main.GenerationScheme # -> AttributeError
-        w.GenerationScheme # -> AttributeError
-   # main.GenerationScheme
-        print(ontology.imported_ontologies)
-        for el in ontology.imported_ontologies:
-            print(dir(el))
-            print(dir(el.individuals))
-            print(dir(el.classes))
-        # ontology.imported_ontologies.append(ontology_classes)
-        # ontology = ontology.load()
-        # ontology = ontology_classes.
 
-        # generation_scheme_instances_list = list(ontology.search(label=self.__generation_scheme_instance_label))
-        generation_scheme_instances_list = list(ontology.search(is_a=ontology.GenerationScheme))
-        # generation_scheme_instances_list = list(ontology.search())
-                                                    # onto.search(is_a=onto.SiGenerationSchemempleVolume)
+        onto_wrapper = OntoWrapper(ontology_classes, ontology)
+
+        generation_scheme_instances_list = list( intersection( onto_wrapper.individuals.search(is_a=onto_wrapper.classes.GenerationScheme)  , onto_wrapper.individuals.individuals()  ) )
+
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")
         root_individual = generation_scheme_instances_list[0]
+
+        # print(len(generation_scheme_instances_list) )
+        # print(root_individual.name)
+        # print(root_individual.is_a)
+        # print(self.__path_to_onto_classes)
+        # print(self.__path_to_ontology)
+        # print(root_individual.get_class_properties())
+        # return
 
         number_of_images = root_individual.Has_NumberOfImagesToRender[0]
 
         # Set up all handlers
         for el in self.__handlers_all:
-            el.init(ontology, root_individual, manager=self)
+            el.init(onto_wrapper, root_individual, manager=self)
 
         # Do the iteration
         for i in range(number_of_images):
@@ -125,7 +125,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         # Clean up all handlers
         for el in reversed(self.__handlers_all):
-            el.end(ontology)
+            el.end(onto_wrapper)
 
         ontology.destroy()
         ontology = None
@@ -217,7 +217,7 @@ def create_objects(obj_file_path, how_many=1):
     res = []
 
     for _ in range(how_many):
-        mesh_list = bproc.loader.load_obj( str(get_path_to_package() / "data/ontologies/" / obj_file_path) ) # returns a list with the loaded object as its only element
+        mesh_list = bproc.loader.load_obj( str(util.get_path_to_package() / "beta_uploads/" / obj_file_path) ) # returns a list with the loaded object as its only element
         res += mesh_list # merge the two lists
 
     return res
@@ -315,7 +315,7 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
         self.__generation_scheme_instance = generation_scheme_instance
 
         # Query ontology for segmentationLabel individuals. End method if there is no segmentationLabel individual (because there's nothing to do for this handler then)
-        segmentation_label_individuals = intersection(self.__generation_scheme_instance.Has_Label, onto.search(is_a=onto.SegmentationLabel))
+        segmentation_label_individuals = intersection(self.__generation_scheme_instance.Has_Label, onto.individuals.search(is_a=onto.classes.SegmentationLabel))
         seg_individual = segmentation_label_individuals
         if len(seg_individual) == 0:
             return
@@ -332,7 +332,7 @@ class SimpleSegmentationLabelHandler(SDGenerationHandler):
 
         # Query the ImageProperties-individual, which is needed to know the image size when no objects to recognize are visible in an image
         image_properties = intersection(
-            seg_individual.Has_ImageProperties, onto.search(is_a=onto.ImageProperties))
+            seg_individual.Has_ImageProperties, onto.individuals.search(is_a=onto.classes.ImageProperties))
         if len(image_properties) == 0:
             self.__image_width = int(4032.0 * 0.1)
             self.__image_height = int(3024.0 * 0.1)
@@ -399,7 +399,7 @@ class SimpleVolumeHandler(SDGenerationHandler):
             root_node = self.__special_root
 
         # Query all volumes directly connected to generation scheme and add them to blender
-        for volume in intersection( root_node.Has_Volume, onto.search(is_a=onto.SimpleVolume) ):
+        for volume in intersection( root_node.Has_Volume, onto.individuals.search(is_a=onto.classes.SimpleVolume) ):
             created_volume = create_blender_volume(x=volume.Has_XCoordinate[0], y=volume.Has_YCoordinate[0], z=volume.Has_ZCoordinate[0],
                                          x_length=volume.Has_XLength[0], y_length=volume.Has_YLength[0], z_length=0)
             volume.bp_reference = created_volume
@@ -436,7 +436,7 @@ class SimpleObjectHandler(SDGenerationHandler):
             manager.add(
                 SimpleRotationHandler(object_individual, object_individual.Has_RotationInfo[0])
             )
-            texture = intersection( object_individual.Has_Texture, onto.search(is_a=onto.RandomTexture))
+            texture = intersection( object_individual.Has_Texture, onto.individuals.search(is_a=onto.classes.RandomTexture))
             if len(texture) == 1:
                 manager.add(
                     RandomTextureHandler(object_individual, texture[0])
@@ -499,7 +499,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
 
         # Ontology-reference to physical plausibility
         effects = intersection(
-            self.__generation_scheme_instance.Has_Effect, onto.search(is_a=onto.SimpleBoxedPhysicalPlausibility))
+            self.__generation_scheme_instance.Has_Effect, onto.individuals.search(is_a=onto.classes.SimpleBoxedPhysicalPlausibility))
 
         if len(effects) == 0:
             self.__active = False
@@ -626,7 +626,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
 
         # Ontology-reference to physical plausibility
         simple_random_ground = intersection(
-            self.__generation_scheme_instance.Has_Ground, onto.search(is_a=onto.SimpleRandomGround))
+            self.__generation_scheme_instance.Has_Ground, onto.individuals.search(is_a=onto.classes.SimpleRandomGround))
 
         if len(simple_random_ground) == 0:
             self.__active = False
@@ -643,7 +643,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
             30)
 
         # Load paths to images of image pool
-        path_to_images = f'{ get_path_to_package() / "addons/components/sd_generation/media/random_images_src" }'
+        path_to_images = f'{ util.get_path_to_package() / "datascientist_addons/generation_components/media/random_images_src" }'
         self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
 
 
@@ -707,13 +707,17 @@ class SimpleCameraHandler(SDGenerationHandler):
         self.__generation_scheme_instance = generation_scheme_instance
 
         # Query the SimpleCamera-individual (there should only be one)
+
+        print(self.__generation_scheme_instance.Has_Camera)
+        print(onto.individuals.search(is_a=onto.classes.SimpleCamera))
+
         cameras = intersection(
-            self.__generation_scheme_instance.Has_Camera, onto.search(is_a=onto.SimpleCamera))
+            self.__generation_scheme_instance.Has_Camera, onto.individuals.search(is_a=onto.classes.SimpleCamera))
         camera = cameras[0]
 
         # Query the ImageProperties-individual
         image_properties = intersection(
-            camera.Has_ImageProperties, onto.search(is_a=onto.ImageProperties))
+            camera.Has_ImageProperties, onto.individuals.search(is_a=onto.classes.ImageProperties))
         if len(image_properties) == 0:
             kmatrix = np.array([
                 [3325.84099 * 0.1,  0.000000000,        2097.56825 * 0.1],
@@ -779,7 +783,7 @@ class SimpleLightHandler(SDGenerationHandler):
 
         # Query all SimpleLight-individuals
         self.__lights = intersection(
-            self.__generation_scheme_instance.Has_Light, onto.search(is_a=onto.SimpleLight))
+            self.__generation_scheme_instance.Has_Light, onto.individuals.search(is_a=onto.classes.SimpleLight))
 
         # Create lights in blender and extend cached ontology with references to those blender objects
         for light_individual in self.__lights:

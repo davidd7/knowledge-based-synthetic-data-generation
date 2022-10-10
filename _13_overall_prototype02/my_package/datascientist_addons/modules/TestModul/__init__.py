@@ -1,4 +1,5 @@
 
+import copy
 from re import M
 from socket import has_dualstack_ipv6
 from xml.dom.expatbuilder import parseFragmentString
@@ -31,11 +32,11 @@ class SDGenModule(SDGenBaseModule):
         with onto_individuals:
             # Volumes
             vol_camera = onto_classes.SimpleVolume(
-                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
-                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+                Has_XCoordinate = [-1],
+                Has_YCoordinate = [-1],
                 Has_ZCoordinate = [parsed_data["camera_height"]],
-                Has_XLength = [parsed_data["area_length_x"]],
-                Has_YLength = [parsed_data["area_length_y"]]
+                Has_XLength = [2],
+                Has_YLength = [2]
             )
             vol_ground = onto_classes.SimpleVolume(
                 Has_XCoordinate = [-parsed_data["area_length_x"]/2],
@@ -51,10 +52,19 @@ class SDGenModule(SDGenBaseModule):
                 Has_XLength = [parsed_data["area_length_x"]],
                 Has_YLength = [parsed_data["area_length_y"]]
             )
-            vol_objects = onto_classes.SimpleVolume(
+            vol_objects_spawns = onto_classes.SimpleVolume(
                 Has_XCoordinate = [-parsed_data["area_length_x"]/2],
                 Has_YCoordinate = [-parsed_data["area_length_y"]/2],
                 Has_ZCoordinate = [100.0],
+                Has_XLength = [parsed_data["area_length_x"]],
+                Has_YLength = [parsed_data["area_length_y"]]
+            )
+            # vol_objects_ground = copy.copy(vol_objects_spawns)
+            # vol_objects_ground.ZCoordinate = [0.0]
+            vol_objects_ground = onto_classes.SimpleVolume(
+                Has_XCoordinate = [-parsed_data["area_length_x"]/2],
+                Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+                Has_ZCoordinate = [0.0],
                 Has_XLength = [parsed_data["area_length_x"]],
                 Has_YLength = [parsed_data["area_length_y"]]
             )
@@ -69,7 +79,10 @@ class SDGenModule(SDGenBaseModule):
                 Has_Volume = [vol_ground]
             )
             loc_inf_objects = onto_classes.EqualDistributedLocationInVolume(
-                Has_Volume = [vol_objects]
+                Has_Volume = [vol_objects_spawns]
+            )
+            loc_inf_light = onto_classes.EqualDistributedLocationInVolume(
+                Has_Volume = [vol_light]
             )
 
             # Rotation Info
@@ -110,11 +123,13 @@ class SDGenModule(SDGenBaseModule):
             )
 
             # Ground
-            ground = onto_classes.SimpleRandomGround()
+            simple_random_ground = onto_classes.SimpleRandomGround(
+                Has_Volume = [vol_ground]
+            )
         
             # Physical Plausibility
             effect_physical_plausibility = onto_classes.SimplePhysicalPlausibility(
-                Has_FixedObjects = [ground],
+                Has_FixedObjects = [simple_random_ground],
                 Has_FallingObject = obj
             )
 
@@ -124,16 +139,32 @@ class SDGenModule(SDGenBaseModule):
                 Has_SegmentationType = ["SegmentClasses"]
             )
 
+            # Light
+            light = onto_classes.SimpleLight(
+                Has_RotationInfo = [rot_inf_at_ground],
+                Has_LocationInfo = [loc_inf_light],
+                Has_Multiplicity = [onto_classes.EqualDistributionRangeMultiplicity(
+                    Has_MinimumInt = [1],
+                    Has_MaximumInt = [2]
+                )]
+            )
 
             # Create root
             new_root = onto_classes.GenerationScheme(
                 individual_name, # <- name of the new individual is first argument
-                Has_Volume = [vol_camera, vol_objects, vol_light],
+                Has_NumberOfImagesToRender = [3],
+                Has_Volume = [vol_ground, vol_camera, vol_objects_spawns, vol_light, vol_objects_ground],
                 Has_Object = obj,
                 Has_Camera = [camera],
-                Has_Ground = [ground],
-                Has_Effect = [effect_physical_plausibility],
-                Has_Label = [label]
+                Has_Ground = [simple_random_ground],
+                Has_Label = [label],
+                Has_Light = [light],
+                Has_Effect = [onto_classes.SimpleBoxedPhysicalPlausibility(
+                    Has_FallingObject = obj,
+                    Has_Volume = [vol_objects_ground],
+                    Has_MinimumSimulationTime = [1.0],
+                    Has_MaximumSimulationTime = [2.0]
+                )]
             )
 
 
