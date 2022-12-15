@@ -30,9 +30,14 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Generation schemes</h1> 
+    <h1 style="flex-grow: 1;">Knowledge Elicitation</h1> 
+</div>
+
+
+<div class="page-header">
+    <h3 style="flex-grow: 1;">Knowledge Bases</h3> 
     <a href={`/generation-schemes/new`} use:link>
-		<button style="flex-grow: 0;" >New scheme</button>
+		<button style="flex-grow: 0;" >Create new</button>
 	</a>
 </div>
 

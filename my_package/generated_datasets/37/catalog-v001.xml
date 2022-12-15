@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <uri id="User Entered Import Resolution" name="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation" uri="file:/C:/Users/david/Git%20Repositories/MATSE-bachelorarbeit-ss22-tests/_13_overall_prototype02/my_package/ontology_classes/main.owl"/>
-    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1664799092667" name="http://test.org/onto.owl" uri="individuals.owl"/>
-    </group>
-</catalog>

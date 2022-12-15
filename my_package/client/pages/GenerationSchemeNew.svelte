@@ -51,7 +51,7 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">New scheme</h1> 
+    <h1 style="flex-grow: 1;">New knowledge base</h1> 
 </div>
 
 
@@ -61,7 +61,7 @@
     <label for="name">Name:</label>
     <input bind:value={name} id="name" name="name" />
 
-    <label for="modul_name">Module:</label>
+    <label for="modul_name">Base module:</label>
     <select value={selected} on:change="{() => name = ''}" id="modul_name" name="module_name">
         {#each sdgeneneration_modules as sdgeneneration_module}
             <option value={sdgeneneration_module.name}>

@@ -44,12 +44,19 @@ function date_custom_format(date) {
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Jobs</h1> 
-    <a href={`/jobs/new`} use:link>
-        <button style="flex-grow: 0;">New job</button>
-    </a>
+    <h1 style="flex-grow: 1;">Data Generation</h1> 
 </div>
 
+<span>
+All data generation commands can also be executed automatically via the API.
+</span>
+
+<div class="page-header">
+    <h3 style="flex-grow: 1;">Generation Jobs</h3> 
+    <a href={`/jobs/new`} use:link>
+        <button style="flex-grow: 0;">Start new</button>
+    </a>
+</div>
 
 
 
@@ -60,7 +67,10 @@ function date_custom_format(date) {
 				ID
 			</td>
 			<td>
-				Knowledge base
+				Base knowledge base
+			</td>
+			<td>
+				Base module
 			</td>
 			<td>
 				Date
@@ -78,6 +88,9 @@ function date_custom_format(date) {
 		</td>
 		<td>
 			{job.scheme_name}
+		</td>
+		<td>
+			{job.module_name}
 		</td>
 		<td>
 			{date_custom_format(new Date(job.creation_date))}

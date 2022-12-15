@@ -51,14 +51,14 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">New job</h1> 
+    <h1 style="flex-grow: 1;">New generation job</h1> 
 </div>
 
 
 
 <form on:submit|preventDefault={handleSubmit} >
 
-    <label for="generation_scheme">Generation schemes:</label>
+    <label for="generation_scheme">Base knowledge base:</label>
     <select bind:value={selected} id="generation_scheme_id" name="generation_scheme_id">
         {#each sdgeneneration_schemes as sdgeneneration_scheme}
             <option value={sdgeneneration_scheme.id}>
@@ -69,7 +69,7 @@
 
 
     <button disabled={!selected} type=submit>
-        Create
+        Start
     </button>
 
 </form>

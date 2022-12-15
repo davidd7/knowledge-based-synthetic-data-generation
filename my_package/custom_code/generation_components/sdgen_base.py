@@ -69,7 +69,8 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self):
 
-        onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes" )
+        # onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes" )
+        onto_path.append( "C:\\Users\david\Git Repositories\MATSE-bachelorarbeit-ss22-tests\my_package\ontology_classes")
 
         print(onto_path)
         print(self.__path_to_onto_classes)
