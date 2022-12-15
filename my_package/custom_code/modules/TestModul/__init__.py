@@ -10,12 +10,12 @@ class SDGenBaseModule():
 
 class SDGenModule(SDGenBaseModule):
 
-    def json_to_onto(onto_classes, onto_individuals, individual_name, data):
+    def json_to_onto(onto_classes, onto_individuals, individual_name, end_user_data):
         """
         Overreaching function creates new individual if 
         """
 
-        parsed_data = json.loads(data)
+        parsed_data = json.loads(end_user_data)
 
         with onto_individuals:
             # Volumes
