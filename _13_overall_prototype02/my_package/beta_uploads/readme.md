@@ -1,2 +1,2 @@
-Data uploaded by through the forms is saved here (e.g. 3d models)
+Data uploaded through the forms is saved here (e.g. 3d models)
 

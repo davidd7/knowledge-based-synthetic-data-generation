@@ -9,7 +9,7 @@
 		{headline}
 	</h3>
 	<div class="indented-block">
-	<slot/>
+		<slot/>
 	</div>
 </div>
 

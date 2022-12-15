@@ -19,7 +19,7 @@
 			sdgeneneration_modules = response_data;
 		}).catch( (error) => {
 			// An error occured
-			console.log( "An error occured: " + error );
+			console.log( "An error occurred: " + error );
 		} );
 	});
     
@@ -40,7 +40,7 @@
             push(`/generation-schemes/${response_data.id}/edit`);
 		}).catch( (error) => {
 			// An error occured
-			console.log( "An error occured: " + error );
+			console.log( "An error occurred: " + error );
 		} );
 
     }
@@ -51,7 +51,7 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Neues Schema</h1> 
+    <h1 style="flex-grow: 1;">New scheme</h1> 
 </div>
 
 
@@ -61,7 +61,7 @@
     <label for="name">Name:</label>
     <input bind:value={name} id="name" name="name" />
 
-    <label for="modul_name">Modul:</label>
+    <label for="modul_name">Module:</label>
     <select value={selected} on:change="{() => name = ''}" id="modul_name" name="module_name">
         {#each sdgeneneration_modules as sdgeneneration_module}
             <option value={sdgeneneration_module.name}>
@@ -72,7 +72,7 @@
 
 
     <button disabled={!name} type=submit>
-        Erstellen
+        Create
     </button>
 
 </form>

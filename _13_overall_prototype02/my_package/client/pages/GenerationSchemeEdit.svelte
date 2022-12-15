@@ -48,7 +48,7 @@
 
 
     async function sendData() {
-        feedbackText = "Wird gesendet...";
+        feedbackText = "Sending...";
 		try {
 			const response=await fetch(`/generation-schemes/${params.id}`,{
 				method: 'PUT',
@@ -65,10 +65,10 @@
 			// 
 			console.log(response_data.id);
 			console.log("Data was saved");
-			feedbackText="Eingaben wurden gespeichert.";
+			feedbackText="Input was saved.";
 		} catch(error) {
-			console.log("Fehler: " + error);
-			feedbackText="Beim Senden ist ein Problem aufgetreten.";
+			console.log("Error: " + error);
+			feedbackText="An error occurred while sending the data.";
 		}
     }
 
@@ -84,12 +84,12 @@
 		{generation_scheme_data.name} ({generation_scheme_data.module_name})
 	</h1>
 	<button on:click={reset}>Reset</button>
-	<button on:click={handleSendButtonClick}>Speichern</button>
+	<button on:click={handleSendButtonClick}>Save</button>
 </div>
 
 <svelte:component this={Thing} />
 
-<button on:click={handleSendButtonClick} class="app-send-button">Speichern</button>
+<button on:click={handleSendButtonClick} class="app-send-button">Save</button>
 
 <span>
 	{feedbackText}

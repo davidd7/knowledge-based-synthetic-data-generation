@@ -9,7 +9,7 @@
         <a href={`/`} use:link>SDGeneration</a>
       </div>
       <div style="flex-grow: 1; text-align: center;">
-          <a href={`/generation-schemes`} use:link>Generierungsschemata</a> - <a href={`/jobs`} use:link>Aufträge</a>
+          <a href={`/generation-schemes`} use:link>Knowledge bases</a> - <a href={`/jobs`} use:link>Jobs</a>
       </div>
       <div style="flex-grow: 0;">
 

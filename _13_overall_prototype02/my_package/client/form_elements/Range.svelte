@@ -25,7 +25,7 @@
 
 
 <div id="slider2">
-<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label' />
+	<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label' />
 </div>
 {#if debug == true}
 	{JSON.stringify(data)}

@@ -3,10 +3,10 @@
 </script>
     
 
-<h1>Unbekannte URL</h1>
-<p>Die eingegebene URL konnte nicht aufgerufen werden</p>
+<h1>Unknown URL</h1>
+<p>The entered URL could not be found</p>
 <a href="/" use:link>
-    <h2> → Zur Startseite</h2>
+    <h2> → To homepage</h2>
 </a>
     
 

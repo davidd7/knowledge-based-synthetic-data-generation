@@ -24,11 +24,11 @@
 		formData.append('file', inputFile.files[0]);
 
 		inputText.value = "";
-		inputText.placeholder = "Lädt...";
+		inputText.placeholder = "Loading...";
 
 		fetch('/upload', {
-		method: 'POST',
-		body: formData
+			method: 'POST',
+			body: formData
 		}).then(response => {
 			if (!response.ok) {
 				throw new Error('Something went wrong');
@@ -39,9 +39,9 @@
 				throw new Error('Something went wrong');
 			}
 			data[valueKey] = response_data;
-			inputText.placeholder = "Keine Datei hochgeladen";
+			inputText.placeholder = "No file uploaded";
 		}).catch( (error) => {
-			inputText.placeholder = "Fehler: " + error;
+			inputText.placeholder = "Error: " + error;
 		} );
 
 
@@ -53,9 +53,9 @@
 
 
 
-<input bind:this={inputText} type="text" disabled="true" placeholder="Keine Datei hochgeladen" value={data[valueKey]} />
+<input bind:this={inputText} type="text" disabled="true" placeholder="No file uploaded" value={data[valueKey]} />
 
-<button on:click={()=>inputFile.click()}>Datei auswählen</button>
+<button on:click={()=>inputFile.click()}>Select file</button>
 
 <input bind:this={inputFile} type="file" on:change={fileChanged}  class={"input-file"} />
 

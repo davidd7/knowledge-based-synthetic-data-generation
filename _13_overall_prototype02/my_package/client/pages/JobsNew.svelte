@@ -19,7 +19,7 @@
 			sdgeneneration_schemes = response_data;
             
 		}).catch( (error) => {
-			console.log( "An error occured: " + error );
+			console.log( "An error occurred: " + error );
 		} );
 	});
     
@@ -40,7 +40,7 @@
             push(`/jobs`);
 		}).catch( (error) => {
 			// An error occured
-			console.log( "An error occured: " + error );
+			console.log( "An error occurred: " + error );
 		} );
 
     }
@@ -51,14 +51,14 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Neuer Auftrag</h1> 
+    <h1 style="flex-grow: 1;">New job</h1> 
 </div>
 
 
 
 <form on:submit|preventDefault={handleSubmit} >
 
-    <label for="generation_scheme">Generierungsschema:</label>
+    <label for="generation_scheme">Generation schemes:</label>
     <select bind:value={selected} id="generation_scheme_id" name="generation_scheme_id">
         {#each sdgeneneration_schemes as sdgeneneration_scheme}
             <option value={sdgeneneration_scheme.id}>
@@ -69,7 +69,7 @@
 
 
     <button disabled={!selected} type=submit>
-        Erstellen
+        Create
     </button>
 
 </form>

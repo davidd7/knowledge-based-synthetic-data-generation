@@ -16,7 +16,7 @@
             console.log(response_data);
             jobs = response_data;
         }).catch( (error) => {
-            console.log( "An error occured: " + error );
+            console.log( "An error occurred: " + error );
         } );
     });
 
@@ -44,9 +44,9 @@ function date_custom_format(date) {
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Aufträge</h1> 
+    <h1 style="flex-grow: 1;">Jobs</h1> 
     <a href={`/jobs/new`} use:link>
-        <button style="flex-grow: 0;">Neuer Auftrag</button>
+        <button style="flex-grow: 0;">New job</button>
     </a>
 </div>
 
@@ -60,13 +60,13 @@ function date_custom_format(date) {
 				ID
 			</td>
 			<td>
-				Schema
+				Knowledge base
 			</td>
 			<td>
-				Datum
+				Date
 			</td>
 			<td class="small-table-column">
-				Status
+				State
 			</td>
 		</tr>
 	</thead>

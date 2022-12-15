@@ -30,9 +30,9 @@
 
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">Generierungsschemata</h1> 
+    <h1 style="flex-grow: 1;">Generation schemes</h1> 
     <a href={`/generation-schemes/new`} use:link>
-		<button style="flex-grow: 0;" >Neues Schema</button>
+		<button style="flex-grow: 0;" >New scheme</button>
 	</a>
 </div>
 
@@ -44,10 +44,10 @@
 				Name
 			</td>
 			<td>
-				Basis-Modul
+				Base module
 			</td>
 			<td class="small-table-column">
-				Optionen
+				Options
 			</td>
 		</tr>
 	</thead>
@@ -62,7 +62,7 @@
 		</td>
 		<td class="small-table-column">
 			<a href={`/generation-schemes/${el.id}/edit`} use:link>
-				<button>Bearbeiten</button>
+				<button>Edit</button>
 			</a>
 		</td>
 	</tr>

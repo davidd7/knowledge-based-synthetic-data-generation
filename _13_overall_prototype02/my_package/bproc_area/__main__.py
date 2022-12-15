@@ -6,7 +6,7 @@ import sys
     
 
 if __name__ == "__main__":
-    print("start")
+    print("Separate process for blenderproc started")
 
     # Save arguments into variables
     print(sys.argv)
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) , path_to_onto_classes )
 
-    print("end")
+    print("Separate process for blenderproc finished")
 
 
 
