@@ -68,6 +68,29 @@ def single_job(job_id):
 
 
 
+
+
+@jobs_bp.route('/<int:job_id>/abort', methods=['POST'])
+def abort_job(job_id):
+    job = single_job(job_id)
+
+    if job == "error":
+        return "error"
+
+    if job["status"] == "generating":
+        active_processes[job["id"]].terminate()
+        update_job_state(job_id, "aborting")
+
+
+    return jsonify(list[0])
+
+
+
+
+
+
+
+
 @jobs_bp.route('/', methods=['POST'])
 def create_job():
     # Read form data and check for problems
@@ -140,26 +163,29 @@ def determine_active_job_status(job_id, stated_status):
                 new_status = "aborted"
 
     if new_status != stated_status:
-        db = get_db()
-        cursor = db.cursor()
-        try:
-            cursor.execute(
-                "UPDATE generation_jobs SET state = ? WHERE id = ?",
-                (new_status, job_id),
-            )
-            db.commit()
-        except e:
-            print("ERROR when writing in DB")
-            print(e)
-        # Need to close cursor in sqlite3?
+        update_job_state(job_id, new_status)
 
     return new_status
 
 
 
-# TODO: Single Job for API
 
 
+def update_job_state(job_id, new_state):
+    if new_state not in ["generating", "aborting", "finished", "unknown", "error", "aborted"]:
+        return "ERROR"
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        cursor.execute(
+            "UPDATE generation_jobs SET state = ? WHERE id = ?",
+            (new_state, job_id),
+        )
+        db.commit()
+    except e:
+        print("ERROR when writing in DB")
+        print(e)
+    # Need to close cursor in sqlite3?
 
 
 
