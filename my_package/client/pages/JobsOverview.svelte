@@ -50,9 +50,20 @@ async function sendAbort(jobId) {
 	console.log(response_data);
 }
 
-async function downloadResult() {
 
+async function downloadResult(jobId) {
+	let response = await fetch(`/jobs/${jobId}/result`, { method: 'GET' } );
+
+	if (!response.ok) {
+		// Error
+		console.log("Error occurred during abort call");
+        return;
+    }
+        
+	response_data = await response.json();
+	console.log(response_data);
 }
+
 
 
 </script>
@@ -116,10 +127,10 @@ All data generation commands can also be executed automatically via the API.
 				<button on:click={sendAbort(job.id)}>Abort</button>
 			{/if} -->
 			{#if job.status == "finished"}
-			<a href={`/jobs`} use:link>
-				<button>Download</button>
-			</a>
-		{/if}
+				<a href={`/jobs/${job.id}/result`} download>
+				<button >Download</button>
+				</a>
+			{/if}
 		</td>
 	</tr>
 {/each}

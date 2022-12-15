@@ -2,12 +2,15 @@ import importlib
 import os
 import subprocess
 from unicodedata import name
-from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
+from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash, send_file
 from my_package.db import get_db
 from owlready2 import *
 from . import util
 import json
-
+import time
+from io import BytesIO
+import zipfile
+import os
 
 
 active_processes = {}
@@ -151,6 +154,39 @@ def create_job():
     start_onto_to_sd(new_job_dict["id"])
 
     return jsonify( row_to_dict(new_job_row) )
+
+
+
+
+
+
+@jobs_bp.route('/<int:job_id>/result', methods=['GET'])
+def download_result(job_id):
+    # Check that job exists and is finished
+    job = get_job(job_id)
+    if job == "error" or job["status"] != "finished":
+        return "error"
+
+    # Create zip file
+    memory_file = BytesIO() # create file only in memory
+    path_to_dataset = util.get_path_to_package() / "generated_datasets" / str(job_id)
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        # Walk over all subfolders of dataset folder
+        for root, dirs, files in os.walk(path_to_dataset):
+            relative_path = os.path.relpath(root, path_to_dataset) # Extract relative path from dataset folder so that same relative path from root is used in zip
+            for file in files:
+                zipf.write(os.path.join(root, file), arcname = os.path.join(relative_path, file))
+    memory_file.seek(0)
+
+    # Send zip file
+    return send_file(memory_file,
+                     download_name="result_" + str(job_id) + ".zip",
+                     as_attachment=True)
+
+
+
+
+
 
 
 
