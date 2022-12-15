@@ -37,7 +37,22 @@ function date_custom_format(date) {
 
 
 
+async function sendAbort(jobId) {
+	let response = await fetch(`/jobs/${jobId}/abort`, { method: 'POST' } );
 
+	if (!response.ok) {
+		// Error
+		console.log("Error occurred during abort call");
+        return;
+    }
+        
+	response_data = await response.json();
+	console.log(response_data);
+}
+
+async function downloadResult() {
+
+}
 
 
 </script>
@@ -97,9 +112,14 @@ All data generation commands can also be executed automatically via the API.
 		</td>
 		<td class="small-table-column">
             {job.status}
-			<!-- <a href={`/jobs`} use:link>
-				<button>Bearbeiten</button>
-			</a> -->
+			{#if job.status == "generating"}
+				<button on:click={sendAbort(job.id)}>Abort</button>
+			{/if}
+			{#if job.status == "finished"}
+			<a href={`/jobs`} use:link>
+				<button>Download</button>
+			</a>
+		{/if}
 		</td>
 	</tr>
 {/each}

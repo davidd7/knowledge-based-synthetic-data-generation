@@ -68,11 +68,29 @@ def single_job(job_id):
 
 
 
+def get_job(job_id):
+    db = get_db()
+    jobs = db.execute(
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
+    ).fetchall()
+
+    list = []
+    for row in jobs:
+        as_dict = row_to_dict(row)
+        as_dict["status"] = determine_active_job_status(as_dict["id"], as_dict["status"])
+        list.append( as_dict )
+
+    if len(list) != 1:
+        return "error"
+    
+    return list[0]
+
+
 
 
 @jobs_bp.route('/<int:job_id>/abort', methods=['POST'])
 def abort_job(job_id):
-    job = single_job(job_id)
+    job = get_job(job_id)
 
     if job == "error":
         return "error"
@@ -82,7 +100,7 @@ def abort_job(job_id):
         update_job_state(job_id, "aborting")
 
 
-    return jsonify(list[0])
+    return jsonify(job)
 
 
 
@@ -154,13 +172,13 @@ def determine_active_job_status(job_id, stated_status):
                 new_status = "error"
 
     if stated_status == "aborting":
-        if not job_id in active_processes:
+        if job_id not in active_processes:
             new_status = "unknown"
         else:
             process_state = active_processes[job_id].poll()
-            if (process_state is not None):
+            if not (process_state is None): # Windows puts process directly to terminated state (no longer None), even if it actually keeps running
                 print("aborted with code " + str(process_state))
-                new_status = "aborted"
+                new_status = "aborted (" + str(process_state) + ")"
 
     if new_status != stated_status:
         update_job_state(job_id, new_status)
@@ -173,7 +191,7 @@ def determine_active_job_status(job_id, stated_status):
 
 def update_job_state(job_id, new_state):
     if new_state not in ["generating", "aborting", "finished", "unknown", "error", "aborted"]:
-        return "ERROR"
+        print("WATCH OUT: unknown new_state was saved for a job")
     db = get_db()
     cursor = db.cursor()
     try:
