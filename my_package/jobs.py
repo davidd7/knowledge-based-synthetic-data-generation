@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, abort, current_app, g, jsonify, re
 from my_package.db import get_db
 from owlready2 import *
 from . import util
+import json
 
 
 # Create Blueprint
@@ -113,7 +114,8 @@ def start_json_to_onto(loaded_class, job_id, json_data):
 
     # Create new nodes in the ontology
     with onto_individuals:
-        loaded_class.json_to_onto(onto_classes, json_data)
+        parsed_data = json.loads(json_data)
+        loaded_class.json_to_onto(onto_classes, parsed_data)
 
     onto_individuals.save(file=path_to_ontology_individuals)
 

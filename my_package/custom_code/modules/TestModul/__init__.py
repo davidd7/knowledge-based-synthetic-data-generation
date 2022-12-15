@@ -15,43 +15,41 @@ class SDGenModule(SDGenBaseModule):
         Overreaching function creates new individual if 
         """
 
-        parsed_data = json.loads(end_user_data)
-
         # Volumes
         vol_camera = onto_classes.SimpleVolume(
             Has_XCoordinate = [-1],
             Has_YCoordinate = [-1],
-            Has_ZCoordinate = [parsed_data["camera_height"]],
+            Has_ZCoordinate = [end_user_data["camera_height"]],
             Has_XLength = [2],
             Has_YLength = [2]
         )
         vol_ground = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-parsed_data["area_length_x"]/2],
-            Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
+            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
             Has_ZCoordinate = [0.0],
-            Has_XLength = [parsed_data["area_length_x"]],
-            Has_YLength = [parsed_data["area_length_y"]]
+            Has_XLength = [end_user_data["area_length_x"]],
+            Has_YLength = [end_user_data["area_length_y"]]
         )
         vol_light = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-parsed_data["area_length_x"]/2],
-            Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
+            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
             Has_ZCoordinate = [500.0],
-            Has_XLength = [parsed_data["area_length_x"]],
-            Has_YLength = [parsed_data["area_length_y"]]
+            Has_XLength = [end_user_data["area_length_x"]],
+            Has_YLength = [end_user_data["area_length_y"]]
         )
         vol_objects_spawns = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-parsed_data["area_length_x"]/2],
-            Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
+            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
             Has_ZCoordinate = [100.0],
-            Has_XLength = [parsed_data["area_length_x"]],
-            Has_YLength = [parsed_data["area_length_y"]]
+            Has_XLength = [end_user_data["area_length_x"]],
+            Has_YLength = [end_user_data["area_length_y"]]
         )
         vol_objects_ground = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-parsed_data["area_length_x"]/2],
-            Has_YCoordinate = [-parsed_data["area_length_y"]/2],
+            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
+            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
             Has_ZCoordinate = [0.0],
-            Has_XLength = [parsed_data["area_length_x"]],
-            Has_YLength = [parsed_data["area_length_y"]]
+            Has_XLength = [end_user_data["area_length_x"]],
+            Has_YLength = [end_user_data["area_length_y"]]
         )
         
         
@@ -75,7 +73,7 @@ class SDGenModule(SDGenBaseModule):
 
         # Objects and characteristics that are object-specific in this example
         obj = []
-        for object in parsed_data["objects_to_recognize"]:
+        for object in end_user_data["objects_to_recognize"]:
             # Multiplicity
             mult_obj = onto_classes.EqualDistributionRangeMultiplicity(
                 Has_MinimumInt = [object["min"]],
