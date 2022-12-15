@@ -9,6 +9,10 @@ from . import util
 import json
 
 
+
+active_processes = {}
+
+
 # Create Blueprint
 jobs_bp = Blueprint('jobs_bp', __name__, template_folder='templates')
 
@@ -33,8 +37,35 @@ def list_jobs():
 
     list = []
     for row in jobs:
-        list.append( row_to_dict(row) )
+        as_dict = row_to_dict(row)
+
+        as_dict["status"] = determine_active_job_status(as_dict["id"], as_dict["status"])
+
+        list.append( as_dict )
     return jsonify(list)
+
+
+
+@jobs_bp.route('/<int:job_id>', methods=['GET'])
+def single_job(job_id):
+    db = get_db()
+    jobs = db.execute(
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
+    ).fetchall()
+
+    list = []
+    for row in jobs:
+        as_dict = row_to_dict(row)
+        as_dict["status"] = determine_active_job_status(as_dict["id"], as_dict["status"])
+        list.append( as_dict )
+
+    if len(list) != 1:
+        # Error
+        return "error"
+
+    return jsonify(list[0])
+
+
 
 
 @jobs_bp.route('/', methods=['POST'])
@@ -55,7 +86,7 @@ def create_job():
     cursor = db.cursor()
     try:
         cursor.execute(
-            "INSERT INTO generation_jobs (knowledge_base_id, state, params) VALUES (?, 'active', ?)",
+            "INSERT INTO generation_jobs (knowledge_base_id, state, params) VALUES (?, 'generating', ?)",
             (knowledge_base_id, params),
         )
         db.commit()
@@ -75,13 +106,58 @@ def create_job():
 
     loaded_class = load_data_scientist_module_by_name(new_job_dict["module_name"])
 
-    print("SOOOOOOOOO: ")
-    print(params)
-    # return
     start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"], params)
     start_onto_to_sd(new_job_dict["id"])
 
     return jsonify( row_to_dict(new_job_row) )
+
+
+
+
+def determine_active_job_status(job_id, stated_status):
+    new_status = stated_status
+
+    if not stated_status in ["generating", "aborting"]:
+        return stated_status
+
+    if stated_status == "generating":
+        if not job_id in active_processes:
+            new_status = "unknown"
+        else:
+            process_state = active_processes[job_id].poll()
+            if (process_state is not None) and process_state == 0:
+                new_status = "finished"
+            if (process_state is not None) and process_state != 0:
+                new_status = "error"
+
+    if stated_status == "aborting":
+        if not job_id in active_processes:
+            new_status = "unknown"
+        else:
+            process_state = active_processes[job_id].poll()
+            if (process_state is not None):
+                print("aborted with code " + str(process_state))
+                new_status = "aborted"
+
+    if new_status != stated_status:
+        db = get_db()
+        cursor = db.cursor()
+        try:
+            cursor.execute(
+                "UPDATE generation_jobs SET state = ? WHERE id = ?",
+                (new_status, job_id),
+            )
+            db.commit()
+        except e:
+            print("ERROR when writing in DB")
+            print(e)
+        # Need to close cursor in sqlite3?
+
+    return new_status
+
+
+
+# TODO: Single Job for API
 
 
 
@@ -121,9 +197,7 @@ def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
     with onto_individuals:
         parsed_data = json.loads(json_data)
         parsed_ml_system_params = json.loads(ml_system_params)
-        print("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        print(ml_system_params)
-        print(parsed_ml_system_params)
+
         # Start json_to_onto:
         loaded_class.json_to_onto(onto_classes, parsed_data, parsed_ml_system_params)
 
@@ -135,7 +209,9 @@ def start_onto_to_sd(job_id):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
-    pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
+    # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
+    process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
+    active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         
     
@@ -157,15 +233,6 @@ def start_onto_to_sd(job_id):
 
 
 
-# def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
-#     #w = World()
-#     onto_classes = get_ontology("file://" + path_to_ontology_classes).load() # w.
-#     # onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
-#     # onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
-#     onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals") #.load() # "file://" + path_to_ontology_individuals).load() # w.
-#     onto_individuals.imported_ontologies.append(onto_classes)
-#     #onto_individuals = onto_individuals.load()
-#     return onto_classes, onto_individuals
 
 
 def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
