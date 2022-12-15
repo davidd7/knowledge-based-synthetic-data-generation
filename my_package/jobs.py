@@ -11,6 +11,7 @@ import time
 from io import BytesIO
 import zipfile
 import os
+import shutil
 
 
 active_processes = {}
@@ -49,25 +50,32 @@ def list_jobs():
 
 
 
-@jobs_bp.route('/<int:job_id>', methods=['GET'])
+
+
+@jobs_bp.route('/<int:job_id>', methods=['GET', 'DELETE'])
 def single_job(job_id):
-    db = get_db()
-    jobs = db.execute(
-        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
-    ).fetchall()
+    if request.method == 'GET':
+        db = get_db()
+        jobs = db.execute(
+            'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
+        ).fetchall()
 
-    list = []
-    for row in jobs:
-        as_dict = row_to_dict(row)
-        as_dict["status"] = determine_active_job_status(as_dict["id"], as_dict["status"])
-        list.append( as_dict )
+        list = []
+        for row in jobs:
+            as_dict = row_to_dict(row)
+            as_dict["status"] = determine_active_job_status(as_dict["id"], as_dict["status"])
+            list.append( as_dict )
 
-    if len(list) != 1:
-        # Error
-        return "error"
+        if len(list) != 1:
+            # Error
+            return "error"
 
-    return jsonify(list[0])
+        return jsonify(list[0])
 
+
+    if request.method == 'DELETE':
+        delete_job(job_id)
+        return jsonify( {} )
 
 
 
@@ -183,6 +191,43 @@ def download_result(job_id):
                      download_name="result_" + str(job_id) + ".zip",
                      as_attachment=True)
 
+
+
+
+
+
+
+
+def delete_job(job_id):
+    # Check that job exists and is finished/unknown/... (only non-active jobs should be deleted)
+    job = get_job(job_id)
+    if job == "error" or job["status"] not in ["finished", "aborted", "unknown"]:
+        return "error"
+
+    # Path to folder that should be deleted
+    path_to_dataset = util.get_path_to_package() / "generated_datasets" / str(job_id)
+
+    # Delete from file system
+    print("Try deleting " + str(path_to_dataset))
+    try:
+        shutil.rmtree(path_to_dataset)
+    except OSError as e:
+        print("Error: %s - %s." % (e.filename, e.strerror))
+        return
+
+    # Delete from database
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        cursor.execute(
+            "DELETE FROM generation_jobs WHERE id = ?",
+            (job_id,),
+        )
+        db.commit()
+    except:
+        print("ERROR when writing in DB")
+        # print(e)
+    # Need to close cursor in sqlite3?
 
 
 

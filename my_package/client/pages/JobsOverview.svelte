@@ -1,11 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
-    import Router, { link } from "svelte-spa-router";
+    import Router, { link, push } from "svelte-spa-router";
+    // import { push } from "svelte-spa-router";
 
     let jobs = [];
 
     onMount(async () => {
-        fetch('/jobs', {
+		loadData();
+    });
+
+
+function loadData() {
+	fetch('/jobs', {
             method: 'GET'
         }).then(response => {
             if (!response.ok) {
@@ -18,7 +24,7 @@
         }).catch( (error) => {
             console.log( "An error occurred: " + error );
         } );
-    });
+}
 
 
 function date_custom_format(date) {
@@ -51,17 +57,17 @@ async function sendAbort(jobId) {
 }
 
 
-async function downloadResult(jobId) {
-	let response = await fetch(`/jobs/${jobId}/result`, { method: 'GET' } );
+
+async function sendDelete(jobId) {
+	let response = await fetch(`/jobs/${jobId}`, { method: 'DELETE' } );
 
 	if (!response.ok) {
 		// Error
 		console.log("Error occurred during abort call");
         return;
     }
-        
-	response_data = await response.json();
-	console.log(response_data);
+
+	loadData()
 }
 
 
@@ -128,9 +134,12 @@ All data generation commands can also be executed automatically via the API.
 			{/if} -->
 			{#if job.status == "finished"}
 				<a href={`/jobs/${job.id}/result`} download>
-				<button >Download</button>
+					<button >Download</button>
 				</a>
 			{/if}
+			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" }
+			<button on:click={sendDelete(job.id)}>Delete</button>
+		{/if}
 		</td>
 	</tr>
 {/each}
