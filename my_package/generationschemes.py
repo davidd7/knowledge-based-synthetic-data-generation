@@ -82,8 +82,8 @@ def create_scheme():
 
 
 
-@generationschemes_bp.route('/<int:scheme_id>', methods=['GET', 'PUT'])
-def single_scheme(scheme_id):
+@generationschemes_bp.route('/<int:knowledge_base_id>', methods=['GET', 'PUT'])
+def single_scheme(knowledge_base_id):
 
     if request.method == 'PUT':
         data = request.get_data(as_text=True)
@@ -95,7 +95,7 @@ def single_scheme(scheme_id):
             try:
                 cursor.execute(
                     "UPDATE generation_schemes SET data = ? WHERE id = ?",
-                    (data, scheme_id),
+                    (data, knowledge_base_id),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -107,7 +107,7 @@ def single_scheme(scheme_id):
     if request.method == 'GET' or request.method == 'PUT':
         db = get_db()
         row = db.execute(
-            'SELECT * FROM generation_schemes WHERE id = ?', (scheme_id,)
+            'SELECT * FROM generation_schemes WHERE id = ?', (knowledge_base_id,)
         ).fetchone()
 
         res =  {

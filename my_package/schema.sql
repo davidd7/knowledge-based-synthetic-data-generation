@@ -10,11 +10,12 @@ CREATE TABLE generation_schemes (
 
 CREATE TABLE generation_jobs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  scheme_id INTEGER NOT NULL,
+  knowledge_base_id INTEGER NOT NULL,
+  params TEXT NOT NULL,
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   state TEXT NOT NULL,
-  FOREIGN KEY (scheme_id) REFERENCES generation_schemes (id)
-); /* Question: should data / module_name also be saved here, because schemes might change? Or is at least data not important, because that data is also stored in ontology anyway after this db entry is created? */
+  FOREIGN KEY (knowledge_base_id) REFERENCES generation_schemes (id)
+);
 
 
 

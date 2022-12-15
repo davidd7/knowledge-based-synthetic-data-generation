@@ -3,7 +3,8 @@
     import { push } from "svelte-spa-router";
 
     let selected;
-    // let name;
+    let params = "{\n     \n}";
+
 
     let sdgeneneration_schemes = [];
 
@@ -59,7 +60,7 @@
 <form on:submit|preventDefault={handleSubmit} >
 
     <label for="generation_scheme">Base knowledge base:</label>
-    <select bind:value={selected} id="generation_scheme_id" name="generation_scheme_id">
+    <select bind:value={selected} id="knowledge_base_id" name="knowledge_base_id">
         {#each sdgeneneration_schemes as sdgeneneration_scheme}
             <option value={sdgeneneration_scheme.id}>
                 {sdgeneneration_scheme.name}
@@ -67,6 +68,11 @@
         {/each}
     </select>
 
+    <p>
+
+    <textarea bind:value={params} name="params" class="params-text-area"></textarea>
+
+    <p>
 
     <button disabled={!selected} type=submit>
         Start
@@ -77,7 +83,12 @@
 
 
 
-
+<style>
+.params-text-area {
+    width: 100%;
+    min-height: 150px;
+}
+</style>
 
 
 

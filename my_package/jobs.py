@@ -28,7 +28,7 @@ def row_to_dict(row):
 def list_jobs():
     db = get_db()
     jobs = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id ORDER BY j.id DESC', ()
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id ORDER BY j.id DESC', ()
     ).fetchall()
 
     list = []
@@ -40,10 +40,13 @@ def list_jobs():
 @jobs_bp.route('/', methods=['POST'])
 def create_job():
     # Read form data and check for problems
-    generation_scheme_id = request.form['generation_scheme_id']
+    knowledge_base_id = request.form['knowledge_base_id']
+    params = request.form['knowledge_base_id']
     error = None
-    if not generation_scheme_id:
-        error = 'generation_scheme_id is required.'
+    if not knowledge_base_id:
+        error = 'knowledge_base_id is required.'
+    if not params:
+        error = 'params is required.'
     if error is not None:
         return "error"
 
@@ -52,8 +55,8 @@ def create_job():
     cursor = db.cursor()
     try:
         cursor.execute(
-            "INSERT INTO generation_jobs (scheme_id, state) VALUES (?, 'active')",
-            (generation_scheme_id,),
+            "INSERT INTO generation_jobs (knowledge_base_id, state, params) VALUES (?, 'active', ?)",
+            (knowledge_base_id, params),
         )
         db.commit()
     except db.IntegrityError:
@@ -65,7 +68,7 @@ def create_job():
     # Query the just created job out of the DB
     new_id = cursor.lastrowid
     new_job_row = db.execute(
-        'SELECT j.id as id, j.scheme_id, j.creation_date, j.state, s.module_name, s.name as scheme_name, s.data as json_data FROM generation_jobs j JOIN generation_schemes s on j.scheme_id = s.id WHERE j.id = ?',
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state, j.params, s.module_name, s.name as scheme_name, s.data as json_data FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ?',
         (new_id,)
     ).fetchall()[0]
     new_job_dict = row_to_dict(new_job_row)
