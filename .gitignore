@@ -20,7 +20,12 @@ _11_overall_prototype01/examples/debugging/
 
 .vscode/
 
+**/.DS_Store
+**/node_modules
+**/public/bundle.*
+my_package/beta_uploads/*.obj
+my_package/generated_datasets/
 
-
+my_package/client/forms/*.svelte
 
 
