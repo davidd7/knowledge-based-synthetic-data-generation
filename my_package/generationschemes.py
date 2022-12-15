@@ -82,7 +82,7 @@ def create_scheme():
 
 
 
-@generationschemes_bp.route('/<int:knowledge_base_id>', methods=['GET', 'PUT'])
+@generationschemes_bp.route('/<int:knowledge_base_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_scheme(knowledge_base_id):
 
     if request.method == 'PUT':
@@ -118,6 +118,41 @@ def single_scheme(knowledge_base_id):
         }
 
         return jsonify(res)
+
+
+    if request.method == 'DELETE':
+        delete_knowledge_base(knowledge_base_id)
+        return jsonify( {} )
+
+
+
+
+
+def delete_knowledge_base(knowledge_base_id):
+    # Delete from database
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        cursor.execute(
+            "DELETE FROM generation_schemes WHERE id = ?",
+            (knowledge_base_id,),
+        )
+        db.commit()
+    except:
+        print("ERROR when writing in DB")
+        # print(e)
+    # Need to close cursor in sqlite3?
+
+
+
+
+
+
+
+
+
+
+
 
 
 

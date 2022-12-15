@@ -6,7 +6,11 @@
     let datas = [];
 
     onMount(async () => {
+		loadData();
+	});
 
+
+	async function loadData() {
         fetch('/generation-schemes', {
             method: 'GET'
 		}).then(response => {
@@ -15,16 +19,34 @@
 			}
 			return response.json();
 		}).then(response_data => {
-			if (response_data == "") {
-				throw new Error('Something went wrong');
-			}
+			// console.log("START?")
+			// // if (response_data == "") {
+			// // 	throw new Error('Something went wrong');
+			// // }
             console.log(response_data);
 			datas = response_data;
 			// inputText.placeholder = "Keine Datei hochgeladen";
 		}).catch( (error) => {
 			// nputText.placeholder = "Fehler: " + error;
+			console.log("An error occured");
 		} );
-	});
+	}
+
+
+async function sendDeleteKnowledgeBase(knowledgeBaseId) {
+	let response = await fetch(`/generation-schemes/${knowledgeBaseId}`, { method: 'DELETE' } );
+
+	if (!response.ok) {
+		// Error
+		console.log("Error occurred during abort call");
+        return;
+    }
+
+	loadData()
+}
+
+
+
 </script>
     
 
@@ -69,6 +91,7 @@
 			<a href={`/generation-schemes/${el.id}/edit`} use:link>
 				<button>Edit</button>
 			</a>
+			<button on:click={sendDeleteKnowledgeBase(el.id)}>Delete</button>
 		</td>
 	</tr>
 {/each}
