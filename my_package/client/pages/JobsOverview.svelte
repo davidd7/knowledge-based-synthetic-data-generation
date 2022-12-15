@@ -112,9 +112,9 @@ All data generation commands can also be executed automatically via the API.
 		</td>
 		<td class="small-table-column">
             {job.status}
-			{#if job.status == "generating"}
+			<!-- {#if job.status == "generating"}
 				<button on:click={sendAbort(job.id)}>Abort</button>
-			{/if}
+			{/if} -->
 			{#if job.status == "finished"}
 			<a href={`/jobs`} use:link>
 				<button>Download</button>
