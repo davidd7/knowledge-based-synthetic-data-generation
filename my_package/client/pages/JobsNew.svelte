@@ -83,6 +83,47 @@
     }
 
 
+
+	let inputFile;
+    let uploadedList;
+
+	function fileChanged() {
+        if (inputFile.value == "") {
+            return;
+        }
+
+		// Prepare what to send
+		var formData = new FormData()
+		formData.append('file', inputFile.files[0]);
+
+        let newEl = document.createElement("LI");
+        uploadedList.appendChild(newEl);
+        newEl.innerHTML = "Loading..."
+
+		fetch('/files', {
+			method: 'POST',
+			body: formData
+		}).then(response => {
+			if (!response.ok) {
+				throw new Error('Something went wrong');
+			}
+			return response.text();
+		}).then(response_data => {
+			if (response_data == "") {
+				throw new Error('Something went wrong');
+			}
+			newEl.innerHTML = inputFile.value.replace(/.*[\/\\]/, '') + " --> " + response_data;
+			// inputText.placeholder = "No file uploaded";
+            inputFile.value = "";
+		}).catch( (error) => {
+			newEl.innerHTML = "Error: " + error;
+            inputFile.value = "";
+		} );
+    }
+
+
+
+
 </script>
     
 
@@ -111,15 +152,19 @@
 
 
     <label>Optional: Upload files to get IDs for them and use them in the parameters:</label>
-        <ul>
+        <ul bind:this={uploadedList}>
 
         </ul>
         
+
+
+
+        
+        <input bind:this={inputFile}  type="file" on:change={fileChanged}  class={"input-file"} />
         <button>
             Upload
         </button>
     <p>
-
     <button disabled={!selected} type=submit>
         Start
     </button>
