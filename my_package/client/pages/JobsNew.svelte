@@ -2,12 +2,20 @@
 	import { onMount } from 'svelte';
     import { push } from "svelte-spa-router";
 
-    let params_default = "{\n     \n}";
+    let params_default = "";
+    let paramsTextarea;
 
     let selected;
     $: {
         selected = selected;
 		getDefault();
+        if (paramsTextarea != null) {
+            if (paramsTextarea != null && selected == undefined) {
+                paramsTextarea.disabled = true;
+            } else {
+                paramsTextarea.disabled = false;
+            }
+        }
 	}
     let params = params_default;
 	
@@ -98,8 +106,18 @@
 
     <p>
 
-    <textarea bind:value={params} name="params" class="params-text-area"></textarea>
+    <label for="paramsTextarea">Parameters:</label>
+    <textarea bind:value={params} name="params" class="params-text-area" bind:this={paramsTextarea}></textarea>
 
+
+    <label>Optional: Upload files to get IDs for them and use them in the parameters:</label>
+        <ul>
+
+        </ul>
+        
+        <button>
+            Upload
+        </button>
     <p>
 
     <button disabled={!selected} type=submit>
