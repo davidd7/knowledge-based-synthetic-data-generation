@@ -617,7 +617,7 @@ class SimpleRandomGroundHandler(SDGenerationHandler):
             30)
 
         # Load paths to images of image pool
-        path_to_images = f'{ util.get_path_to_package() / "datascientist_addons/generation_components/media/random_images_src" }'
+        path_to_images = f'{ util.get_path_to_package() / "custom_code/generation_components/media/random_images_src" }'
         self.__images = list(pathlib.Path(path_to_images).rglob("*.jpg"))
 
 

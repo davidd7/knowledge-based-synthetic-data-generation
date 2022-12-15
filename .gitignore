@@ -16,8 +16,6 @@ build/
 *.zip
 *.hdf5
 
-_11_overall_prototype01/examples/debugging/
-
 .vscode/
 
 **/.DS_Store

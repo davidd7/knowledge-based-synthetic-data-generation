@@ -88,7 +88,7 @@ def load_data_scientist_module_by_name(module_name):
         return "error"
 
     # Import the module
-    path = util.get_path_to_package() / "datascientist_addons" / "modules" / module_name / "__init__.py"
+    path = util.get_path_to_package() / "custom_code" / "modules" / module_name / "__init__.py"
     spec = importlib.util.spec_from_file_location(module_name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

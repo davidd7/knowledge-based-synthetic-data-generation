@@ -51,7 +51,7 @@ def create_scheme():
         return "error"
 
     # Read default json-data for this module
-    data = Path( util.get_path_to_package() / "datascientist_addons" / "modules" / module_name / "default.json" ).read_text()
+    data = Path( util.get_path_to_package() / "custom_code" / "modules" / module_name / "default.json" ).read_text()
 
     # Connect to DB
     db = get_db()

@@ -16,8 +16,8 @@ if __name__ == "__main__":
     # Import relevant python modules in my_package
     sys.path.append(path_to_package)
     import util
-    from datascientist_addons.generation_components import onto_to_sd
-    from datascientist_addons.generation_components import *
+    from custom_code.generation_components import onto_to_sd
+    from custom_code.generation_components import *
 
     # Get path to ontology
     path_to_ontology = pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) / "individuals.owl"

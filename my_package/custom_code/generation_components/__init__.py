@@ -1,5 +1,5 @@
 from owlready2 import *
-from datascientist_addons.generation_components import sdgen_base
+from custom_code.generation_components import sdgen_base
 
 
 

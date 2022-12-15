@@ -107,7 +107,7 @@ def create_app(test_config=None):
     app.register_blueprint(jobs_bp, url_prefix='/jobs')
 
     if True: # TODO: In production user modules should be loaded on every startup
-        prepare_datascientist_addons()
+        prepare_custom_code()
 
 
 
@@ -118,7 +118,7 @@ def create_app(test_config=None):
 
 
 
-def prepare_datascientist_addons():
+def prepare_custom_code():
 
     # 1. Module-Forms
     # 1.1 Delete existing forms
