@@ -2,9 +2,15 @@
 	import { onMount } from 'svelte';
     import { push } from "svelte-spa-router";
 
-    let selected;
-    let params = "{\n     \n}";
+    let params_default = "{\n     \n}";
 
+    let selected;
+    $: {
+        selected = selected;
+		getDefault();
+	}
+    let params = params_default;
+	
 
     let sdgeneneration_schemes = [];
 
@@ -24,6 +30,28 @@
 		} );
 	});
     
+    async function getDefault() {
+        if (selected == undefined || selected == "") {
+            return;
+        }
+        fetch('/modules/' + document.getElementById("option_" + selected).dataset.moduleName, {
+            method: 'GET'
+		}).then(response => {
+			if (!response.ok) {
+				throw new Error('Something went wrong');
+			}
+			return response.json();
+		}).then(response_data => {
+			// sdgeneneration_schemes = response_data;
+            let old_default = params_default;
+            params_default = response_data.default_value;
+            if (old_default == params) {
+                params = params_default;
+            }
+		}).catch( (error) => {
+			console.log( "An error occurred: " + error );
+		} );
+    }
 		
     function handleSubmit(event) {
         var formData = new FormData(event.currentTarget);
@@ -62,7 +90,7 @@
     <label for="generation_scheme">Base knowledge base:</label>
     <select bind:value={selected} id="knowledge_base_id" name="knowledge_base_id">
         {#each sdgeneneration_schemes as sdgeneneration_scheme}
-            <option value={sdgeneneration_scheme.id}>
+            <option id={"option_" + sdgeneneration_scheme.id} value={sdgeneneration_scheme.id} data-module-name="{sdgeneneration_scheme.module_name}">
                 {sdgeneneration_scheme.name}
             </option>
         {/each}
