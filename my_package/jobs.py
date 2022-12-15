@@ -112,7 +112,8 @@ def start_json_to_onto(loaded_class, job_id, json_data):
     onto_classes, onto_individuals = load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals)
 
     # Create new nodes in the ontology
-    loaded_class.json_to_onto(onto_classes, onto_individuals, "abc_xyz", json_data)
+    with onto_individuals:
+        loaded_class.json_to_onto(onto_classes, "abc_xyz", json_data)
 
     onto_individuals.save(file=path_to_ontology_individuals)
 
