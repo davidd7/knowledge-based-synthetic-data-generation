@@ -24,7 +24,7 @@
 			3D model:
 			<Input3DModel valueKey={"url"} />
 			<p>
-				How many instances of this object type should appear per image:
+			How many instances of this object type should appear per image:
 			<Range minValue={0} maxValue={10} rangeStartKey={"min"} rangeEndKey={"max"} />
 		</Multiple>
 	</HeadlinedGroup>
