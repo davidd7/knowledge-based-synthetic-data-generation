@@ -10,7 +10,7 @@ class SDGenBaseModule():
 
 class SDGenModule(SDGenBaseModule):
 
-    def json_to_onto(onto_classes, individual_name, end_user_data):
+    def json_to_onto(onto_classes, end_user_data):
         """
         Overreaching function creates new individual if 
         """
@@ -127,7 +127,6 @@ class SDGenModule(SDGenBaseModule):
 
         # Create root
         new_root = onto_classes.GenerationScheme(
-            individual_name, # <- name of the new individual is first argument
             Has_NumberOfImagesToRender = [3],
             Has_Volume = [vol_ground, vol_camera, vol_objects_spawns, vol_light, vol_objects_ground],
             Has_Object = obj,
