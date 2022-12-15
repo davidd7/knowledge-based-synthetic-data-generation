@@ -41,7 +41,7 @@ def list_jobs():
 def create_job():
     # Read form data and check for problems
     knowledge_base_id = request.form['knowledge_base_id']
-    params = request.form['knowledge_base_id']
+    params = request.form['params']
     error = None
     if not knowledge_base_id:
         error = 'knowledge_base_id is required.'
@@ -75,7 +75,10 @@ def create_job():
 
     loaded_class = load_data_scientist_module_by_name(new_job_dict["module_name"])
 
-    start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"])
+    print("SOOOOOOOOO: ")
+    print(params)
+    # return
+    start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"], params)
     start_onto_to_sd(new_job_dict["id"])
 
     return jsonify( row_to_dict(new_job_row) )
@@ -102,7 +105,7 @@ def load_data_scientist_module_by_name(module_name):
 
 
 
-def start_json_to_onto(loaded_class, job_id, json_data):
+def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
     # 1. Create directory
     job_path = util.get_path_to_package() / "generated_datasets" / str(job_id)
     job_path.mkdir(parents=True, exist_ok=True)
@@ -117,7 +120,12 @@ def start_json_to_onto(loaded_class, job_id, json_data):
     # Create new nodes in the ontology
     with onto_individuals:
         parsed_data = json.loads(json_data)
-        loaded_class.json_to_onto(onto_classes, parsed_data)
+        parsed_ml_system_params = json.loads(ml_system_params)
+        print("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        print(ml_system_params)
+        print(parsed_ml_system_params)
+        # Start json_to_onto:
+        loaded_class.json_to_onto(onto_classes, parsed_data, parsed_ml_system_params)
 
     onto_individuals.save(file=path_to_ontology_individuals)
 
@@ -149,18 +157,26 @@ def start_onto_to_sd(job_id):
 
 
 
+# def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
+#     #w = World()
+#     onto_classes = get_ontology("file://" + path_to_ontology_classes).load() # w.
+#     # onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
+#     # onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
+#     onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals") #.load() # "file://" + path_to_ontology_individuals).load() # w.
+#     onto_individuals.imported_ontologies.append(onto_classes)
+#     #onto_individuals = onto_individuals.load()
+#     return onto_classes, onto_individuals
+
+
 def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
-    #w = World()
-    onto_classes = get_ontology("file://" + path_to_ontology_classes).load() # w.
+    w = World()
+    onto_classes = w.get_ontology("file://" + path_to_ontology_classes).load() # w.
     # onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
     # onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.
-    onto_individuals = get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals") #.load() # "file://" + path_to_ontology_individuals).load() # w.
+    onto_individuals = w.get_ontology("http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation-individuals") #.load() # "file://" + path_to_ontology_individuals).load() # w.
     onto_individuals.imported_ontologies.append(onto_classes)
     #onto_individuals = onto_individuals.load()
     return onto_classes, onto_individuals
-
-
-
 
 
 
