@@ -18,7 +18,6 @@ def row_to_dict(row):
     res = {}
     for key in row.keys():
         res[key] = row[key]
-
     return res
 
 

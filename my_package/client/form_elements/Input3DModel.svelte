@@ -26,7 +26,7 @@
 		inputText.value = "";
 		inputText.placeholder = "Loading...";
 
-		fetch('/upload', {
+		fetch('/files', {
 			method: 'POST',
 			body: formData
 		}).then(response => {

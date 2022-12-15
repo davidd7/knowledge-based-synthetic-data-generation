@@ -10,13 +10,13 @@ from datetime import datetime
 from my_package.generationschemes import generationschemes_bp
 from my_package.modules import modules_bp
 from my_package.jobs import jobs_bp
+from my_package.files import files_bp
 from . import util
 import pathlib
 
 
-
 UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
-ALLOWED_EXTENSIONS = {'obj'}
+
 
 
 def create_app(test_config=None):
@@ -47,11 +47,6 @@ def create_app(test_config=None):
     db.init_app(app)
 
 
-    def allowed_file(filename):
-        return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 
     # ROUTES
 
@@ -70,35 +65,7 @@ def create_app(test_config=None):
         return send_from_directory('client/public', path)
 
 
-    @app.route('/upload', methods=['POST'])
-    def upload_file():
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            #flash('No file part')
-            #return redirect(request.url)
-            return "Error"
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            # flash('No selected file')
-            # return redirect(request.url)
-            return ""
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            # Add date to filename to make it more unique
-            filename = filename.split(".")
-            filename[-2] += "-" + datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + "_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
-            filename = ".".join(filename)
-
-            # Save file on server
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # Send the created filename to the client
-            return filename
-            #return redirect(url_for('download_file', name=filename))
-        return ""
-
+    app.register_blueprint(files_bp, url_prefix='/files')
 
     app.register_blueprint(generationschemes_bp, url_prefix='/generation-schemes')
 

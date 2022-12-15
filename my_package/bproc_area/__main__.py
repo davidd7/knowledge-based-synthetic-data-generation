@@ -3,7 +3,7 @@ import importlib
 import pathlib
 import sys
 
-    
+
 
 if __name__ == "__main__":
     print("Separate process for blenderproc started")
