@@ -3,7 +3,7 @@ import os
 import shutil
 import string
 import subprocess
-from flask import Flask, flash, request, redirect, url_for, send_from_directory
+from flask import Flask, flash, request, redirect, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import pathlib
 from datetime import datetime
@@ -13,6 +13,7 @@ from my_package.jobs import jobs_bp
 from my_package.files import files_bp
 from . import util
 import pathlib
+import json
 
 
 UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'uploads'
@@ -65,6 +66,31 @@ def create_app(test_config=None):
         return send_from_directory('client/public', path)
 
 
+    @app.route('/settings/debug-mode/', methods=['GET', 'PUT'])
+    def settings_debug_mode():
+        # if PUT:
+        if request.method == 'PUT':
+            debug_mode_value = request.json['value']
+            error = None
+            if not ("value" in request.json):
+                error = 'debug_mode_value is required.'
+            elif debug_mode_value not in [True, False]:
+                error = "value must be true or false"
+            if error is not None:
+                return "error is: " + error
+
+            print(debug_mode_value)
+            with open( util.get_path_to_package() / 'data/settings.json', 'w') as f:
+                json.dump({"debug_mode" : debug_mode_value}, f)
+
+        # if PUT or GET:
+        value = "false"
+        with open( util.get_path_to_package() / 'data/settings.json', 'r') as f:
+            value = json.load(f)["debug_mode"]
+
+        return jsonify({"value":value})
+
+
     app.register_blueprint(files_bp, url_prefix='/files')
 
     app.register_blueprint(generationschemes_bp, url_prefix='/generation-schemes')
@@ -81,6 +107,12 @@ def create_app(test_config=None):
     return app
 
 
+
+def get_settings_debug_mode():
+    value = False
+    with open( util.get_path_to_package() / 'data/settings.json', 'r') as f:
+        value = json.load(f)["debug_mode"]
+    return value
 
 
 

@@ -76,7 +76,7 @@
 
 <button on:click={()=>inputFile.click()}>Select file</button>
 
-<input bind:this={inputFile} type="file" on:change={fileChanged}  class={"input-file"} />
+<input bind:this={inputFile} type="file" on:change={fileChanged} class={"input-file"} />
 
 
 

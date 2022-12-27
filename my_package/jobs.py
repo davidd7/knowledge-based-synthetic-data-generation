@@ -12,6 +12,7 @@ from io import BytesIO
 import zipfile
 import os
 import shutil
+import my_package
 
 
 active_processes = {}
@@ -335,7 +336,11 @@ def start_onto_to_sd(job_id):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
     # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
-    process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
+    process = None
+    if not my_package.get_settings_debug_mode():
+        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
+    else: 
+        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
     active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         

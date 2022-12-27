@@ -1,6 +1,8 @@
 <script>
     import Router, { link } from "svelte-spa-router";
     import { routes } from "../routes.js";
+    import GlobalOverflowMenu from "./GlobalOverflowMenu.svelte";
+    import MenuButton from './MenuButton.svelte';	
 </script>
   
 <nav>
@@ -14,7 +16,9 @@
           <a href={`/jobs`} use:link>Data Generation</a>
       </div>
       <div style="flex-grow: 0;">
-
+        <MenuButton>
+          <GlobalOverflowMenu/>
+        </MenuButton>
       </div>
     </div>
 </nav>
