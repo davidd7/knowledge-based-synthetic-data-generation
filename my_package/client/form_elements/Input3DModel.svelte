@@ -18,7 +18,7 @@
 	let inputFile;
 	let inputText;
 	
-	function fileChanged() {
+	async function fileChanged() {
 		// Prepare what to send
 		var formData = new FormData()
 		formData.append('file', inputFile.files[0]);
@@ -26,27 +26,53 @@
 		inputText.value = "";
 		inputText.placeholder = "Loading...";
 
-		fetch('/files', {
-			method: 'POST',
-			body: formData
-		}).then(response => {
-			if (!response.ok) {
-				throw new Error('Something went wrong');
+		let success = false;
+		let attempts = 0;
+
+		while (!success && attempts < 1) {
+
+			try {
+
+				let response = await fetch('/files', {
+					method: 'POST',
+					body: formData
+				});
+				
+				if (!response.ok) {
+					throw new Error('Something went wrong');
+					// inputText.placeholder = "Error: " + error;
+				}
+				let response_data = await response.text();
+
+				if (response_data == "") {
+					throw new Error('Something went wrong');
+				}
+				data[valueKey] = response_data;
+				inputText.placeholder = "No file uploaded";
+				success = true;
+				console.log("Upload was successful")
+
+			} catch (error) {
+				inputText.placeholder = "Error: " + error;
+				console.log("Attempt " + (attempts + 1) + " of 1 unsuccessful.");
+				console.log("If you are running flask on the dev server, use a production server instead for successfull file uploads.");
+				attempts += 1;
+				await sleep(1000);
 			}
-			return response.text();
-		}).then(response_data => {
-			if (response_data == "") {
-				throw new Error('Something went wrong');
-			}
-			data[valueKey] = response_data;
-			inputText.placeholder = "No file uploaded";
-		}).catch( (error) => {
-			inputText.placeholder = "Error: " + error;
-		} );
+
+		}
+
+
 
 
 	}
 	
+
+
+	function sleep(ms) {
+    	return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
 
 </script>
 

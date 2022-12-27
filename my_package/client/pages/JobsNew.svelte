@@ -112,11 +112,10 @@
 			if (response_data == "") {
 				throw new Error('Something went wrong');
 			}
-			newEl.innerHTML = inputFile.value.replace(/.*[\/\\]/, '') + " --> " + response_data;
-			// inputText.placeholder = "No file uploaded";
+			newEl.innerHTML = `File: '${inputFile.value.replace(/.*[\/\\]/, '')}'<br>Result: Success<br>Assigned key: '${response_data}'`;
             inputFile.value = "";
 		}).catch( (error) => {
-			newEl.innerHTML = "Error: " + error;
+			newEl.innerHTML = `File: '${inputFile.value.replace(/.*[\/\\]/, '')}'<br>Result: Error. Please try again.`;
             inputFile.value = "";
 		} );
     }
