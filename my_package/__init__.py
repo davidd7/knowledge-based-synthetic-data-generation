@@ -15,7 +15,7 @@ from . import util
 import pathlib
 
 
-UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
+UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'uploads'
 
 
 

@@ -18,7 +18,7 @@ import string
 # VALUES
 
 
-# UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'beta_uploads'
+# UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'suploads'
 ALLOWED_EXTENSIONS = {'obj'}
 
 
