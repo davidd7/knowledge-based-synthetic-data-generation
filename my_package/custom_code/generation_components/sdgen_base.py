@@ -69,15 +69,10 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self):
 
-        # onto_path.append( "E:\David (HDD)\projects\MATSE-bachelorarbeit-ss22-tests\_13_overall_prototype02\my_package\ontology_classes" )
-        onto_path.append( "C:\\Users\david\Git Repositories\MATSE-bachelorarbeit-ss22-tests\my_package\ontology_classes")
-
-        print(onto_path)
-        print(self.__path_to_onto_classes)
         w = World()
 
         ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
-        ontology_classes = w.get_ontology(self.__path_to_onto_classes).load()
+        ontology_classes = w.get_ontology(self.__path_to_onto_classes).load(only_local=True)
 
         onto_wrapper = OntoWrapper(ontology_classes, ontology)
 

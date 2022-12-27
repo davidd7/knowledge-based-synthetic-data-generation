@@ -50,8 +50,7 @@
 		} catch (error) {
 			inputText.placeholder = "Error. Please try again.";
 			inputFile.value = "";
-			console.log("Attempt unsuccessful.");
-			console.log("If you are running flask on the dev server, use a production server instead for successfull file uploads.");
+            console.log("Error during file upload. If you are running flask on the dev server, use a production server instead for successfull file uploads.");
 			await sleep(1000);
 		}
 

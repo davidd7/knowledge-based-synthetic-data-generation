@@ -115,6 +115,7 @@
 			newEl.innerHTML = `File: '${inputFile.value.replace(/.*[\/\\]/, '')}'<br>Result: Success<br>Assigned key: '${response_data}'`;
             inputFile.value = "";
 		}).catch( (error) => {
+            console.log("Error during file upload. If you are running flask on the dev server, use a production server instead for successfull file uploads.");
 			newEl.innerHTML = `File: '${inputFile.value.replace(/.*[\/\\]/, '')}'<br>Result: Error. Please try again.`;
             inputFile.value = "";
 		} );
