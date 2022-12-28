@@ -712,10 +712,11 @@ class SimpleCameraHandler(SDGenerationHandler):
         manager.add(
             SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
         )
-        manager.add(
-            SimpleRotationLookingAtVolumeHandler(
-                camera, camera.Has_RotationInfo[0])
-        )
+        rotation_info = camera.Has_RotationInfo[0]
+        if rotation_info.is_a == onto.classes.LookDownRotation:
+            manager.add(LookDownRotationHandler(camera, rotation_info))
+        elif rotation_info.is_a == onto.classes.LookAtVolumeRotation:
+            manager.add(SimpleRotationLookingAtVolumeHandler(camera, rotation_info))
 
         # fx, fx, cx, cy, imagewidth, imageheight, scalefactor
         # Set up intrinsics matrix
@@ -874,6 +875,36 @@ class SimpleRotationHandler(SDGenerationHandler):
         pass
 
 
+
+
+
+
+class LookDownRotationHandler(SDGenerationHandler):
+    def __init__(self, handled_object, individual):
+        self.__handled_object = handled_object
+        self.__individual = individual
+
+    def init(self, onto, generation_scheme_instance, manager):
+        # Add another volumeHandler, because volume where to look at may only be referenced through this individual
+        manager.add(
+            SimpleVolumeHandler(special_root=self.__individual)
+        )
+
+    def iteration(self):
+        # Get position of object
+        origin = self.__handled_object.bp_reference[0].get_location()
+
+        # Calculation that "looks down" straight
+        rotation_matrix = R.from_quat([0, 0, 1, 1]).as_matrix()
+
+        # Add homog cam pose based on location and rotation
+        cam2world_matrix = bproc.math.build_transformation_mat( origin, rotation_matrix )
+
+        # Add calculated rotation to the instance
+        self.__handled_object.bp_reference[0].set_local2world_mat(cam2world_matrix)
+
+    def end(self, onto):
+        pass
 
 
 

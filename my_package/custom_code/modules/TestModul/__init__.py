@@ -66,10 +66,10 @@ class SDGenModule(SDGenBaseModule):
         )
 
         # Rotation Info
-        rot_inf_at_ground = onto_classes.EqualDistributionRotationLookingAtVolume(
+        rot_inf_at_ground = onto_classes.LookAtVolumeRotation(
             Has_Volume = [vol_ground]
         )
-        rot_inf_random = onto_classes.EqualDistributionRandomRotation()
+        rot_inf_random = onto_classes.RandomRotation()
 
         # Objects and characteristics that are object-specific in this example
         obj = []

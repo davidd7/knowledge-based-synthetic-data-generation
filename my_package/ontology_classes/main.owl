@@ -429,14 +429,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRandomRotation -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRandomRotation">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RotationInfo"/>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRangeMultiplicity -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRangeMultiplicity">
@@ -453,20 +445,6 @@
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Has_MinimumInt"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRotationLookingAtVolume -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#EqualDistributionRotationLookingAtVolume">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RotationInfo"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Has_Volume"/>
-                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Volume"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -568,6 +546,28 @@
     
 
 
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#LookAtVolumeRotation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#LookAtVolumeRotation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RotationInfo"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Has_Volume"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Volume"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#LookDownRotation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#LookDownRotation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RotationInfo"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Model -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Model">
@@ -591,6 +591,14 @@
     <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Object -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#Object"/>
+    
+
+
+    <!-- http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RandomRotation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RandomRotation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/david/ontologies/2022/6/synthetic-data-generation/main.owl#RotationInfo"/>
+    </owl:Class>
     
 
 
