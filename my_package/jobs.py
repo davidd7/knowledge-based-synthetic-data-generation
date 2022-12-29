@@ -408,16 +408,11 @@ def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
 def start_onto_to_sd(job_id, passcode):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(request.headers.get('Host')) 
-    print(request.headers.get('host_url')) 
-    print(request.headers.get('scheme')) 
-    print(request.host_url) 
-    # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
     process = None
-    if not my_package.get_settings_debug_mode():
-        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
-    else:
-        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
+    mode = "run"
+    if my_package.get_settings_debug_mode():
+        mode = "debug"
+    process = subprocess.Popen(["blenderproc", mode, "bproc_area/blenderproc_entry.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
     active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         
