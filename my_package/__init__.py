@@ -133,11 +133,10 @@ def prepare_custom_code():
         path_to_svelte_form = pathlib.Path(el.path) / "Form.svelte"
         shutil.copyfile(path_to_svelte_form, path_client_forms / (el.name + ".svelte") )
 
-    print("Here I'm at")
 
     # 2. Form-elements
     # 2.1 Delete existing forms
-    path_client_forms = util.get_path_to_package() / "client" / "form_elements"
+    path_client_forms = util.get_path_to_package() / "client" / "form_components"
     for f in os.listdir( path_client_forms ):
         if not f.endswith(".svelte"):
             continue
@@ -146,10 +145,8 @@ def prepare_custom_code():
     # 2.2 Copy 
     files = util.get_datascientist_formcomponents_files()
     for el in files:
-        print(el)
         if not el.name.endswith(".svelte"):
             continue
-        # path_to_component = pathlib.Path(el.path) / "Form.svelte"
         shutil.copyfile(el, path_client_forms / el.name )
 
 

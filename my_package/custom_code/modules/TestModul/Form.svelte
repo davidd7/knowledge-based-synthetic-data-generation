@@ -2,11 +2,11 @@
 	// Import general components
 	import { getContext } from 'svelte';
 	// Import form elements
-	import Multiple from '../form_elements/Multiple.svelte';
-	import Range from '../form_elements/Range.svelte';
-	import HeadlinedGroup from '../form_elements/HeadlinedGroup.svelte';
-	import NumberInput from '../form_elements/NumberInput.svelte';
-	import Input3DModel from '../form_elements/Input3DModel.svelte';
+	import Multiple from '../form_components/Multiple.svelte';
+	import Range from '../form_components/Range.svelte';
+	import HeadlinedGroup from '../form_components/HeadlinedGroup.svelte';
+	import NumberInput from '../form_components/NumberInput.svelte';
+	import Input3DModel from '../form_components/Input3DModel.svelte';
 
 	let data;
 	$: { data = data; }
