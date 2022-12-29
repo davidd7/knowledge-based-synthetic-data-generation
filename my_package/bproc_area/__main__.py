@@ -6,6 +6,12 @@ import requests
 
 
 
+
+
+
+
+
+
 if __name__ == "__main__":
     print("Separate process for blenderproc started")
 
@@ -21,6 +27,8 @@ if __name__ == "__main__":
     import util
     from custom_code.generation_components import onto_to_sd
     from custom_code.generation_components import *
+    from bproc_area.interfaces import *
+    from bproc_area.manager import *
 
     # Get path to ontology
     path_to_ontology = pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) / "individuals.owl"
@@ -31,12 +39,11 @@ if __name__ == "__main__":
     path_to_onto_classes = f"file://{path_to_onto_classes}"
 
 
-    sd_generation_manager = sdgen_base.SimpleSDGenerationManager(path_to_ontology, path_to_onto_classes)
+    sd_generation_manager = SimpleSDGenerationManager(path_to_ontology, path_to_onto_classes)
 
     onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) , path_to_onto_classes, sd_generation_manager )
 
 
-    # api_url = f"http://127.0.0.1:5000/jobs/{job_id}/finished"
     api_url = f"{ip_address}/jobs/{job_id}/finished"
     data = {"passcode": passcode, "statistics": sd_generation_manager.get_timer().get_statistics() }
     response = requests.post(api_url, json=data)
@@ -44,5 +51,15 @@ if __name__ == "__main__":
 
 
     print("Separate process for blenderproc finished")
+
+
+
+
+
+
+
+
+
+
 
 

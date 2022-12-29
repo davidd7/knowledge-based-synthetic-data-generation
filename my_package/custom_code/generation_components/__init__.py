@@ -1,5 +1,5 @@
 from owlready2 import *
-from custom_code.generation_components import sdgen_base
+from custom_code.generation_components import handlers
 
 
 
@@ -16,41 +16,41 @@ class SDGenBaseModule():
 def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes, sd_generation_manager):
 
     sd_generation_manager.add(
-        sdgen_base.BlenderHandler()
+        handlers.BlenderHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleVolumeHandler()
+        handlers.SimpleVolumeHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleObjectHandler()
+        handlers.SimpleObjectHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleCameraHandler()
+        handlers.SimpleCameraHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleLightHandler()
+        handlers.SimpleLightHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleRandomGroundHandler()
+        handlers.SimpleRandomGroundHandler()
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleBoxedPhysicalPlausibilityHandler(),
+        handlers.SimpleBoxedPhysicalPlausibilityHandler(),
         at_end_of_iteration=True
     )
 
     sd_generation_manager.add(
-        sdgen_base.RealImageRenderingHandler(path_where_to_save_result),
+        handlers.RealImageRenderingHandler(path_where_to_save_result),
         at_end_of_iteration=True
     )
 
     sd_generation_manager.add(
-        sdgen_base.SimpleSegmentationLabelHandler(path_where_to_save_result),
+        handlers.SimpleSegmentationLabelHandler(path_where_to_save_result),
         at_end_of_iteration=True
     )
 
