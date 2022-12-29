@@ -98,9 +98,19 @@ class SDGenModule(SDGenBaseModule):
 
 
         # Camera
+        cam_image_properties = onto_classes.ImageProperties(
+            Has_ScaleFactor = [0.1],
+            Has_FX = [3325.84099],
+            Has_CX = [2097.56825],
+            Has_FY = [3336.41112],
+            Has_CY = [1558.48315],
+            Has_XLength = [4032.0],
+            Has_YLength = [3024.0]
+        )
         camera = onto_classes.SimpleCamera(
             Has_LocationInfo = [loc_inf_camera],
-            Has_RotationInfo = [rot_inf_down]
+            Has_RotationInfo = [rot_inf_down],
+            Has_ImageProperties = [cam_image_properties]
         )
 
         # Ground

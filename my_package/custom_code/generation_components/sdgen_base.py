@@ -680,10 +680,6 @@ class SimpleCameraHandler(SDGenerationHandler):
         self.__generation_scheme_instance = generation_scheme_instance
 
         # Query the SimpleCamera-individual (there should only be one)
-
-        print(self.__generation_scheme_instance.Has_Camera)
-        print(onto.individuals.search(is_a=onto.classes.SimpleCamera))
-
         cameras = intersection(
             self.__generation_scheme_instance.Has_Camera, onto.individuals.search(is_a=onto.classes.SimpleCamera))
         camera = cameras[0]
@@ -691,22 +687,34 @@ class SimpleCameraHandler(SDGenerationHandler):
         # Query the ImageProperties-individual
         image_properties = intersection(
             camera.Has_ImageProperties, onto.individuals.search(is_a=onto.classes.ImageProperties))
-        if len(image_properties) == 0:
-            kmatrix = np.array([
-                [3325.84099 * 0.1,  0.000000000,        2097.56825 * 0.1],
-                [0.00000000,        3336.41112 * 0.1,   1558.48315 * 0.1],
-                [0.00000000,        0.0000000,          1.00000000]])
-            image_width = int(4032.0 * 0.1)
-            image_height = int(3024.0 * 0.1)
-        else:
+
+        # Retrieve Image Properties
+        # Default values for when no ImageProperties are set in ontology instances
+        scale_factor = 0.1
+        fx = 3325.84099
+        cx = 2097.56825
+        fy = 3336.41112
+        cy = 1558.48315
+        xlength = 4032.0
+        ylength = 3024.0
+        # See if ImagesProperties are set in ontology instances and use them if there are
+        if len(image_properties) != 0:
             image_properties = image_properties[0]
             scale_factor = image_properties.Has_ScaleFactor[0]
-            kmatrix = np.array([
-                [image_properties.Has_FX[0] * scale_factor, 0.000000000, image_properties.Has_CX[0] * scale_factor],
-                [0.00000000, image_properties.Has_FY[0] * scale_factor, image_properties.Has_CY[0] * scale_factor],
-                [0.00000000, 0.0000000, 1.00000000]])
-            image_width = int(image_properties.Has_XLength[0] * scale_factor)
-            image_height = int(image_properties.Has_YLength[0] * scale_factor)
+            fx = image_properties.Has_FX[0]
+            cx = image_properties.Has_CX[0]
+            fy = image_properties.Has_FY[0]
+            cy = image_properties.Has_CY[0]
+            xlength = image_properties.Has_XLength[0]
+            ylength = image_properties.Has_YLength[0]
+
+        # Set ImageProperties in simulation
+        kmatrix = np.array([
+            [fx * scale_factor,  0.000000000,        cx * scale_factor],
+            [0.00000000,         fy * scale_factor,  cy * scale_factor],
+            [0.00000000,         0.0000000,          1.00000000]])
+        image_width = int(xlength * scale_factor)
+        image_height = int(ylength * scale_factor)
 
         # Add reference to CameraWrapper
         camera.bp_reference = [BlenderCameraWrapper()]
@@ -735,14 +743,10 @@ class SimpleCameraHandler(SDGenerationHandler):
 
 
 def addRotationHandler(manager, onto, individual):
-    print("ooooooooooooooooooooo Adding RotationHandler")
     rotation_info = individual.Has_RotationInfo[0]
-    print(rotation_info.is_a)
-    print(onto.classes.LookAtVolumeRotation)
     if onto.classes.LookDownRotation in rotation_info.is_a:
         manager.add(LookDownRotationHandler(individual, rotation_info))
     elif onto.classes.LookAtVolumeRotation in rotation_info.is_a:
-        print("LookAtVolumeRotation added")
         manager.add(SimpleRotationLookingAtVolumeHandler(individual, rotation_info))
     elif onto.classes.RandomRotation in rotation_info.is_a:
         manager.add(SimpleRotationHandler(individual, rotation_info))
@@ -921,9 +925,6 @@ class LookDownRotationHandler(SDGenerationHandler):
 class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):
         self.__handled_object = handled_object
-        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo\OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        print(handled_object)
-        # print(dir(handled_object.bp_reference[0].blender_obj))
         self.__individual = individual
 
     def init(self, onto, generation_scheme_instance, manager):
