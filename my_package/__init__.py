@@ -16,7 +16,7 @@ import pathlib
 import json
 
 
-UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'uploads'
+UPLOAD_FOLDER = pathlib.Path(__file__).parent.resolve() / 'data' / 'uploads'
 
 
 

@@ -125,7 +125,7 @@ def create_objects(obj_file_path, how_many=1):
     res = []
 
     for _ in range(how_many):
-        mesh_list = bproc.loader.load_obj( str(util.get_path_to_package() / "uploads/" / obj_file_path) ) # returns a list with the loaded object as its only element
+        mesh_list = bproc.loader.load_obj( str(util.get_path_to_package() / "data" / "uploads/" / obj_file_path) ) # returns a list with the loaded object as its only element
         res += mesh_list # merge the two lists
 
     return res

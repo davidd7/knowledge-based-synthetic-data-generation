@@ -31,7 +31,7 @@ if __name__ == "__main__":
     from bproc_area.manager import *
 
     # Get path to ontology
-    path_to_ontology = pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) / "individuals.owl"
+    path_to_ontology = pathlib.Path(path_to_package) / "data" / "generated_datasets" / str(job_id) / "individuals.owl"
     path_to_ontology = f"file://{path_to_ontology}"
 
     onto_path.append(pathlib.Path(path_to_package) / "ontology_classes")
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     sd_generation_manager = SimpleSDGenerationManager(path_to_ontology, path_to_onto_classes)
 
-    onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) , path_to_onto_classes, sd_generation_manager )
+    onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "data" / "generated_datasets" / str(job_id) , path_to_onto_classes, sd_generation_manager )
 
 
     api_url = f"{ip_address}/jobs/{job_id}/finished"

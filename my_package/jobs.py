@@ -252,7 +252,7 @@ def download_result(job_id):
 
     # Create zip file
     memory_file = BytesIO() # create file only in memory
-    path_to_dataset = util.get_path_to_package() / "generated_datasets" / str(job_id)
+    path_to_dataset = util.get_path_to_package() / "data" / "generated_datasets" / str(job_id)
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
         # Walk over all subfolders of dataset folder
         for root, dirs, files in os.walk(path_to_dataset):
@@ -280,7 +280,7 @@ def delete_job(job_id):
         return "error"
 
     # Path to folder that should be deleted
-    path_to_dataset = util.get_path_to_package() / "generated_datasets" / str(job_id)
+    path_to_dataset = util.get_path_to_package() / "data" / "generated_datasets" / str(job_id)
 
     # Delete from file system
     print("Try deleting " + str(path_to_dataset))
@@ -383,7 +383,7 @@ def load_data_scientist_module_by_name(module_name):
 
 def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
     # 1. Create directory
-    job_path = util.get_path_to_package() / "generated_datasets" / str(job_id)
+    job_path = util.get_path_to_package() / "data" / "generated_datasets" / str(job_id)
     job_path.mkdir(parents=True, exist_ok=True)
 
     # Define necessary paths
