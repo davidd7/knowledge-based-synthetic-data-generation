@@ -55,7 +55,7 @@ def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes):
         at_end_of_iteration=True
     )
 
-    sd_generation_manager.start()
+    timer = sd_generation_manager.start()
 
 
 

@@ -9,6 +9,7 @@ import colorsys
 from scipy.spatial.transform import Rotation as R
 import pathlib
 import util
+import time
 
 
 # INTERFACES
@@ -70,7 +71,9 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
     def start(self):
 
-        # print(dir(bpy.context.scene.camera))
+        # INIT
+        timer = RenderingTimer()
+        timer.start()
 
         w = World()
 
@@ -91,12 +94,21 @@ class SimpleSDGenerationManager(SDGenerationManager):
         for el in self.__handlers_all:
             el.init(onto_wrapper, root_individual, manager=self)
 
+        # ITERATE
+        
+        timer.iterate_start()
+
+
         # Do the iteration
         for i in range(number_of_images):
             for el in self.__handlers_iteration_normal:
                 el.iteration()
             for el in self.__handlers_iteration_end:
                 el.iteration()
+            timer.iterate_round_finish()
+
+
+        # END
 
         # Clean up all handlers
         for el in reversed(self.__handlers_all):
@@ -104,6 +116,9 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         ontology.destroy()
         ontology = None
+
+        timer.end()
+        return timer
 
 
 # UTILITY FUNCTIONS
@@ -122,6 +137,81 @@ class Utility():
         for el in sys.path:
             print(el)
         print("### ### ### ### ### ### ###")
+
+
+
+
+
+
+
+class RenderingTimer():
+    def __init__(self):
+        self.__init_start = None
+        self.__iterate_start = None
+        self.__iterations = []
+        self.__end = None
+
+    def start(self):
+        self.__init_start = time.time()
+
+    def iterate_start(self):
+        self.__iterate_start = time.time()
+
+    def iterate_round_finish(self):
+        self.__iterations.append(time.time())
+
+    def end(self):
+        self.__end = time.time()
+    
+    def calc_total_time(self):
+        return self.__end - self.__init_start
+
+    def calc_init_time(self):
+        return self.__iterate_start - self.__init_start
+
+    def calc_iterate_time(self):
+        return self.__iterations[-1] - self.__iterate_start
+
+    def calc_end_time(self):
+        return self.__end - self.__iterations[-1]
+
+    def calc_iterate_median(self):
+        number_iterations = len(self.__iterations)
+        if number_iterations == 0:
+            return 0
+
+        # Calculate intervals
+        intervals = self.__calculate_intervals()
+
+        # Calculate median
+        intervals_sorted = sorted(intervals)
+        if number_iterations % 2 == 1:
+            i = math.floor(number_iterations/2.0)
+            return iterations[i]
+        else:
+            i = number_iterations/2
+            return (iterations[i-1] + iterations[i]) / 2.0
+
+    def calc_iterate_avg(self):
+        number_iterations = len(self.__iterations)
+        return calc_iterate_time() / number_iterations
+
+    def calc_iterate_min(self):
+        intervals = self.__calculate_intervals()
+        return sorted(intervals)[0]
+
+    def calc_iterate_max(self):
+        intervals = self.__calculate_intervals()
+        return sorted(intervals)[-1]
+
+    def __calculate_intervals(self):
+        intervals = []
+        last = self.__iterate_start
+        for el in self.__iterations:
+            intervals.append( el - last )
+            last = el
+        return intervals
+
 
 
 
