@@ -387,7 +387,7 @@ def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
     job_path.mkdir(parents=True, exist_ok=True)
 
     # Define necessary paths
-    path_to_ontology_classes = f'{ util.get_path_to_package() / "ontology_classes" / "main.owl" }'
+    path_to_ontology_classes = f'{ util.get_path_to_package() / "custom_code" / "generation_components" / "main.owl" }'
     path_to_ontology_individuals = f'{ job_path / "individuals.owl" }'
 
     # Get ontologies

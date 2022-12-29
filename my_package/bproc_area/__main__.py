@@ -34,8 +34,8 @@ if __name__ == "__main__":
     path_to_ontology = pathlib.Path(path_to_package) / "data" / "generated_datasets" / str(job_id) / "individuals.owl"
     path_to_ontology = f"file://{path_to_ontology}"
 
-    onto_path.append(pathlib.Path(path_to_package) / "ontology_classes")
-    path_to_onto_classes = pathlib.Path(path_to_package) / "ontology_classes" / "main.owl"
+    onto_path.append(pathlib.Path(path_to_package) / "custom_code" / "generation_components")
+    path_to_onto_classes = pathlib.Path(path_to_package) / "custom_code" / "generation_components" / "main.owl"
     path_to_onto_classes = f"file://{path_to_onto_classes}"
 
 
