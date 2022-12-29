@@ -22,11 +22,11 @@ $env:FLASK_ENV = "development"
 flask run
 
 # Making changes to the Svelte files
-(navigate to _13_overall_prototype02/my_package/client/ in terminal)
+(navigate to _13_overall_prototype02/my_package/frontend/ in terminal)
 npm run dev
 
 # Todo: Using Svelte for the first time
-(navigate to _13_overall_prototype02/my_package/client/ in terminal)
+(navigate to _13_overall_prototype02/my_package/frontend/ in terminal)
 npm install
 
 npm install @rollup/plugin-dynamic-import-vars --save-dev
