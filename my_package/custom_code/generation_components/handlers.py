@@ -12,9 +12,7 @@ import util
 import time
 import math
 from custom_code.generation_components.utilities import *
-# from bproc_area import SDGenerationHandler
-# from bproc_area import interfaces
-from bproc_area.interfaces import *
+from interfaces import *
 
 
 # HANDLER

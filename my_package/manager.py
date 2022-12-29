@@ -1,7 +1,7 @@
 from owlready2 import *
 import time
 import math
-from bproc_area.interfaces import *
+from interfaces import *
 
 
 # MANAGER

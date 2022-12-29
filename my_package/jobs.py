@@ -412,7 +412,7 @@ def start_onto_to_sd(job_id, passcode):
     mode = "run"
     if my_package.get_settings_debug_mode():
         mode = "debug"
-    process = subprocess.Popen(["blenderproc", mode, "bproc_area/blenderproc_entry.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
+    process = subprocess.Popen(["blenderproc", mode, "blenderproc_entry.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
     active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         
