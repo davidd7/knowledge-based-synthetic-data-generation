@@ -26,6 +26,7 @@ my_package/uploads/*.obj
 my_package/generated_datasets/
 
 my_package/client/forms/*.svelte
+my_package/client/form_components/*.svelte
 
 
 

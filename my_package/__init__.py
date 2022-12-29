@@ -119,7 +119,7 @@ def get_settings_debug_mode():
 
 def prepare_custom_code():
 
-    # 1. Module-Forms
+    # 1. Forms from modules
     # 1.1 Delete existing forms
     path_client_forms = util.get_path_to_package() / "client" / "forms"
     for f in os.listdir( path_client_forms ):
@@ -127,15 +127,32 @@ def prepare_custom_code():
             continue
         os.remove(os.path.join(path_client_forms, f))
 
-
     # 1.2 Copy 
     files = util.get_datascientist_modules_files()
     for el in files:
         path_to_svelte_form = pathlib.Path(el.path) / "Form.svelte"
         shutil.copyfile(path_to_svelte_form, path_client_forms / (el.name + ".svelte") )
 
+    print("Here I'm at")
 
-    # 2. Form-elements (TODO, currently the form elements are directly placed into the target folder)
+    # 2. Form-elements
+    # 2.1 Delete existing forms
+    path_client_forms = util.get_path_to_package() / "client" / "form_elements"
+    for f in os.listdir( path_client_forms ):
+        if not f.endswith(".svelte"):
+            continue
+        os.remove(os.path.join(path_client_forms, f))
+
+    # 2.2 Copy 
+    files = util.get_datascientist_formcomponents_files()
+    for el in files:
+        print(el)
+        if not el.name.endswith(".svelte"):
+            continue
+        # path_to_component = pathlib.Path(el.path) / "Form.svelte"
+        shutil.copyfile(el, path_client_forms / el.name )
+
+
 
 
     # 3. Call "npm run" to compile svelte-forms
