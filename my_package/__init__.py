@@ -121,7 +121,7 @@ def prepare_custom_code():
 
     # 1. Forms from modules
     # 1.1 Delete existing forms
-    path_client_forms = util.get_path_to_package() / "client" / "forms"
+    path_client_forms = util.get_path_to_package() / "client" / "src" / "forms"
     for f in os.listdir( path_client_forms ):
         if not f.endswith(".svelte"):
             continue
@@ -136,7 +136,7 @@ def prepare_custom_code():
 
     # 2. Form-elements
     # 2.1 Delete existing forms
-    path_client_forms = util.get_path_to_package() / "client" / "form_components"
+    path_client_forms = util.get_path_to_package() / "client" / "src" / "form_components"
     for f in os.listdir( path_client_forms ):
         if not f.endswith(".svelte"):
             continue

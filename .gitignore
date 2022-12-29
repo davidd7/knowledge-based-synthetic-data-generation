@@ -25,8 +25,8 @@ my_package/beta_uploads/*.obj
 my_package/uploads/*.obj
 my_package/generated_datasets/
 
-my_package/client/forms/*.svelte
-my_package/client/form_components/*.svelte
+my_package/client/src/forms/*.svelte
+my_package/client/src/form_components/*.svelte
 
 
 
