@@ -60,6 +60,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
         self.__path_to_ontology: str = path_to_ontology
         self.__path_to_onto_classes = path_to_onto_classes
 
+
     def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
         self.__handlers_all.append(handler)
         if not at_end_of_iteration:
@@ -68,6 +69,8 @@ class SimpleSDGenerationManager(SDGenerationManager):
             self.__handlers_iteration_end.append(handler)
 
     def start(self):
+
+        # print(dir(bpy.context.scene.camera))
 
         w = World()
 
@@ -141,7 +144,9 @@ class BlenderCameraWrapper():
         translation = matrix[0:3, 3]
         return translation
 
-
+    @property
+    def blender_obj(self):
+        return bpy.context.scene.camera # bproc.camera#. #.blender_obj
 
 
 
@@ -404,9 +409,7 @@ class SimpleObjectHandler(SDGenerationHandler):
             manager.add(
                 SimpleLocationHandler(object_individual, object_individual.Has_LocationInfo[0])
             )
-            manager.add(
-                SimpleRotationHandler(object_individual, object_individual.Has_RotationInfo[0])
-            )
+            addRotationHandler(manager, onto, object_individual)
             texture = intersection( object_individual.Has_Texture, onto.individuals.search(is_a=onto.classes.RandomTexture))
             if len(texture) == 1:
                 manager.add(
@@ -708,15 +711,13 @@ class SimpleCameraHandler(SDGenerationHandler):
         # Add reference to CameraWrapper
         camera.bp_reference = [BlenderCameraWrapper()]
 
-        # Instantiate LocationInfo- and RotationInfo-Handlers
+        # Instantiate LocationInfoHandler
         manager.add(
             SimpleLocationHandler(camera, camera.Has_LocationInfo[0])
         )
-        rotation_info = camera.Has_RotationInfo[0]
-        if rotation_info.is_a == onto.classes.LookDownRotation:
-            manager.add(LookDownRotationHandler(camera, rotation_info))
-        elif rotation_info.is_a == onto.classes.LookAtVolumeRotation:
-            manager.add(SimpleRotationLookingAtVolumeHandler(camera, rotation_info))
+
+        # Instantiate RotationInfo-Handler
+        addRotationHandler(manager, onto, camera)
 
         # fx, fx, cx, cy, imagewidth, imageheight, scalefactor
         # Set up intrinsics matrix
@@ -733,8 +734,18 @@ class SimpleCameraHandler(SDGenerationHandler):
 
 
 
-
-
+def addRotationHandler(manager, onto, individual):
+    print("ooooooooooooooooooooo Adding RotationHandler")
+    rotation_info = individual.Has_RotationInfo[0]
+    print(rotation_info.is_a)
+    print(onto.classes.LookAtVolumeRotation)
+    if onto.classes.LookDownRotation in rotation_info.is_a:
+        manager.add(LookDownRotationHandler(individual, rotation_info))
+    elif onto.classes.LookAtVolumeRotation in rotation_info.is_a:
+        print("LookAtVolumeRotation added")
+        manager.add(SimpleRotationLookingAtVolumeHandler(individual, rotation_info))
+    elif onto.classes.RandomRotation in rotation_info.is_a:
+        manager.add(SimpleRotationHandler(individual, rotation_info))
 
 
 
@@ -784,10 +795,8 @@ class SimpleLightHandler(SDGenerationHandler):
             manager.add(
                 SimpleLocationHandler(light_individual, light_individual.Has_LocationInfo[0])
             )
-            manager.add(
-                SimpleRotationLookingAtVolumeHandler(
-                    light_individual, light_individual.Has_RotationInfo[0])
-            )
+            addRotationHandler(manager, onto, light_individual)
+
 
     def iteration(self):
         # Randomize strength of each light source
@@ -912,6 +921,9 @@ class LookDownRotationHandler(SDGenerationHandler):
 class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
     def __init__(self, handled_object, individual):
         self.__handled_object = handled_object
+        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo\OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        print(handled_object)
+        # print(dir(handled_object.bp_reference[0].blender_obj))
         self.__individual = individual
 
     def init(self, onto, generation_scheme_instance, manager):
@@ -919,36 +931,32 @@ class SimpleRotationLookingAtVolumeHandler(SDGenerationHandler):
         manager.add(
             SimpleVolumeHandler(special_root=self.__individual)
         )
-        pass
+
+        self.__points = []
+        for el in self.__handled_object.bp_reference:
+            # Create empty (=point) that will be set to random points in volume
+            self.__points.append(bproc.object.create_empty("point", "plain_axes")) # bpy.data.objects.new( "empty", None )
+
+            # Make handled object always look at this empty
+            self.__track_constraint = el.blender_obj.constraints.new(type="TRACK_TO")
+            self.__track_constraint.target = self.__points[-1].blender_obj
+            self.__track_constraint.track_axis = 'TRACK_NEGATIVE_Z'
+            self.__track_constraint.up_axis = 'UP_Y'
+            # self.__track_constraint.use_target_z = True
 
     def iteration(self):
-        # Get position of object
-        origin = self.__handled_object.bp_reference[0].get_location()
+        for i, el in enumerate(self.__handled_object.bp_reference):
+            # Get position of object
+            origin = el.get_location()
 
-        # Get a random position onto which the object should "look at" (i.e. onto which it should be orientated)
-        target = bproc.sampler.upper_region(
-            objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
-            min_height=0,
-            max_height=0)
+            # Get a random position onto which the object should "look at" (i.e. onto which it should be orientated)
+            target = bproc.sampler.upper_region(
+                objects_to_sample_on=[self.__individual.Has_Volume[0].bp_reference],
+                min_height=0,
+                max_height=0)
             
-        # Calculate and set rotation
-        rotation_matrix = bproc.camera.rotation_from_forward_vec(target - origin)
+            self.__points[i].blender_obj.location = target
 
-        # Calculations that are currently not used
-        test = R.from_matrix(rotation_matrix)
-        test = test.as_quat()
-        a = 1
-        [x, y, z] = target - origin
-        rotation_matrix = R.from_quat([np.sin(a/2)*x, np.sin(a/2)*y, np.sin(a/2)*z, np.cos(a/2)]).as_matrix()
-
-        # Calculation that "looks down" straight
-        rotation_matrix = R.from_quat([0, 0, 1, 1]).as_matrix()
-
-        # Add homog cam pose based on location and rotation
-        cam2world_matrix = bproc.math.build_transformation_mat( origin, rotation_matrix )
-
-        # Add calculated rotation to the instance
-        self.__handled_object.bp_reference[0].set_local2world_mat(cam2world_matrix)
 
 
     def end(self, onto):

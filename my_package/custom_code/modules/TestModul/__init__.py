@@ -70,6 +70,7 @@ class SDGenModule(SDGenBaseModule):
             Has_Volume = [vol_ground]
         )
         rot_inf_random = onto_classes.RandomRotation()
+        rot_inf_down = onto_classes.LookDownRotation()
 
         # Objects and characteristics that are object-specific in this example
         obj = []
@@ -99,7 +100,7 @@ class SDGenModule(SDGenBaseModule):
         # Camera
         camera = onto_classes.SimpleCamera(
             Has_LocationInfo = [loc_inf_camera],
-            Has_RotationInfo = [rot_inf_at_ground]
+            Has_RotationInfo = [rot_inf_down]
         )
 
         # Ground
