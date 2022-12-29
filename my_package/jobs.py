@@ -13,6 +13,8 @@ import zipfile
 import os
 import shutil
 import my_package
+import secrets
+import string
 
 
 active_processes = {}
@@ -37,7 +39,7 @@ def row_to_dict(row):
 def list_jobs():
     db = get_db()
     jobs = db.execute(
-        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id ORDER BY j.id DESC', ()
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name, j.statistics as statistics FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id ORDER BY j.id DESC', ()
     ).fetchall()
 
     list = []
@@ -58,7 +60,7 @@ def single_job(job_id):
     if request.method == 'GET':
         db = get_db()
         jobs = db.execute(
-            'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
+            'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name, j.statistics as statistics FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
         ).fetchall()
 
         list = []
@@ -83,7 +85,7 @@ def single_job(job_id):
 def get_job(job_id):
     db = get_db()
     jobs = db.execute(
-        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name, j.statistics as statistics FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id WHERE j.id = ? ORDER BY j.id DESC', (job_id,)
     ).fetchall()
 
     list = []
@@ -111,8 +113,41 @@ def abort_job(job_id):
         active_processes[job["id"]].terminate()
         update_job_state(job_id, "aborting")
 
-
     return jsonify(job)
+
+
+
+@jobs_bp.route('/<int:job_id>/finished', methods=['POST'])
+def finish_job(job_id):
+    # job = get_job(job_id)
+
+    error = None
+    if ("passcode" not in request.json) or ("statistics" not in request.json):
+        error = 'passcode and statistics are required.'
+    if error is not None:
+        return "error"
+
+    passcode = request.json['passcode']
+    statistics = request.json['statistics']
+
+    # Connect to DB
+    db = get_db()
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(
+            "UPDATE generation_jobs SET state = 'finished', statistics = ? WHERE id = ? and passcode = ?",
+            (str(statistics), job_id, passcode),
+        )
+        db.commit()
+    except db.IntegrityError:
+        error = f"error"
+        return "error"
+    else:
+        pass
+
+    
+    return jsonify({}) # TODO
 
 
 
@@ -133,14 +168,16 @@ def create_job():
         error = 'params is required.'
     if error is not None:
         return "error"
+    alphabet = string.ascii_letters + string.digits
+    passcode = ''.join(secrets.choice(alphabet) for i in range(20))  
 
     # Connect to DB and insert new job
     db = get_db()
     cursor = db.cursor()
     try:
         cursor.execute(
-            "INSERT INTO generation_jobs (knowledge_base_id, state, params) VALUES (?, 'generating', ?)",
-            (knowledge_base_id, params),
+            "INSERT INTO generation_jobs (knowledge_base_id, state, params, passcode, statistics) VALUES (?, 'generating', ?, ?, '')",
+            (knowledge_base_id, params, passcode),
         )
         db.commit()
     except db.IntegrityError:
@@ -160,7 +197,7 @@ def create_job():
     loaded_class = load_data_scientist_module_by_name(new_job_dict["module_name"])
 
     start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"], params)
-    start_onto_to_sd(new_job_dict["id"])
+    start_onto_to_sd(new_job_dict["id"], passcode)
 
     return jsonify( row_to_dict(new_job_row) )
 
@@ -331,16 +368,16 @@ def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
 
 
 
-def start_onto_to_sd(job_id):
+def start_onto_to_sd(job_id, passcode):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     print(dir_path) 
     # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
     process = None
     if not my_package.get_settings_debug_mode():
-        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
+        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode)], cwd=dir_path)
     else: 
-        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path)
+        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode)], cwd=dir_path)
     active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         

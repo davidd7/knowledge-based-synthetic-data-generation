@@ -139,7 +139,10 @@ All data generation commands can also be executed automatically via the API.
 			{/if}
 			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" }
 			<button on:click={sendDelete(job.id)}>Delete</button>
-		{/if}
+			{/if}
+			{#if job.status == "finished" }
+			<button on:click={alert(job.statistics)}>Statistics</button>
+			{/if}
 		</td>
 	</tr>
 {/each}

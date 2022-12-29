@@ -14,9 +14,9 @@ CREATE TABLE generation_jobs (
   params TEXT NOT NULL,
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   state TEXT NOT NULL,
-  FOREIGN KEY (knowledge_base_id) REFERENCES generation_schemes (id),
   passcode TEXT NOT NULL,
-  statistics TEXT NOT NULL
+  statistics TEXT NOT NULL,
+  FOREIGN KEY (knowledge_base_id) REFERENCES generation_schemes (id)
 );
 
 

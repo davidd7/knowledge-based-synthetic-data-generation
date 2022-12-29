@@ -13,8 +13,7 @@ class SDGenBaseModule():
 
 
 
-def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes):
-    sd_generation_manager = sdgen_base.SimpleSDGenerationManager(path_to_onto, path_to_onto_classes)
+def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes, sd_generation_manager):
 
     sd_generation_manager.add(
         sdgen_base.BlenderHandler()
@@ -55,7 +54,7 @@ def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes):
         at_end_of_iteration=True
     )
 
-    timer = sd_generation_manager.start()
+    sd_generation_manager.start()
 
 
 

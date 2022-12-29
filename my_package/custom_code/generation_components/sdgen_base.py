@@ -10,6 +10,7 @@ from scipy.spatial.transform import Rotation as R
 import pathlib
 import util
 import time
+import math
 
 
 # INTERFACES
@@ -60,6 +61,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
         self.__handlers_iteration_end: list[SDGenerationHandler] = []
         self.__path_to_ontology: str = path_to_ontology
         self.__path_to_onto_classes = path_to_onto_classes
+        self.__timer = RenderingTimer()
 
 
     def add(self, handler: SDGenerationHandler, at_end_of_iteration=False):
@@ -72,8 +74,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
     def start(self):
 
         # INIT
-        timer = RenderingTimer()
-        timer.start()
+        self.__timer.start()
 
         w = World()
 
@@ -96,7 +97,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         # ITERATE
         
-        timer.iterate_start()
+        self.__timer.iterate_start()
 
 
         # Do the iteration
@@ -105,7 +106,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
                 el.iteration()
             for el in self.__handlers_iteration_end:
                 el.iteration()
-            timer.iterate_round_finish()
+            self.__timer.iterate_round_finish()
 
 
         # END
@@ -117,8 +118,11 @@ class SimpleSDGenerationManager(SDGenerationManager):
         ontology.destroy()
         ontology = None
 
-        timer.end()
-        return timer
+        self.__timer.end()
+
+
+    def get_timer(self):
+        return self.__timer
 
 
 # UTILITY FUNCTIONS
@@ -186,15 +190,15 @@ class RenderingTimer():
         # Calculate median
         intervals_sorted = sorted(intervals)
         if number_iterations % 2 == 1:
-            i = math.floor(number_iterations/2.0)
-            return iterations[i]
+            i = int(math.floor(number_iterations/2.0))
+            return intervals[i]
         else:
-            i = number_iterations/2
-            return (iterations[i-1] + iterations[i]) / 2.0
+            i = int(number_iterations/2)
+            return (intervals[i-1] + intervals[i]) / 2.0
 
     def calc_iterate_avg(self):
         number_iterations = len(self.__iterations)
-        return calc_iterate_time() / number_iterations
+        return self.calc_iterate_time() / number_iterations
 
     def calc_iterate_min(self):
         intervals = self.__calculate_intervals()
@@ -211,6 +215,18 @@ class RenderingTimer():
             intervals.append( el - last )
             last = el
         return intervals
+    
+    def get_statistics(self):
+        return {
+            "total" : self.calc_total_time(),
+            "init" : self.calc_init_time(),
+            "iterate" : self.calc_iterate_time(),
+            "end" : self.calc_end_time(),
+            "iterate_median" : self.calc_iterate_median(),
+            "iterate_avg" : self.calc_iterate_avg(),
+            "iterate_min" : self.calc_iterate_min(),
+            "iterate_max" : self.calc_iterate_max()
+        }
 
 
 
