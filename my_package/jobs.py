@@ -2,7 +2,7 @@ import importlib
 import os
 import subprocess
 from unicodedata import name
-from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash, send_file
+from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash, send_file, Response
 from my_package.db import get_db
 from owlready2 import *
 from . import util
@@ -50,6 +50,37 @@ def list_jobs():
 
         list.append( as_dict )
     return jsonify(list)
+
+
+
+
+
+
+update_counter = 0
+
+def event_stream():
+    update_counter_old = update_counter
+    i = 0
+    try:
+        while True:
+            if update_counter != update_counter_old or i % 60 == 0: # Sending data at least all 60 seconds to check that client is still listening
+                yield 'data: %s\n\n' % update_counter
+                update_counter_old = update_counter
+            print("Stream starts sleeping")
+            time.sleep(1)
+            i += 1
+    finally:
+        return
+        pass
+
+
+
+
+
+@jobs_bp.route('/updates-stream')
+def stream():
+    print("Stream called")
+    return Response(event_stream(), mimetype="text/event-stream")
 
 
 
@@ -146,7 +177,8 @@ def finish_job(job_id):
     else:
         pass
 
-    
+    global update_counter
+    update_counter += 1
     return jsonify({}) # TODO
 
 
@@ -197,6 +229,11 @@ def create_job():
     loaded_class = load_data_scientist_module_by_name(new_job_dict["module_name"])
 
     start_json_to_onto(loaded_class, new_job_dict["id"], new_job_dict["json_data"], params)
+
+    print("ADDRESS: :::::::::::::::")
+    print(request.headers.get('Host'))
+
+
     start_onto_to_sd(new_job_dict["id"], passcode)
 
     return jsonify( row_to_dict(new_job_row) )
@@ -371,13 +408,16 @@ def start_json_to_onto(loaded_class, job_id, json_data, ml_system_params):
 def start_onto_to_sd(job_id, passcode):
     print("SDGen: Starting blenderproc")
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(dir_path) 
+    print(request.headers.get('Host')) 
+    print(request.headers.get('host_url')) 
+    print(request.headers.get('scheme')) 
+    print(request.host_url) 
     # pid = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id)], cwd=dir_path).pid
     process = None
     if not my_package.get_settings_debug_mode():
-        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode)], cwd=dir_path)
-    else: 
-        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode)], cwd=dir_path)
+        process = subprocess.Popen(["blenderproc", "run", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
+    else:
+        process = subprocess.Popen(["blenderproc", "debug", "bproc_area/__main__.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
     active_processes[job_id] = process
     print("SDGen: Finished with starting blenderproc")
         

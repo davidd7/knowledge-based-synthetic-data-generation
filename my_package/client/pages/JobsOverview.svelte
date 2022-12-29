@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy  } from 'svelte';
     import Router, { link, push } from "svelte-spa-router";
     // import { push } from "svelte-spa-router";
 
@@ -10,6 +10,15 @@
     });
 
 
+    onDestroy(async () => {
+		console.log("ondestroy");
+		source.close();
+    });
+
+
+let source = new EventSource('/jobs/updates-stream');
+let lastUpdateCount = undefined;
+
 function loadData() {
 	fetch('/jobs', {
             method: 'GET'
@@ -19,11 +28,20 @@ function loadData() {
             }
             return response.json();
         }).then(response_data => {
-            console.log(response_data);
+            // console.log(response_data);
             jobs = response_data;
         }).catch( (error) => {
             console.log( "An error occurred: " + error );
         } );
+
+	source.onmessage = function (event) {
+		//  alert(event.data);
+		console.log(event.data);
+		if (lastUpdateCount == undefined || lastUpdateCount != event.data) {
+			lastUpdateCount = event.data;
+			loadData();
+		}
+	};
 }
 
 
@@ -69,6 +87,9 @@ async function sendDelete(jobId) {
 
 	loadData()
 }
+
+
+
 
 
 

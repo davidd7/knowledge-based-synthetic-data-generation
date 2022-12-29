@@ -14,6 +14,7 @@ if __name__ == "__main__":
     path_to_package = sys.argv[1]
     job_id = sys.argv[2]
     passcode = sys.argv[3]
+    ip_address = sys.argv[4]
 
     # Import relevant python modules in my_package
     sys.path.append(path_to_package)
@@ -35,7 +36,8 @@ if __name__ == "__main__":
     onto_to_sd( path_to_ontology, pathlib.Path(path_to_package) / "generated_datasets" / str(job_id) , path_to_onto_classes, sd_generation_manager )
 
 
-    api_url = f"http://127.0.0.1:5000/jobs/{job_id}/finished"
+    # api_url = f"http://127.0.0.1:5000/jobs/{job_id}/finished"
+    api_url = f"{ip_address}/jobs/{job_id}/finished"
     data = {"passcode": passcode, "statistics": sd_generation_manager.get_timer().get_statistics() }
     response = requests.post(api_url, json=data)
     response.json()
