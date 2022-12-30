@@ -438,6 +438,7 @@ def start_onto_to_sd(job_id, passcode):
 
 
 def load_classes_and_individuals(path_to_ontology_classes, path_to_ontology_individuals):
+    onto_path.append( util.get_path_to_package() / "custom_code" / "generation_components") ###
     w = World()
     onto_classes = w.get_ontology("file://" + path_to_ontology_classes).load() # w.
     # onto_individuals = get_ontology("http://test.org/onto.owl") # "file://" + path_to_ontology_individuals).load() # w.

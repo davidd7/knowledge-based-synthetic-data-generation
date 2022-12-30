@@ -30,10 +30,26 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         w = World()
 
-        ontology = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
+        onto_individuals = w.get_ontology(self.__path_to_ontology).load(only_local=True) # reload=True # World().get_ontology(... hat Probleme auch nicht gelöst
         ontology_classes = w.get_ontology(self.__path_to_onto_classes).load(only_local=True)
 
-        onto_wrapper = OntoWrapper(ontology_classes, ontology)
+        # print("ONTO CLASSES:")
+        # print( [el for el in ontology_classes.classes()] )
+        # print(ontology_classes.imported_ontologies)
+        # for el in ontology_classes.imported_ontologies:
+        #     print( [el2 for el2 in el.classes()] )
+        # print( [el for el in ontology_classes.classes()] )
+        # print(ontology_classes.NewImportTestXYZ)
+        # # print(ontology_classes.main22.NewImportTestXYZ) # .main22 is none
+        # print( [el for el in w.classes()])
+        # # print( w.RandomTexture  ) # Error
+        # # print( w.NewImportTestXYZ  ) # Verm auch error, aber nciht explizit getestet
+        # # with w: # error bereits durch das with
+        # #     print(RandomTexture)
+        # # print( w[RandomTexture]  ) # Error
+        # return
+
+        onto_wrapper = OntoWrapper(ontology_classes, onto_individuals)
 
         generation_scheme_instances_list = list( intersection( onto_wrapper.individuals.search(is_a=onto_wrapper.classes.GenerationScheme)  , onto_wrapper.individuals.individuals()  ) )
 
@@ -67,8 +83,8 @@ class SimpleSDGenerationManager(SDGenerationManager):
         for el in reversed(self.__handlers_all):
             el.end(onto_wrapper)
 
-        ontology.destroy()
-        ontology = None
+        onto_individuals.destroy()
+        onto_individuals = None
 
         self.__timer.end()
 
