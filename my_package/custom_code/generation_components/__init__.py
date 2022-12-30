@@ -6,13 +6,6 @@ from custom_code.generation_components import handlers
 
 
 
-
-class SDGenBaseModule():
-    def onto_to_sd(path_to_onto, path_where_to_save_result):
-        pass
-
-
-
 def onto_to_sd(path_to_onto, path_where_to_save_result, path_to_onto_classes, sd_generation_manager):
 
     sd_generation_manager.add(

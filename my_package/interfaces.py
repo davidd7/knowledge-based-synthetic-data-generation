@@ -23,7 +23,9 @@ class SDGenerationHandler():
 
 
 
-
+class SDGenBaseModule():
+    def json_to_onto(onto_classes, end_user_data, ml_system_data):
+        pass
 
 
 

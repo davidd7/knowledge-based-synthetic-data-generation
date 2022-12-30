@@ -1,11 +1,7 @@
 import json
 from owlready2 import *
+from my_package.interfaces import *
 
-
-
-class SDGenBaseModule():
-    def onto_to_sd(path_to_onto, path_where_to_save_result):
-        pass
 
 
 class SDGenModule(SDGenBaseModule):
@@ -129,8 +125,8 @@ class SDGenModule(SDGenBaseModule):
             Has_RotationInfo = [rot_inf_at_ground],
             Has_LocationInfo = [loc_inf_light],
             Has_Multiplicity = [onto_classes.EqualDistributionRangeMultiplicity(
-                Has_MinimumInt = [1],
-                Has_MaximumInt = [2]
+                Has_MinimumInt = [0], # 1
+                Has_MaximumInt = [10]  # 2
             )]
         )
 

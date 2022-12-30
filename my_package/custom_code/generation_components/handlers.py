@@ -583,10 +583,25 @@ class SimpleLightHandler(SDGenerationHandler):
                     if obj_ref.get_energy() == 0:
                         obj_ref.set_energy(obj_ref_energy)
 
+            # def custom_hider(self, obj_ref, hide):
+            #     nonlocal obj_ref_energy
+            #     if hide:
+            #         obj_ref_energy = obj_ref.get_energy()
+            #         obj_ref.set_energy(0)
+            #     else:
+            #         if obj_ref.get_energy() == 0:
+            #             obj_ref.set_energy(obj_ref_energy)
+
+            # for el in light_individual.bp_reference:
+            #     el.hide = custom_hider
+
             # Instantiate Multiplicity, LocationInfo- and RotationInfo-Handlers
             manager.add(
                 SimpleMultiplicityHandler(light_individual, light_individual.Has_Multiplicity[0], custom_hide_function=custom_hider)
             )
+            # manager.add(
+            #     SimpleMultiplicityHandler(light_individual, light_individual.Has_Multiplicity[0])  #   , custom_hide_function=custom_hider)
+            # )
             manager.add(
                 SimpleLocationHandler(light_individual, light_individual.Has_LocationInfo[0])
             )
