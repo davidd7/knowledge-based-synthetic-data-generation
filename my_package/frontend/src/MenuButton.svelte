@@ -4,7 +4,8 @@
 </script>
 
 <div class="container">
-	<button on:click={toggleMenu} class="button">Menu</button>
+	<img src="pics/more_vert_black_24dp.svg"  on:click={toggleMenu} class="button"/>
+	<!-- <button on:click={toggleMenu} class="button">Menu</button> -->
 	<div class="dropdown-container">
 		{#if active}
 			<div class="dropdown">

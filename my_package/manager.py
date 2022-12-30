@@ -2,6 +2,7 @@ from owlready2 import *
 import time
 import math
 from interfaces import *
+import numpy as np
 
 
 # MANAGER
@@ -173,6 +174,7 @@ class RenderingTimer():
         return intervals
     
     def get_statistics(self):
+        intervals = self.__calculate_intervals()
         return {
             "total" : self.calc_total_time(),
             "init" : self.calc_init_time(),
@@ -181,7 +183,9 @@ class RenderingTimer():
             "iterate_median" : self.calc_iterate_median(),
             "iterate_avg" : self.calc_iterate_avg(),
             "iterate_min" : self.calc_iterate_min(),
-            "iterate_max" : self.calc_iterate_max()
+            "iterate_max" : self.calc_iterate_max(),
+            "iterate_var" : np.var(intervals),
+            "iterate_std" : np.std(intervals)
         }
 
 
