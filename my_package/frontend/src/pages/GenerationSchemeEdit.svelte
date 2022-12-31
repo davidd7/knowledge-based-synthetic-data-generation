@@ -13,7 +13,7 @@
 	let Thing;
 	let store = writable('store');
 	$store = {};
-	setContext('context', store)
+	setContext('context', store);
 
 	function handleSendButtonClick() {
 		sendData();
@@ -48,6 +48,8 @@
 
 
     async function sendData() {
+		console.log("Sending to server:");
+		console.log(JSON.stringify($store));
         feedbackText = "Sending...";
 		try {
 			const response=await fetch(`/generation-schemes/${params.id}`,{

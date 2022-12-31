@@ -151,8 +151,8 @@
     <textarea bind:value={params} name="params" class="params-text-area" bind:this={paramsTextarea}></textarea>
 
 
-    <label>Optional: Upload files to get IDs for them and use them in the parameters:</label>
-        <ul bind:this={uploadedList}>
+    <label for="uploadedListUl">Optional: Upload files to get IDs for them and use them in the parameters:</label>
+        <ul bind:this={uploadedList} name="uploadedListUl">
 
         </ul>
         

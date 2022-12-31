@@ -2,6 +2,8 @@
 <script>
 	import { getContext } from 'svelte';
 	let context_data = getContext('context');
+	console.log("Range.svelte received context: " );
+	console.log(context_data);
 	export let debug = false;
 
 	import RangeSlider from "svelte-range-slider-pips";
@@ -21,6 +23,8 @@
 	$: {
 		data[rangeEndKey] = test[1];
 	}
+
+
 </script>
 
 

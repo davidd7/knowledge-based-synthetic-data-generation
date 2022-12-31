@@ -11,7 +11,7 @@
     
 
 <style>
-img {
+/* img {
     width: 100%;
-}
+} */
 </style>
