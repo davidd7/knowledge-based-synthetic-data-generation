@@ -87,11 +87,15 @@ async function sendDeleteKnowledgeBase(knowledgeBaseId) {
 		<td>
 			{el.module_name}
 		</td>
-		<td class="small-table-column">
+		<td style="white-space: nowrap; width: 1px;">
 			<a href={`/generation-schemes/${el.id}/edit`} use:link>
-				<button>Edit</button>
+				<button class="table-button">
+					<img src="pics/edit_FILL1_wght400_GRAD0_opsz48.svg" class="table-button-icon" alt="edit"/>
+				</button>
 			</a>
-			<button on:click={sendDeleteKnowledgeBase(el.id)}>Delete</button>
+			<button on:click={sendDeleteKnowledgeBase(el.id)} class="table-button">
+				<img src="pics/delete_black_48dp.svg" class="table-button-icon" alt="delete"/>
+			</button>
 		</td>
 	</tr>
 {/each}
@@ -103,5 +107,7 @@ async function sendDeleteKnowledgeBase(knowledgeBaseId) {
 
 
 
+<style>
 
+</style>
 

@@ -129,7 +129,10 @@ All data generation commands can also be executed automatically via the API.
 				Date
 			</td>
 			<td class="small-table-column">
-				State
+				Status
+			</td>
+			<td class="small-table-column">
+				Options
 			</td>
 		</tr>
 	</thead>
@@ -150,19 +153,27 @@ All data generation commands can also be executed automatically via the API.
 		</td>
 		<td class="small-table-column">
             {job.status}
+		</td>
+		<td style="white-space: nowrap; width: 1px; text-align: right;">
 			<!-- {#if job.status == "generating"}
 				<button on:click={sendAbort(job.id)}>Abort</button>
 			{/if} -->
 			{#if job.status == "finished"}
 				<a href={`/jobs/${job.id}/result`} download>
-					<button >Download</button>
+					<button class="table-button">
+						<img src="pics/file_download_black_48dp.svg" class="table-button-icon" alt="download"/>
+					</button>
 				</a>
 			{/if}
-			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" }
-			<button on:click={sendDelete(job.id)}>Delete</button>
-			{/if}
 			{#if job.status == "finished" }
-			<button on:click={alert(job.statistics)}>Statistics</button>
+				<button on:click={alert(job.statistics)} class="table-button">
+					<img src="pics/query_stats_black_48dp.svg" class="table-button-icon" alt="view statistics"/>
+				</button>
+			{/if}
+			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" }
+				<button on:click={sendDelete(job.id)} class="table-button">
+					<img src="pics/delete_black_48dp.svg" class="table-button-icon" alt="delete"/>
+				</button>
 			{/if}
 		</td>
 	</tr>

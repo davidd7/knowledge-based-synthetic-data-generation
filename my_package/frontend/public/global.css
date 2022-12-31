@@ -140,3 +140,33 @@ main {
 	margin: 0px;
 	/* font-size: 16px; */
 }
+
+
+
+
+
+
+
+.table-button {
+	height: 30px;
+	width: 30px;
+	overflow: hidden;
+	/* box-sizing: content-box; */
+	padding: 0px;
+	vertical-align: middle;
+	display: inline;
+}
+.table-button-icon {
+	opacity: 0.8;
+	height: 20px;
+}
+
+
+
+
+
+
+
+
+
+
