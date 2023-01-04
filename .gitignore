@@ -22,6 +22,9 @@ build/
 **/node_modules
 **/public/bundle.*
 my_package/data/uploads/*.obj
+!my_package/data/uploads/gear_class1.obj
+!my_package/data/uploads/gear_class2.obj
+
 my_package/data/generated_datasets/
 
 my_package/frontend/src/forms/*.svelte
