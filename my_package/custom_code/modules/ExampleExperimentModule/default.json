@@ -3,7 +3,5 @@
 	"class1_max": 10,
 	"class2_min": 0,
 	"class2_max": 10,
-	"area_length_x": 300,
-	"area_length_y": 500,
-	"camera_height": 950
+	"location" : "half_left"
 }

@@ -2,12 +2,10 @@
 	// Import general components
 	import { getContext, setContext } from 'svelte';
 	// Import form elements
-	import Multiple from '../form_components/Multiple.svelte';
 	import Range from '../form_components/Range.svelte';
 	import HeadlinedGroup from '../form_components/HeadlinedGroup.svelte';
 	import NumberInput from '../form_components/NumberInput.svelte';
-	import Input3DModel from '../form_components/Input3DModel.svelte';
-    import ForwardContext from '../form_components/ForwardContext.svelte';
+    import SelectInput from '../form_components/SelectInput.svelte';
 
 	let data;
 	$: { data = data; }
@@ -34,12 +32,9 @@
 		How many instances of class 2 should appear per image:
 		<Range minValue={0} maxValue={40} rangeStartKey={"class2_min"} rangeEndKey={"class2_max"} />
 	</HeadlinedGroup>
+	<p>
 	<HeadlinedGroup headline="Area, in which all objects appear">
-		<NumberInput label="Length in the X direction:" unitLabel="mm"  data={data} valueKey={"area_length_x"} />
-		<NumberInput label="Length in the Y direction:" unitLabel="mm"  data={data} valueKey={"area_length_y"} />
-	</HeadlinedGroup>
-	<HeadlinedGroup headline="Camera">
-		<NumberInput label="Height above table:" unitLabel="mm"  data={data} valueKey={"camera_height"} />
+		<SelectInput label="" data={data} valueKey={"location"} options={[{value:"full", text:"full"}, {value:"half_left", text:"left half only"}, {value:"half_right", text:"right half only"}]} />
 	</HeadlinedGroup>
 </div>
 
