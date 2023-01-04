@@ -77,6 +77,11 @@ async function sendAbort(jobId) {
 
 
 async function sendDelete(jobId) {
+	let user_response = confirm("Do you really want to delete this knowledge base?");
+	if (user_response == false) {
+		return;
+	}
+	
 	let response = await fetch(`/jobs/${jobId}`, { method: 'DELETE' } );
 
 	if (!response.ok) {

@@ -34,6 +34,11 @@
 
 
 async function sendDeleteKnowledgeBase(knowledgeBaseId) {
+	let user_response = confirm("Do you really want to delete this knowledge base?");
+	if (user_response == false) {
+		return;
+	}
+
 	let response = await fetch(`/generation-schemes/${knowledgeBaseId}`, { method: 'DELETE' } );
 
 	if (!response.ok) {
