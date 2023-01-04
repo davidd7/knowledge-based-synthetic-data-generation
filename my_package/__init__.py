@@ -10,6 +10,7 @@ from datetime import datetime
 from my_package.generationschemes import generationschemes_bp
 from my_package.modules import modules_bp
 from my_package.jobs import jobs_bp
+from my_package.jobs import is_job_running
 from my_package.files import files_bp
 from . import util
 import pathlib
@@ -89,6 +90,18 @@ def create_app(test_config=None):
             value = json.load(f)["debug_mode"]
 
         return jsonify({"value":value})
+
+
+    @app.route('/settings/reload-custom-code/', methods=['POST'])
+    def settings_reload_custom_code():
+        # if PUT:
+        if request.method == 'POST':
+            if is_job_running():
+                return "ERROR" # TODO
+            else:
+                prepare_custom_code()
+
+        return jsonify({})
 
 
     app.register_blueprint(files_bp, url_prefix='/files')

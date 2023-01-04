@@ -343,6 +343,15 @@ def determine_active_job_status(job_id, stated_status):
 
 
 
+def is_job_running():
+    result = False
+    for el in active_processes:
+        process_state = el.poll()
+        if process_state is not None:
+            result = True
+            break
+    return result
+
 
 
 def update_job_state(job_id, new_state):

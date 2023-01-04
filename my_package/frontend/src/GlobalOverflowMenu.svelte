@@ -46,9 +46,40 @@
 	}
 
 
+	async function sendReloadCustomCode() {
+		let response = await fetch(`/settings/reload-custom-code`, { method: 'POST' } );
+
+		console.log(response);
+
+		if (!response.ok) {
+			// Error
+			console.log("Error occurred during abort call");
+			return;
+		}
+
+		if (response.ok) {
+			if (confirm("Custom code reloaded. Reload webpage?") == true) {
+				window.location.reload();
+			} else {
+				// Do nothing
+			}
+		}
+
+		// loadData()
+	}
+
+
 
 
 </script>
 
 
-Debug modes: <input type="checkbox" bind:checked={debugModeValue} on:change={updateValues} >
+<span style="white-space:nowrap;">Debug mode: <input type="checkbox" bind:checked={debugModeValue} on:change={updateValues} ></span>
+<span style="white-space:nowrap;">Reload custom code:
+	<button on:click={sendReloadCustomCode} class="table-button">
+		<img src="pics/refresh_FILL1_wght400_GRAD0_opsz48.svg" class="table-button-icon" alt="delete"/>
+	</button>
+</span>
+
+
+

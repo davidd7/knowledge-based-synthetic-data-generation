@@ -26,7 +26,7 @@
 
 <div class="app-container">
 	<HeadlinedGroup headline="Objects to recognize">
-		How many instances of class 1 should appear per image:
+		HHow many instances of class 1 should appear per image:
 		<Range minValue={0} maxValue={40} rangeStartKey={"class1_min"} rangeEndKey={"class1_max"} />
 		<p>
 		How many instances of class 2 should appear per image:
