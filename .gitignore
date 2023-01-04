@@ -25,6 +25,8 @@ my_package/data/uploads/*.obj
 !my_package/data/uploads/gear_class1.obj
 !my_package/data/uploads/gear_class2.obj
 
+my_package/custom_code/generation_components/media/random_images_src/*.jpg
+
 my_package/data/generated_datasets/
 
 my_package/frontend/src/forms/*.svelte

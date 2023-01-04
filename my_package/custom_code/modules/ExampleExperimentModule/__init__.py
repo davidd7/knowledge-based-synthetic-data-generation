@@ -43,6 +43,13 @@ class SDGenModule(SDGenBaseModule):
             Has_XLength = [150.0],
             Has_YLength = [200.0]
         )
+        vol_light_look_at = onto_classes.SimpleVolume(
+            Has_XCoordinate = [-75.0],
+            Has_YCoordinate = [-100.0],
+            Has_ZCoordinate = [0.0],
+            Has_XLength = [150.0],
+            Has_YLength = [200.0]
+        )
         vol_objects_spawns = onto_classes.SimpleVolume(
             Has_XCoordinate = [-75.0],
             Has_YCoordinate = [y_coordinate],
@@ -75,7 +82,7 @@ class SDGenModule(SDGenBaseModule):
 
         # Rotation Info
         rot_inf_lights_at_ground = onto_classes.LookAtVolumeRotation(
-            Has_Volume = [vol_random_images_ground]
+            Has_Volume = [vol_light_look_at]
         )
         rot_inf_random = onto_classes.RandomRotation()
         rot_inf_down = onto_classes.LookDownRotation()
@@ -161,8 +168,8 @@ class SDGenModule(SDGenBaseModule):
             Has_Effect = [onto_classes.SimpleBoxedPhysicalPlausibility( #
                 Has_FallingObject = obj,
                 Has_Volume = [vol_physical_plausibility_ground],
-                Has_MinimumSimulationTime = [4.0],
-                Has_MaximumSimulationTime = [20.0]
+                Has_MinimumSimulationTime = [1.0],
+                Has_MaximumSimulationTime = [10.0]
             )]
         )
 
