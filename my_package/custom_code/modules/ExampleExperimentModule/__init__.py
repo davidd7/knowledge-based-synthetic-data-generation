@@ -7,45 +7,55 @@ from my_package.interfaces import *
 class SDGenModule(SDGenBaseModule):
 
     def json_to_onto(onto_classes, end_user_data, ml_system_data):
-        """
-        Overreaching function creates new individual if 
-        """
+    
+        # Set area based on location set in form
+        area_length_y = None
+        y_coordinate = None
+        if end_user_data["location"] == "full":
+            area_length_y = 200.0
+            y_coordinate = -area_length_y/2
+        elif end_user_data["location"] == "half_left":
+            area_length_y = 100.0
+            y_coordinate = -area_length_y
+        elif end_user_data["location"] == "half_right":
+            area_length_y = 100.0
+            y_coordinate = 0
 
         # Volumes
         vol_camera = onto_classes.SimpleVolume(
             Has_XCoordinate = [-1],
             Has_YCoordinate = [-1],
-            Has_ZCoordinate = [end_user_data["camera_height"]],
+            Has_ZCoordinate = [200.0],
             Has_XLength = [2],
             Has_YLength = [2]
         )
         vol_ground = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
-            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
+            Has_XCoordinate = [-500.0],
+            Has_YCoordinate = [-500.0],
             Has_ZCoordinate = [0.0],
-            Has_XLength = [end_user_data["area_length_x"]],
-            Has_YLength = [end_user_data["area_length_y"]]
+            Has_XLength = [1000.0],
+            Has_YLength = [1000.0]
         )
         vol_light = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
-            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
+            Has_XCoordinate = [-150.0/2],
+            Has_YCoordinate = [-area_length_y/2],
             Has_ZCoordinate = [500.0],
-            Has_XLength = [end_user_data["area_length_x"]],
-            Has_YLength = [end_user_data["area_length_y"]]
+            Has_XLength = [150.0],
+            Has_YLength = [area_length_y]
         )
         vol_objects_spawns = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
-            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
+            Has_XCoordinate = [-150.0/2],
+            Has_YCoordinate = [y_coordinate],
             Has_ZCoordinate = [100.0],
-            Has_XLength = [end_user_data["area_length_x"]],
-            Has_YLength = [end_user_data["area_length_y"]]
+            Has_XLength = [150.0],
+            Has_YLength = [area_length_y]
         )
         vol_objects_ground = onto_classes.SimpleVolume(
-            Has_XCoordinate = [-end_user_data["area_length_x"]/2],
-            Has_YCoordinate = [-end_user_data["area_length_y"]/2],
+            Has_XCoordinate = [-150.0/2],
+            Has_YCoordinate = [y_coordinate],
             Has_ZCoordinate = [0.0],
-            Has_XLength = [end_user_data["area_length_x"]],
-            Has_YLength = [end_user_data["area_length_y"]]
+            Has_XLength = [150.0],
+            Has_YLength = [area_length_y]
         )
         
         
@@ -69,28 +79,33 @@ class SDGenModule(SDGenBaseModule):
         rot_inf_down = onto_classes.LookDownRotation()
 
         # Objects and characteristics that are object-specific in this example
-        obj = []
-        for object in end_user_data["objects_to_recognize"]:
-            # Multiplicity
-            mult_obj = onto_classes.EqualDistributionRangeMultiplicity(
-                Has_MinimumInt = [object["min"]],
-                Has_MaximumInt = [object["max"]]
-            )
-
-            # Model
-            model_obj = onto_classes.Model(
-                Has_File = [object["url"]]
-            )
-
-            # Object
-            obj.append(
-                onto_classes.Object(
-                    Has_Multiplicity = [mult_obj],
-                    Has_Model = [model_obj],
-                    Has_RotationInfo = [rot_inf_random],
-                    Has_LocationInfo = [loc_inf_objects]
-                )
-            )
+        obj_class_1 = onto_classes.Object(
+            Has_Multiplicity = [
+                onto_classes.EqualDistributionRangeMultiplicity(
+                    Has_MinimumInt = [end_user_data["class1_min"]],
+                    Has_MaximumInt = [end_user_data["class1_max"]]
+            )],
+            Has_Model = [
+                onto_classes.Model(
+                    Has_File = ["gear_class1.obj"]
+            )],
+            Has_RotationInfo = [rot_inf_random],
+            Has_LocationInfo = [loc_inf_objects]
+        )
+        obj_class_2 = onto_classes.Object(
+            Has_Multiplicity = [
+                onto_classes.EqualDistributionRangeMultiplicity(
+                    Has_MinimumInt = [end_user_data["class2_min"]],
+                    Has_MaximumInt = [end_user_data["class2_max"]]
+            )],
+            Has_Model = [
+                onto_classes.Model(
+                    Has_File = ["gear_class2.obj"]
+            )],
+            Has_RotationInfo = [rot_inf_random],
+            Has_LocationInfo = [loc_inf_objects]
+        )
+        obj = [obj_class_1, obj_class_2]
 
 
         # Camera
@@ -126,7 +141,7 @@ class SDGenModule(SDGenBaseModule):
             Has_LocationInfo = [loc_inf_light],
             Has_Multiplicity = [onto_classes.EqualDistributionRangeMultiplicity(
                 Has_MinimumInt = [0], # 1
-                Has_MaximumInt = [10]  # 2
+                Has_MaximumInt = [0]  # 2
             )]
         )
 

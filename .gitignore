@@ -21,8 +21,6 @@ build/
 **/.DS_Store
 **/node_modules
 **/public/bundle.*
-my_package/beta_uploads/*.obj
-my_package/uploads/*.obj
 my_package/data/uploads/*.obj
 my_package/data/generated_datasets/
 
