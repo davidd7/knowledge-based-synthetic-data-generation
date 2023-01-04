@@ -27,7 +27,7 @@ my_package/data/generated_datasets/
 my_package/frontend/src/forms/*.svelte
 my_package/frontend/src/form_components/*.svelte
 
-
+my_package/examples/debugging/temp/
 
 
 
