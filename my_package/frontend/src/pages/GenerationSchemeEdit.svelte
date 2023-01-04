@@ -83,10 +83,10 @@
 
 <div class="page-header">
     <h1 style="flex-grow: 1;">
-		{generation_scheme_data.name} (base module: {generation_scheme_data.module_name})
+		{generation_scheme_data.name} <!--(base module: {generation_scheme_data.module_name})-->
 	</h1>
-	<button on:click={reset}>Reset</button>
-	<button on:click={handleSendButtonClick}>Save</button>
+	<button on:click={reset} class={'edit-scheme-button'}>Reset</button>
+	<button on:click={handleSendButtonClick} class={'edit-scheme-button'}>Save</button>
 </div>
 
 <svelte:component this={Thing} />
@@ -105,6 +105,10 @@
 
 .app-send-button {
 	margin-top: 16px;
+}
+
+.edit-scheme-button {
+	margin-top: 9px;
 }
 
 </style>

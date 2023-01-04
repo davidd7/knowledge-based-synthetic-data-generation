@@ -14,6 +14,8 @@
 	export let rangeEndKey = 0;
 	export let minValue = 0;
 	export let maxValue = 0;
+	
+	export let pips = true;
 
 	let test = [data[rangeStartKey],data[rangeEndKey]]
 
@@ -29,7 +31,9 @@
 
 
 <div id="slider2">
-	<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label' />
+	<!-- <RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips all='label' />-->
+	<RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range bind:pips={pips} all='label' />
+	<!-- <RangeSlider min={minValue} max={maxValue}  bind:values={test} springValues={ {"stiffness":1, "damping":1 } } range pips float pipstep=5  />-->
 </div>
 {#if debug == true}
 	{JSON.stringify(data)}
@@ -47,7 +51,15 @@
 		--range-handle:          var(--slider-color); /* non-focussed handle color */
 		--range-handle-focus:    var(--slider-color); /* focussed handle color */
 	}
-	
+	.rangeSlider > .rangeHandle > .rangeFloat {
+		opacity: 1;
+		transform: scale(5);
+	}
+
+	#slider2 .rangeFloat{
+		border: 10px black solid;
+	}
+
 </style>
 
 
