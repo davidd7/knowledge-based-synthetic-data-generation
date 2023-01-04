@@ -39,7 +39,7 @@ def row_to_dict(row):
 def list_jobs():
     db = get_db()
     jobs = db.execute(
-        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name, j.statistics as statistics FROM generation_jobs j JOIN generation_schemes s on j.knowledge_base_id = s.id ORDER BY j.id DESC', ()
+        'SELECT j.id as id, j.knowledge_base_id, j.creation_date, j.state as status, s.name as scheme_name, s.module_name, j.statistics as statistics FROM generation_jobs j LEFT OUTER JOIN generation_schemes s on j.knowledge_base_id = s.id ORDER BY j.id DESC', ()
     ).fetchall()
 
     list = []
@@ -276,7 +276,7 @@ def download_result(job_id):
 def delete_job(job_id):
     # Check that job exists and is finished/unknown/... (only non-active jobs should be deleted)
     job = get_job(job_id)
-    if job == "error" or job["status"] not in ["finished", "aborted", "unknown"]:
+    if job == "error" or job["status"] not in ["finished", "aborted", "unknown", "error"]:
         return "error"
 
     # Path to folder that should be deleted

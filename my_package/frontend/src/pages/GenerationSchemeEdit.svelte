@@ -14,6 +14,8 @@
 	let store = writable('store');
 	$store = {};
 	setContext('context', store);
+	let kb_name = "loading...";
+
 
 	function handleSendButtonClick() {
 		sendData();
@@ -40,6 +42,7 @@
 		let response_data = await response.json();
 
 		generation_scheme_data = response_data;
+		kb_name = generation_scheme_data.name;
 		$store = JSON.parse(response_data.data);
 		Thing = (   await import(`../forms/${response_data.module_name}.svelte`)  ).default;
 	}
@@ -58,7 +61,7 @@
 					'Accept': 'application/json, text/plain, */*',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify($store)
+				body: JSON.stringify( { name : kb_name, data : $store })
 			});
 			if(!response.ok) {
 				throw new Error('Something went wrong');
@@ -82,9 +85,10 @@
     
 
 <div class="page-header">
-    <h1 style="flex-grow: 1;">
-		{generation_scheme_data.name} <!--(base module: {generation_scheme_data.module_name})-->
-	</h1>
+    <!-- <h1 style="flex-grow: 1;">
+		{kb_name} < ! - -(base module: {generation_scheme_data.module_name})- - >
+	</h1> -->
+	<input style="flex-grow: 1;" bind:value={kb_name} type="text" class={'input-knowledge-base-name'}>
 	<button on:click={reset} class={'edit-scheme-button'}>Reset</button>
 	<button on:click={handleSendButtonClick} class={'edit-scheme-button'}>Save</button>
 </div>
@@ -109,6 +113,19 @@
 
 .edit-scheme-button {
 	margin-top: 9px;
+}
+
+.input-knowledge-base-name {
+	border: 0px solid black;
+	font-size: 2rem;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-weight: bold;
+	padding: 8px;
+	margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+	padding-left: 0px;
 }
 
 </style>

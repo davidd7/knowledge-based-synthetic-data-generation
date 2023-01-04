@@ -3,6 +3,8 @@ from unicodedata import name
 from . import util
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
 from my_package.db import get_db
+import json
+
 
 
 # Initialize Blueprint
@@ -86,7 +88,9 @@ def create_scheme():
 def single_scheme(knowledge_base_id):
 
     if request.method == 'PUT':
-        data = request.get_data(as_text=True)
+        # data = request.get_data(as_text=True)
+        data = request.json["data"] # TODO: Check that parameters there and as expected !
+        param_name = request.json["name"]
         db = get_db()
         cursor = db.cursor()
         error = None
@@ -94,8 +98,8 @@ def single_scheme(knowledge_base_id):
         if error is None:
             try:
                 cursor.execute(
-                    "UPDATE generation_schemes SET data = ? WHERE id = ?",
-                    (data, knowledge_base_id),
+                    "UPDATE generation_schemes SET name = ?, data = ? WHERE id = ?",
+                    (param_name, json.dumps(data), knowledge_base_id),
                 )
                 db.commit()
             except db.IntegrityError:

@@ -81,7 +81,7 @@ async function sendDelete(jobId) {
 	if (user_response == false) {
 		return;
 	}
-	
+
 	let response = await fetch(`/jobs/${jobId}`, { method: 'DELETE' } );
 
 	if (!response.ok) {
@@ -175,7 +175,7 @@ All data generation commands can also be executed automatically via the API.
 					<img src="pics/query_stats_black_48dp.svg" class="table-button-icon" alt="view statistics"/>
 				</button>
 			{/if}
-			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" }
+			{#if job.status == "finished" || job.status == "aborted" || job.status == "unknown" || job.status == "error" }
 				<button on:click={sendDelete(job.id)} class="table-button">
 					<img src="pics/delete_black_48dp.svg" class="table-button-icon" alt="delete"/>
 				</button>
