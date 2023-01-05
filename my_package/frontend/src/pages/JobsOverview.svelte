@@ -11,7 +11,7 @@
 
 
     onDestroy(async () => {
-		console.log("ondestroy");
+		// console.log("ondestroy");
 		source.close();
     });
 

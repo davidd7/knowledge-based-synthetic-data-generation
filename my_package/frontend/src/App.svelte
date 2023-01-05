@@ -1,48 +1,59 @@
 <script>
-    import Router, { link } from "svelte-spa-router";
-    // import { routes } from "./routes.js";
-    import GlobalOverflowMenu from "./GlobalOverflowMenu.svelte";
-    import MenuButton from './MenuButton.svelte';
+  import Router, { link } from "svelte-spa-router";
+  // import { routes } from "./routes.js";
+  import GlobalOverflowMenu from "./GlobalOverflowMenu.svelte";
+  import MenuButton from './MenuButton.svelte';
 
-    import Home from "./pages/Home.svelte";
-    import NotFound from "./pages/NotFound.svelte";
-    import GenerationSchemesOverview from "./pages/GenerationSchemesOverview.svelte";
-    import GenerationSchemeNew from "./pages/GenerationSchemeNew.svelte";
-    import GenerationSchemeEdit from "./pages/GenerationSchemeEdit.svelte";
-    import Jobs from "./pages/JobsOverview.svelte";
-    import JobsNew from "./pages/JobsNew.svelte";
+  import Home from "./pages/Home.svelte";
+  import NotFound from "./pages/NotFound.svelte";
+  import GenerationSchemesOverview from "./pages/GenerationSchemesOverview.svelte";
+  import GenerationSchemeNew from "./pages/GenerationSchemeNew.svelte";
+  import GenerationSchemeEdit from "./pages/GenerationSchemeEdit.svelte";
+  import Jobs from "./pages/JobsOverview.svelte";
+  import JobsNew from "./pages/JobsNew.svelte";
 
-    import {wrap} from 'svelte-spa-router/wrap'
-    import {location, querystring} from 'svelte-spa-router'
+  import {wrap} from 'svelte-spa-router/wrap'
+  import {push, pop, replace, location, querystring} from 'svelte-spa-router'
 
 
-let x = {aaa : 50};
+  let hasUnsavedDataDefault = () => false;
+  let x = {hasUnsavedData : hasUnsavedDataDefault};
+
+function allPagesCondition(detail) {
+  if ( x.hasUnsavedData() ) {
+    // alert();
+    // push('/book/42');
+    // pop();
+    // replace('/generation-schemes/15/edit');
+    // detail.location = '/generation-schemes/15/edit';
+    return false;
+  } else {
+    x.hasUnsavedData = hasUnsavedDataDefault;
+    return true;
+  }
+}
 
 export const routes = {
-  "/": wrap({component: Home, conditions: [ (detail)=>{
-    // console.log(detail.location);
-    // console.log( $location );
-    // console.log( $querystring );
-    console.log(GenerationSchemeEdit.checkState);
-    console.log(GenerationSchemeEdit.params);
-    console.log(GenerationSchemeEdit);
-    console.log(x);
-    console.log(x.aaa());
-  } ],
-  props: {
-            num: x
-        }
-      }
-  ),
-  "/generation-schemes": GenerationSchemesOverview,
-  "/generation-schemes/new": GenerationSchemeNew,
-  "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { num: x } } ),
-  "/jobs": Jobs,
-  "/jobs/new": JobsNew,
-  "*": NotFound
+  "/": wrap({component: Home, conditions: [ allPagesCondition ] } ),
+  "/generation-schemes": wrap({component: GenerationSchemesOverview, conditions: [ allPagesCondition ] } ),
+  "/generation-schemes/new": wrap({component: GenerationSchemeNew, conditions: [ allPagesCondition ] } ),
+  "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { num: x }, conditions: [ allPagesCondition ] } ),
+  "/jobs": wrap({component: Jobs, conditions: [ allPagesCondition ] } ),
+  "/jobs/new": wrap({component: JobsNew, conditions: [ allPagesCondition ] } ),
+  "*": wrap({component: NotFound, conditions: [ allPagesCondition ] } )
 };
 
 
+
+function conditionsFailed(event) {
+    console.error('conditionsFailed event', event.detail)
+
+    // Perform any action, for example replacing the current route
+    // if (event.detail.userData.foo == 'bar') {
+    //     replace('/hello/world')
+    // }
+        replace('/generation-schemes/15/edit')
+}
 
 
 </script>
@@ -66,7 +77,7 @@ export const routes = {
 </nav>
 
 <main>
-  <Router {routes}/>
+  <Router {routes} on:conditionsFailed={conditionsFailed}/>
 </main>
 
   

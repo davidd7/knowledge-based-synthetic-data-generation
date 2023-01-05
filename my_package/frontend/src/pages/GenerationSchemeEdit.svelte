@@ -15,10 +15,6 @@
 	let Thing;
 	let store = writable('store');
 	$store = {};
-	// $: {
-	// 	store = store;
-	// 	console.log("sth happened");
-	// }
 
 	setContext('context', store);
 	let kb_name = "loading...";
@@ -36,22 +32,6 @@
 	}
 
 
-// 	window.onload = function() {
-// 		console.log("AAAAAAAAAAAAAAAa");
-//     window.addEventListener("beforeunload", function (e) {
-// 		alert();
-//         var confirmationMessage = 'It looks like you have been editing something. '
-//                                 + 'If you leave before saving, your changes will be lost.';
-
-//         (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-//         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-//     });
-// };
-
-
-
-
-
 
 	function browserSaveBeforeLeave(e) {
 			var confirmationMessage = 'It looks like you have been editing something. '
@@ -64,7 +44,7 @@
 
     onMount( () => {
 		overrideCurrentDataWithDataFromServer();
-		num.aaa = hasUnsavedData;
+		num.hasUnsavedData = hasUnsavedData;
 
 		window.addEventListener("beforeunload", browserSaveBeforeLeave);
 	} );
@@ -122,10 +102,11 @@
 				throw new Error('Something went wrong');
 			}
 			const response_data=await response.json();
+			originalData = JSON.stringify( { name : kb_name, data : $store });
 			// 
-			console.log(response_data.id);
-			console.log("Data was saved");
-			feedbackText="Input was saved.";
+			// console.log(response_data.id);
+			// console.log("Data was saved");
+			// feedbackText="Input was saved.";
 		} catch(error) {
 			console.log("Error: " + error);
 			feedbackText="An error occurred while sending the data.";

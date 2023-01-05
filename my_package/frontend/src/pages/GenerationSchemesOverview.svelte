@@ -23,7 +23,7 @@
 			// // if (response_data == "") {
 			// // 	throw new Error('Something went wrong');
 			// // }
-            console.log(response_data);
+            // console.log(response_data);
 			datas = response_data;
 			// inputText.placeholder = "Keine Datei hochgeladen";
 		}).catch( (error) => {
