@@ -1,8 +1,50 @@
 <script>
     import Router, { link } from "svelte-spa-router";
-    import { routes } from "./routes.js";
+    // import { routes } from "./routes.js";
     import GlobalOverflowMenu from "./GlobalOverflowMenu.svelte";
-    import MenuButton from './MenuButton.svelte';	
+    import MenuButton from './MenuButton.svelte';
+
+    import Home from "./pages/Home.svelte";
+    import NotFound from "./pages/NotFound.svelte";
+    import GenerationSchemesOverview from "./pages/GenerationSchemesOverview.svelte";
+    import GenerationSchemeNew from "./pages/GenerationSchemeNew.svelte";
+    import GenerationSchemeEdit from "./pages/GenerationSchemeEdit.svelte";
+    import Jobs from "./pages/JobsOverview.svelte";
+    import JobsNew from "./pages/JobsNew.svelte";
+
+    import {wrap} from 'svelte-spa-router/wrap'
+    import {location, querystring} from 'svelte-spa-router'
+
+
+let x = {aaa : 50};
+
+export const routes = {
+  "/": wrap({component: Home, conditions: [ (detail)=>{
+    // console.log(detail.location);
+    // console.log( $location );
+    // console.log( $querystring );
+    console.log(GenerationSchemeEdit.checkState);
+    console.log(GenerationSchemeEdit.params);
+    console.log(GenerationSchemeEdit);
+    console.log(x);
+    console.log(x.aaa());
+  } ],
+  props: {
+            num: x
+        }
+      }
+  ),
+  "/generation-schemes": GenerationSchemesOverview,
+  "/generation-schemes/new": GenerationSchemeNew,
+  "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { num: x } } ),
+  "/jobs": Jobs,
+  "/jobs/new": JobsNew,
+  "*": NotFound
+};
+
+
+
+
 </script>
   
 <nav>

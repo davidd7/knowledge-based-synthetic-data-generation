@@ -1,10 +1,12 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import {writable} from 'svelte/store';
 	import { setContext } from 'svelte';
 
 	// Export params so that url params are inserted into it
 	export let params;
+
+	export let num;
 
 	let feedbackText = "";
 
@@ -13,8 +15,15 @@
 	let Thing;
 	let store = writable('store');
 	$store = {};
+	// $: {
+	// 	store = store;
+	// 	console.log("sth happened");
+	// }
+
 	setContext('context', store);
 	let kb_name = "loading...";
+
+	let originalData = "";
 
 
 	function handleSendButtonClick() {
@@ -22,10 +31,55 @@
 	}
 
 
+	function hasUnsavedData() {
+		return JSON.stringify( { name : kb_name, data : $store }) != originalData;
+	}
 
-    onMount( overrideCurrentDataWithDataFromServer );
+
+// 	window.onload = function() {
+// 		console.log("AAAAAAAAAAAAAAAa");
+//     window.addEventListener("beforeunload", function (e) {
+// 		alert();
+//         var confirmationMessage = 'It looks like you have been editing something. '
+//                                 + 'If you leave before saving, your changes will be lost.';
+
+//         (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+//         return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+//     });
+// };
+
+
+
+
+
+
+	function browserSaveBeforeLeave(e) {
+			var confirmationMessage = 'It looks like you have been editing something. '
+									+ 'If you leave before saving, your changes will be lost.';
+
+			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    	}
+
+
+    onMount( () => {
+		overrideCurrentDataWithDataFromServer();
+		num.aaa = hasUnsavedData;
+
+		window.addEventListener("beforeunload", browserSaveBeforeLeave);
+	} );
+
+
+
+
+
+
+
+	onDestroy( () => {
+		window.removeEventListener("beforeunload", browserSaveBeforeLeave);
+	} );
     
-
+	// onMoun
 
 	async function overrideCurrentDataWithDataFromServer() {
         let response = await fetch(`/generation-schemes/${params.id}`, {
@@ -44,6 +98,7 @@
 		generation_scheme_data = response_data;
 		kb_name = generation_scheme_data.name;
 		$store = JSON.parse(response_data.data);
+		originalData = JSON.stringify( { name : kb_name, data : $store });
 		Thing = (   await import(`../forms/${response_data.module_name}.svelte`)  ).default;
 	}
 
