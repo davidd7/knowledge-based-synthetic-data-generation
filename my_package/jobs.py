@@ -177,6 +177,16 @@ def finish_job(job_id):
     else:
         pass
 
+    changed_rows = cursor.rowcount
+    print("ROWCOUNR IS " + str(changed_rows))
+    if changed_rows != 1: # can be certain that passcode is right if one row was updates. Otherwise stop.
+        return
+
+    # Save statistics on local disc also
+    file_name = util.get_path_to_package() / "data" / "generated_datasets" / str(job_id) / "statistics.json"
+    with open(file_name, 'w', encoding='utf-8') as f:
+        json.dump(statistics, f, ensure_ascii=False, indent=4)
+
     global update_counter
     update_counter += 1
     return jsonify({}) # TODO
