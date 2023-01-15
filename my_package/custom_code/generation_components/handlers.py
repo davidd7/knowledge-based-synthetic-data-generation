@@ -297,33 +297,44 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             bpy.ops.rigidbody.world_add()
 
 
-        # Find out Base-Area
         fixed_objects = []
-        base = effect.Has_Volume[0]
-        fixed_objects.append( base.bp_reference )
+        # Find out Base-Area
+        # fixed_objects = []
+        # base = effect.Has_Volume[0]
+        # fixed_objects.append( base.bp_reference )
+        base = effect.Has_Volume[0] #.bp_reference
+        # Make copy of base so that we can set height ourselves without changing original
+        base_new = create_blender_volume(
+            base.Has_XCoordinate[0] -50,
+            base.Has_YCoordinate[0] -50,
+            base.Has_ZCoordinate[0] -50,
+            base.Has_XLength[0] +100,
+            base.Has_YLength[0] +100,
+            50)
+        fixed_objects.append( base_new )
 
         # Create Walls
         fixed_objects.append( create_rectangular_cuboid(
-            base.Has_XCoordinate[0],
-            base.Has_YCoordinate[0],
+            base.Has_XCoordinate[0] -50,
+            base.Has_YCoordinate[0] -50,
             base.Has_ZCoordinate[0],
-            base.Has_XLength[0],
-            1,
+            base.Has_XLength[0] +100,
+            50,
             1000))
         fixed_objects[-1].hide(True)
         fixed_objects.append( create_rectangular_cuboid(
-            base.Has_XCoordinate[0],
-            base.Has_YCoordinate[0] + base.Has_YLength[0],
+            base.Has_XCoordinate[0] -50,
+            base.Has_YCoordinate[0] + base.Has_YLength[0] + 0,
             base.Has_ZCoordinate[0],
-            base.Has_XLength[0],
-            1,
+            base.Has_XLength[0] +100,
+            50,
             1000))
         fixed_objects[-1].hide(True)
         fixed_objects.append( create_rectangular_cuboid(
-            base.Has_XCoordinate[0],
+            base.Has_XCoordinate[0] -50,
             base.Has_YCoordinate[0],
             base.Has_ZCoordinate[0],
-            1,
+            50,
             base.Has_YLength[0],
             1000))
         fixed_objects[-1].hide(True)
@@ -331,7 +342,7 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
             base.Has_XCoordinate[0] + base.Has_XLength[0],
             base.Has_YCoordinate[0],
             base.Has_ZCoordinate[0],
-            1,
+            50,
             base.Has_YLength[0],
             1000))
         fixed_objects[-1].hide(True)
@@ -377,8 +388,17 @@ class SimpleBoxedPhysicalPlausibilityHandler(SDGenerationHandler):
         bproc.object.simulate_physics_and_fix_final_poses(
             min_simulation_time=self.__minimum_simulation_time,
             max_simulation_time=self.__maximum_simulation_time,
-            check_object_interval=1
+            check_object_interval=1 #,
+            # substeps_per_frame = 5
         )
+
+        # bproc.object.simulate_physics( # TODO: COMMENT OUT THE ABOVE AGAIN AND REMOVE THIS AFTER DEBUGGING
+        #     min_simulation_time=self.__minimum_simulation_time,
+        #     max_simulation_time=self.__maximum_simulation_time,
+        #     check_object_interval=1 #,
+        #     # substeps_per_frame = 5
+        # )
+
 
     def end(self, onto):
         pass
