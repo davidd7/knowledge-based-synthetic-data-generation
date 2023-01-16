@@ -3,12 +3,12 @@
 
 This software adds an autonomy layer and an abstraction layer on top of BlenderProc.
 
-With the autonomy layer:
+With the autonomy layer...
 * Programmers can program modules that define a form and API for a synthetic data generation pipeline
 * Process Experts can influence the generation process via a web-based UI
 * Other systemms can trigger trigger synthetic data generation via a REST API
 
-With the abstraction layer:
+With the abstraction layer...
 * Algorithms are split from expert knowledge
 * Algorithms become reusable
 * It is saved how a dataset was created
@@ -63,18 +63,42 @@ flask --app my_package --debug init-db
 
 ## Starting the server
 
-### Start Flask server in production mode
+### Start Flask server in production mode (recommended)
 
-* Use a production server, e.g., [waitress](https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/)
+* Several WSGI servers are available for Flask applications ([list](https://flask.palletsprojects.com/en/2.2.x/deploying/))
 
-#### 1) Install the production server package in the virtual environment (venv)
+* In the following, the steps when using the WSGI server "[waitress](https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/)" are shown:
 
-#### 2) Start the server using the respective production server's commands
+#### 1) Start virtual environment (venv) (if not still active)
 
-#### 3) When starting the server, it's IP address will likely be printed (or it has to be found out in another way). Copy this address into the browser to access the web application (the ip address from the production server may be different from the debugging server).
+* Navigate to ...\knowledge-based-synthetic-data-generation\
+* Execute the following commands:
 
+```
+Set-ExecutionPolicy Unrestricted -Scope Process
+venv\Scripts\activate
+```
 
-### Start Flask server in debug mode
+#### 2) Install waitress in the virtual environment (venv)
+
+```
+pip install waitress
+```
+
+#### 3) Start the server
+
+```
+waitress-serve --port=8080 --call 'my_package:create_app'
+```
+
+#### 4) Open the web application in a browser
+
+* Open the server's ip address in a browser to access the web application
+* For instance, if the server and browser are on the same computer, type [`http://localhost:8080/`](http://localhost:8080/) or [`http://127.0.0.1:8080/`](http://127.0.0.1:8080/) into the URL bar
+
+### Start Flask server in debug mode (**not** recommended)
+
+* PLEASE NOTE: Running in debug note is not recommended even for small deployments. For instance, 3d model uploads are unreliable and often don't work on the debug server. Instead, please use a production server (see above).
 
 #### 1) Start virtual environment (venv) (if not still active)
 
@@ -93,20 +117,21 @@ flask --app my_package --debug run
 ```
 
 * (--debug can be left away if changes in flask source code should not automatically be compiled)
-* PLEASE NOTE: Running in debug note is not recommended for even small deployment. For instance, 3d model uploads often don't work here. Instead, please use production mode.
 
-#### 3) When starting the server, it's IP address will be printed. Copy this address into the browser to access the web application
+#### 3) Open the web application in a browser
 
+* When starting the server, it's IP address will be printed. Copy this address into a browser's url bar to access the web application
+* For instance, if the server and browser are on the same computer, type [`http://localhost:5000/`](http://localhost:500/) or [`http://127.0.0.1:5000/`](http://127.0.0.1:5000/) into the URL bar
 
 ## Used software
 
-| Software    | Licence     |
-| ----------- | ----------- |
-| [BlenderProc](https://github.com/DLR-RM/BlenderProc)      | GPL-3.0 license       |
-| [Owlready2](https://bitbucket.org/jibalamy/owlready2/src/master/)      | LGPLv3+       |
-| [Flask](https://pypi.org/project/Flask/)   | [BSD-3-Clause License](https://flask.palletsprojects.com/en/2.2.x/license/)        |
-| [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router)   | MIT license        |
-| [svelte-range-slider-pips](https://github.com/simeydotme/svelte-range-slider-pips)      | MPL-2.0 license (not affecting this package's licence)      |
+| Software    | Licence     | Citation     |
+| ----------- | ----------- | ------------ |
+| [BlenderProc](https://github.com/DLR-RM/BlenderProc)      | GPL-3.0 license       | Denninger, M., Sundermeyer, M., Winkelbauer, D., Olefir, D., Hodan, T., Zidan, Y., Elbadrawy, M., Knauer, M., Katam, H., Lodhi, A., & Penzkofer, A. (2021). BlenderProc2 (Version 2.0.0) [Computer software]. https://github.com/DLR-RM/BlenderProc/ |
+| [Owlready2](https://bitbucket.org/jibalamy/owlready2/src/master/)      | LGPLv3+       | Lamy JB. Owlready: Ontology-oriented programming in Python with automatic classification and high level constructs for biomedical ontologies. Artificial Intelligence In Medicine 2017;80:11-28 |
+| [Flask](https://pypi.org/project/Flask/)   | [BSD-3-Clause License](https://flask.palletsprojects.com/en/2.2.x/license/)        | - |
+| [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router)   | MIT license        | - |
+| [svelte-range-slider-pips](https://github.com/simeydotme/svelte-range-slider-pips)      | MPL-2.0 license (not affecting this package's licence)      | - |
 
 
 <!---
