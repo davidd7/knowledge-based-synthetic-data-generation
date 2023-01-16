@@ -33,20 +33,11 @@
 
 
 
-	function browserSaveBeforeLeave(e) {
-			var confirmationMessage = 'It looks like you have been editing something. '
-									+ 'If you leave before saving, your changes will be lost.';
-
-			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-    	}
 
 
     onMount( () => {
 		overrideCurrentDataWithDataFromServer();
 		num.hasUnsavedData = hasUnsavedData;
-
-		window.addEventListener("beforeunload", browserSaveBeforeLeave);
 	} );
 
 
@@ -55,9 +46,6 @@
 
 
 
-	onDestroy( () => {
-		window.removeEventListener("beforeunload", browserSaveBeforeLeave);
-	} );
     
 	// onMoun
 

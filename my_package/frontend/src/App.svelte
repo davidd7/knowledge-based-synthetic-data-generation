@@ -14,6 +14,31 @@
 
   import {wrap} from 'svelte-spa-router/wrap'
   import {push, pop, replace, location, querystring} from 'svelte-spa-router'
+	import { onDestroy, onMount } from 'svelte';
+
+
+
+  
+	onDestroy( () => {
+		window.removeEventListener("beforeunload", browserSaveBeforeLeave);
+	} );
+
+
+  
+	function browserSaveBeforeLeave(e) {
+    if ( x.hasUnsavedData() ) {
+			var confirmationMessage = 'It looks like you have been editing something. '
+									+ 'If you leave before saving, your changes will be lost.';
+
+			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    	}
+    }
+
+
+  onMount( () => {
+		window.addEventListener("beforeunload", browserSaveBeforeLeave);
+	} );
 
 
   let hasUnsavedDataDefault = () => false;
@@ -21,13 +46,11 @@
 
 function allPagesCondition(detail) {
   if ( x.hasUnsavedData() ) {
-    // alert();
-    // push('/book/42');
-    // pop();
-    // replace('/generation-schemes/15/edit');
-    // detail.location = '/generation-schemes/15/edit';
-    return false;
+    console.log("Leaving page although there are unsaved changes (no way to stop the page leaving with svelte-spa-router at the moment).");
+    x.hasUnsavedData = hasUnsavedDataDefault; // remove the save tester, because we're not staying on page anyway (would leave it if the page could be not left)
+    return true; // set to true so that new page loads (if false then would load blank page but still leave the old page)
   } else {
+    console.log("Leaving page, everything okay.");
     x.hasUnsavedData = hasUnsavedDataDefault;
     return true;
   }
@@ -52,7 +75,7 @@ function conditionsFailed(event) {
     // if (event.detail.userData.foo == 'bar') {
     //     replace('/hello/world')
     // }
-        replace('/generation-schemes/15/edit')
+        // replace('/generation-schemes/15/edit')
 }
 
 
