@@ -52,7 +52,7 @@ class SimpleSDGenerationManager(SDGenerationManager):
 
         onto_wrapper = OntoWrapper(ontology_classes, onto_individuals)
 
-        generation_scheme_instances_list = list( intersection( onto_wrapper.individuals.search(is_a=onto_wrapper.classes.GenerationScheme)  , onto_wrapper.individuals.individuals()  ) )
+        generation_scheme_instances_list = list( intersection( onto_wrapper.individuals.search(is_a=onto_wrapper.classes.GenerationRoot)  , onto_wrapper.individuals.individuals()  ) )
 
         if len(generation_scheme_instances_list) == 0:
             raise ValueError("No generation scheme root with the label specified in __init__ was found")

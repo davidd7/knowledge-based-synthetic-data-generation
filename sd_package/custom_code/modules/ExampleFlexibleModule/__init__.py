@@ -131,7 +131,7 @@ class SDGenModule(SDGenBaseModule):
         )
 
         # Create root
-        new_root = onto_classes.GenerationScheme(
+        new_root = onto_classes.GenerationRoot(
             Has_NumberOfImagesToRender = [ml_system_data["number_of_images_to_render"]],
             Has_Volume = [vol_ground, vol_camera, vol_objects_spawns, vol_light, vol_objects_ground],
             Has_Object = obj,
