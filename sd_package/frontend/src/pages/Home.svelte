@@ -5,6 +5,22 @@
 <h1>
 Welcome
 </h1>
+
+With this application, you can generate synthetic datasets, e.g., for autonomous and knowledge-based production processes. To do this, there are three phases.
+
+<p/>
+
+<b>First</b>, in the <b>Configuration</b> phase, a programmer can extend this application with additional functionalities. Instructions for how this works can be found on the Configuration page.
+
+<p/>
+
+<b>Secondly</b>, in the <b>Knowledge Elicitation</b> phase, domain experts can enter knowledge via web forms to influence the generation process. These forms can be found on the Knowledge Elicitation page. What forms there are is set by the programmer in the Configuration. As part of the prototype, we've prepared two example forms (ExampleExperimentModule and ExampleFlexibleModule).
+
+<p/>
+
+<b>Thirdly</b>, in the <b>Data Generation</b> phase, an external system can trigger the synthetic data generation process via a REST API. For example, data can be automatically generated as part of an autonomous process. If you want to generate datasets without an API, e.g., for testing purposes, we've included a simple UI that sends te REST commands for you at the Data Generation page.
+
+<!-- 
 <ul style="color: grey;">
     <li>
         <span class="inline-headline">
@@ -16,7 +32,9 @@ Welcome
             Jobs:
         </span>
         Start a process for generating synthetic data
-</ul>
+</ul> -->
+
+
 
 
 <style>

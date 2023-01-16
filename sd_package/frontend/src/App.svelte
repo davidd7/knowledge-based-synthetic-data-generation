@@ -13,6 +13,7 @@
 
   import {wrap} from 'svelte-spa-router/wrap'
 	import { onDestroy, onMount } from 'svelte';
+  import ConfigurationOverview from "./pages/ConfigurationOverview.svelte";
 
   
 
@@ -56,6 +57,7 @@
 
   export const routes = {
     "/": wrap({component: Home, conditions: [ allPagesCondition ] } ),
+    "/modules": wrap({component: ConfigurationOverview, conditions: [ allPagesCondition ] } ),
     "/generation-schemes": wrap({component: GenerationSchemesOverview, conditions: [ allPagesCondition ] } ),
     "/generation-schemes/new": wrap({component: GenerationSchemeNew, conditions: [ allPagesCondition ] } ),
     "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { globalProps: globalPropsOriginal }, conditions: [ allPagesCondition ] } ),

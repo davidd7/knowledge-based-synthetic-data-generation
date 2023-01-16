@@ -334,6 +334,8 @@ def determine_active_job_status(job_id, stated_status):
             process_state = active_processes[job_id].poll()
             if (process_state is not None) and process_state == 0:
                 new_status = "finished"
+                # Delete out of list
+                # del active_processes[job_id]
             if (process_state is not None) and process_state != 0:
                 new_status = "error"
 
@@ -355,7 +357,7 @@ def determine_active_job_status(job_id, stated_status):
 
 def is_job_running():
     result = False
-    for el in active_processes:
+    for el in active_processes.values():
         process_state = el.poll()
         if process_state is not None:
             result = True
