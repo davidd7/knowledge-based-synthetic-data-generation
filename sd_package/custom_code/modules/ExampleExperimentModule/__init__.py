@@ -1,6 +1,6 @@
 import json
 from owlready2 import *
-from my_package.interfaces import *
+from sd_package.interfaces import *
 
 
 

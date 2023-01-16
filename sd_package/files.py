@@ -3,7 +3,7 @@ import os
 import subprocess
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash, current_app
-from my_package.db import get_db
+from sd_package.db import get_db
 from owlready2 import *
 from . import util
 import json

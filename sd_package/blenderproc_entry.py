@@ -22,7 +22,7 @@ if __name__ == "__main__":
     passcode = sys.argv[3]
     ip_address = sys.argv[4]
 
-    # Import relevant python modules in my_package
+    # Import relevant python modules in sd_package
     sys.path.append(path_to_package)
     import util
     from custom_code.generation_components import onto_to_sd

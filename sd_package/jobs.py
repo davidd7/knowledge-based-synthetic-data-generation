@@ -3,7 +3,7 @@ import os
 import subprocess
 from unicodedata import name
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash, send_file, Response
-from my_package.db import get_db
+from sd_package.db import get_db
 from owlready2 import *
 from . import util
 import json
@@ -12,7 +12,7 @@ from io import BytesIO
 import zipfile
 import os
 import shutil
-import my_package
+import sd_package
 import secrets
 import string
 
@@ -429,7 +429,7 @@ def start_onto_to_sd(job_id, passcode):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     process = None
     mode = "run"
-    if my_package.get_settings_debug_mode():
+    if sd_package.get_settings_debug_mode():
         mode = "debug"
     process = subprocess.Popen(["blenderproc", mode, "blenderproc_entry.py", util.get_path_to_package(), str(job_id), str(passcode), request.host_url], cwd=dir_path)
     active_processes[job_id] = process

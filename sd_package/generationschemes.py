@@ -2,7 +2,7 @@ from pathlib import Path
 from unicodedata import name
 from . import util
 from flask import Blueprint, render_template, abort, current_app, g, jsonify, request, flash
-from my_package.db import get_db
+from sd_package.db import get_db
 import json
 
 

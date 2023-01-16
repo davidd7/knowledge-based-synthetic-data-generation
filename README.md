@@ -53,12 +53,12 @@ pip install owlready2
 #### 5) Initialize database
 
 ```
-flask --app my_package --debug init-db
+flask --app sd_package --debug init-db
 ```
 
 #### 6) Install packages needed for frontend
 
-* Navigate to ...\my_package\frontend\
+* Navigate to ...\sd_package\frontend\
 * ```npm install```
 
 ## Starting the server
@@ -87,7 +87,7 @@ pip install waitress
 #### 3) Start the server
 
 ```
-waitress-serve --port=8080 --call 'my_package:create_app'
+waitress-serve --port=8080 --call 'sd_package:create_app'
 ```
 
 #### 4) Open the web application in a browser
@@ -114,7 +114,7 @@ venv\Scripts\activate
 #### 2) Start the flask server
 
 ```
-flask --app my_package --debug run
+flask --app sd_package --debug run
 ```
 
 * (--debug can be left away if changes in flask source code should not automatically be compiled)
@@ -140,7 +140,7 @@ flask --app my_package --debug run
 ## Notes regarding changes to core parts of the software (beyond custom code addons):
 
 #### Advanced live compiling of changes to internal Svelte files
-(navigate to _13_overall_prototype02/my_package/frontend/ in terminal)
+(navigate to _13_overall_prototype02/sd_package/frontend/ in terminal)
 ```
 npm run dev
 ```

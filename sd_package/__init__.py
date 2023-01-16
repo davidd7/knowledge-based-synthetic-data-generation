@@ -7,11 +7,11 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory,
 from werkzeug.utils import secure_filename
 import pathlib
 from datetime import datetime
-from my_package.generationschemes import generationschemes_bp
-from my_package.modules import modules_bp
-from my_package.jobs import jobs_bp
-from my_package.jobs import is_job_running
-from my_package.files import files_bp
+from sd_package.generationschemes import generationschemes_bp
+from sd_package.modules import modules_bp
+from sd_package.jobs import jobs_bp
+from sd_package.jobs import is_job_running
+from sd_package.files import files_bp
 from . import util
 import pathlib
 import json
@@ -45,7 +45,7 @@ def create_app(test_config=None):
 
 
     # Connect to database (use single object for all requests, via factory pattern)
-    from my_package import db
+    from sd_package import db
     db.init_app(app)
 
 
