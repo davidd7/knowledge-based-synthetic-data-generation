@@ -63,10 +63,9 @@ flask --app my_package --debug init-db
 
 ## Starting the server
 
-### Start Flask server in production mode (recommended)
+### Option 1: Start Flask server in production mode (recommended)
 
 * Several WSGI servers are available for Flask applications ([list](https://flask.palletsprojects.com/en/2.2.x/deploying/))
-
 * In the following, the steps when using the WSGI server "[waitress](https://flask.palletsprojects.com/en/2.2.x/deploying/waitress/)" are shown:
 
 #### 1) Start virtual environment (venv) (if not still active)
@@ -96,7 +95,9 @@ waitress-serve --port=8080 --call 'my_package:create_app'
 * Open the server's ip address in a browser to access the web application
 * For instance, if the server and browser are on the same computer, type [`http://localhost:8080/`](http://localhost:8080/) or [`http://127.0.0.1:8080/`](http://127.0.0.1:8080/) into the URL bar
 
-### Start Flask server in debug mode (**not** recommended)
+---
+
+### Option 2: Start Flask server in debug mode (**not** recommended)
 
 * PLEASE NOTE: Running in debug note is not recommended even for small deployments. For instance, 3d model uploads are unreliable and often don't work on the debug server. Instead, please use a production server (see above).
 
@@ -127,11 +128,12 @@ flask --app my_package --debug run
 
 | Software    | Licence     | Citation     |
 | ----------- | ----------- | ------------ |
-| [BlenderProc](https://github.com/DLR-RM/BlenderProc)      | GPL-3.0 license       | Denninger, M., Sundermeyer, M., Winkelbauer, D., Olefir, D., Hodan, T., Zidan, Y., Elbadrawy, M., Knauer, M., Katam, H., Lodhi, A., & Penzkofer, A. (2021). BlenderProc2 (Version 2.0.0) [Computer software]. https://github.com/DLR-RM/BlenderProc/ |
-| [Owlready2](https://bitbucket.org/jibalamy/owlready2/src/master/)      | LGPLv3+       | Lamy JB. Owlready: Ontology-oriented programming in Python with automatic classification and high level constructs for biomedical ontologies. Artificial Intelligence In Medicine 2017;80:11-28 |
-| [Flask](https://pypi.org/project/Flask/)   | [BSD-3-Clause License](https://flask.palletsprojects.com/en/2.2.x/license/)        | - |
+| [BlenderProc](https://github.com/DLR-RM/BlenderProc)      | GPL-3.0 license       | M. Denninger, M. Sundermeyer, D. Winkelbauer, Y. Zidan, D. Olefir, M. Elbadrawy, A. Lodhi, and H. Katam, “Blenderproc,” 2019. |
+| [Owlready2](https://bitbucket.org/jibalamy/owlready2/src/master/)      | LGPLv3+ licence       | J.-B. Lamy, “Owlready: Ontology-oriented programming in python with automatic classification and high level constructs for biomedical ontologies,” Artificial Intelligence in Medicine, vol. 80, pp. 11–28, 2017. |
+| [Flask](https://pypi.org/project/Flask/)   | BSD 3-clause license        | - |
 | [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router)   | MIT license        | - |
 | [svelte-range-slider-pips](https://github.com/simeydotme/svelte-range-slider-pips)      | MPL-2.0 license (not affecting this package's licence)      | - |
+
 
 
 <!---
@@ -142,8 +144,6 @@ flask --app my_package --debug run
 ```
 npm run dev
 ```
-
-
 --->
 
 
