@@ -62,7 +62,7 @@
     <input bind:value={name} id="name" name="name" />
 
     <label for="modul_name">Base module:</label>
-    <select value={selected} on:change="{() => name = ''}" id="modul_name" name="module_name">
+    <select value={selected} id="modul_name" name="module_name">
         {#each sdgeneneration_modules as sdgeneneration_module}
             <option value={sdgeneneration_module.name}>
                 {sdgeneneration_module.name}

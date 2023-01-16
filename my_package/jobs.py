@@ -63,11 +63,11 @@ def event_stream():
     i = 0
     try:
         while True:
-            if update_counter != update_counter_old or i % 60 == 0: # Sending data at least all 60 seconds to check that client is still listening
+            if i % 5 == 0 or update_counter != update_counter_old: # Sending data at least all 5 seconds to check that client is still listening
                 yield 'data: %s\n\n' % update_counter
                 update_counter_old = update_counter
             print("Stream starts sleeping")
-            time.sleep(1)
+            time.sleep(1) # 1 = 1 second
             i += 1
     finally:
         return
