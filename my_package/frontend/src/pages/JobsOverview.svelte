@@ -1,7 +1,6 @@
 <script>
 	import { onMount, onDestroy  } from 'svelte';
-    import Router, { link, push } from "svelte-spa-router";
-    // import { push } from "svelte-spa-router";
+    import { link } from "svelte-spa-router";
 
     let jobs = [];
 

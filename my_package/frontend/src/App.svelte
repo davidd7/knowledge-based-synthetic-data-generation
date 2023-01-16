@@ -1,6 +1,5 @@
 <script>
   import Router, { link } from "svelte-spa-router";
-  // import { routes } from "./routes.js";
   import GlobalOverflowMenu from "./GlobalOverflowMenu.svelte";
   import MenuButton from './MenuButton.svelte';
 
@@ -13,10 +12,27 @@
   import JobsNew from "./pages/JobsNew.svelte";
 
   import {wrap} from 'svelte-spa-router/wrap'
-  import {push, pop, replace, location, querystring} from 'svelte-spa-router'
 	import { onDestroy, onMount } from 'svelte';
 
+  
 
+
+  let hasUnsavedDataDefault = () => false;
+  let globalPropsOriginal = { hasUnsavedData : hasUnsavedDataDefault };
+
+  
+	function browserSaveBeforeLeave(e) {
+    if ( globalPropsOriginal.hasUnsavedData() ) {
+		  var confirmationMessage = 'It looks like you have been editing something. If you leave before saving, your changes will be lost.';
+			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+    }
+  }
+
+
+  onMount( () => {
+		window.addEventListener("beforeunload", browserSaveBeforeLeave);
+	} );
 
   
 	onDestroy( () => {
@@ -24,59 +40,36 @@
 	} );
 
 
-  
-	function browserSaveBeforeLeave(e) {
-    if ( x.hasUnsavedData() ) {
-			var confirmationMessage = 'It looks like you have been editing something. '
-									+ 'If you leave before saving, your changes will be lost.';
 
-			(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-			return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-    	}
+  function allPagesCondition(detail) {
+    if ( globalPropsOriginal.hasUnsavedData() ) {
+      console.log("Leaving page although there are unsaved changes (no way to stop the page leaving with svelte-spa-router at the moment).");
+      globalPropsOriginal.hasUnsavedData = hasUnsavedDataDefault; // remove the save tester, because we're not staying on page anyway (would leave it if the page could be not left)
+      return true; // set to true so that new page loads (if false then would load blank page but still leave the old page)
+    } else {
+      console.log("Leaving page, everything okay.");
+      globalPropsOriginal.hasUnsavedData = hasUnsavedDataDefault;
+      return true;
     }
-
-
-  onMount( () => {
-		window.addEventListener("beforeunload", browserSaveBeforeLeave);
-	} );
-
-
-  let hasUnsavedDataDefault = () => false;
-  let x = {hasUnsavedData : hasUnsavedDataDefault};
-
-function allPagesCondition(detail) {
-  if ( x.hasUnsavedData() ) {
-    console.log("Leaving page although there are unsaved changes (no way to stop the page leaving with svelte-spa-router at the moment).");
-    x.hasUnsavedData = hasUnsavedDataDefault; // remove the save tester, because we're not staying on page anyway (would leave it if the page could be not left)
-    return true; // set to true so that new page loads (if false then would load blank page but still leave the old page)
-  } else {
-    console.log("Leaving page, everything okay.");
-    x.hasUnsavedData = hasUnsavedDataDefault;
-    return true;
   }
-}
-
-export const routes = {
-  "/": wrap({component: Home, conditions: [ allPagesCondition ] } ),
-  "/generation-schemes": wrap({component: GenerationSchemesOverview, conditions: [ allPagesCondition ] } ),
-  "/generation-schemes/new": wrap({component: GenerationSchemeNew, conditions: [ allPagesCondition ] } ),
-  "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { num: x }, conditions: [ allPagesCondition ] } ),
-  "/jobs": wrap({component: Jobs, conditions: [ allPagesCondition ] } ),
-  "/jobs/new": wrap({component: JobsNew, conditions: [ allPagesCondition ] } ),
-  "*": wrap({component: NotFound, conditions: [ allPagesCondition ] } )
-};
 
 
+  export const routes = {
+    "/": wrap({component: Home, conditions: [ allPagesCondition ] } ),
+    "/generation-schemes": wrap({component: GenerationSchemesOverview, conditions: [ allPagesCondition ] } ),
+    "/generation-schemes/new": wrap({component: GenerationSchemeNew, conditions: [ allPagesCondition ] } ),
+    "/generation-schemes/:id/edit": wrap({component: GenerationSchemeEdit, props: { globalProps: globalPropsOriginal }, conditions: [ allPagesCondition ] } ),
+    "/jobs": wrap({component: Jobs, conditions: [ allPagesCondition ] } ),
+    "/jobs/new": wrap({component: JobsNew, conditions: [ allPagesCondition ] } ),
+    "*": wrap({component: NotFound, conditions: [ allPagesCondition ] } )
+  };
 
-function conditionsFailed(event) {
+
+
+  function conditionsFailed(event) {
+    // Currently not called, because when condition fails route is left anyway without option to stop so better just transition to new page without letting the transition fail
     console.error('conditionsFailed event', event.detail)
-
-    // Perform any action, for example replacing the current route
-    // if (event.detail.userData.foo == 'bar') {
-    //     replace('/hello/world')
-    // }
-        // replace('/generation-schemes/15/edit')
-}
+  }
 
 
 </script>

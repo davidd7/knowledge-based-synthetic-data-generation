@@ -1,12 +1,12 @@
 <script>
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import {writable} from 'svelte/store';
 	import { setContext } from 'svelte';
 
 	// Export params so that url params are inserted into it
 	export let params;
 
-	export let num;
+	export let globalProps;
 
 	let feedbackText = "";
 
@@ -27,17 +27,15 @@
 	}
 
 
-	function hasUnsavedData() {
+	function customHasUnsavedDataCheck() {
 		return JSON.stringify( { name : kb_name, data : $store }) != originalData;
 	}
 
 
-
-
-
     onMount( () => {
 		overrideCurrentDataWithDataFromServer();
-		num.hasUnsavedData = hasUnsavedData;
+		// Connect our customHasUnsavedDataCheck function to globalProps
+		globalProps.hasUnsavedData = customHasUnsavedDataCheck;
 	} );
 
 

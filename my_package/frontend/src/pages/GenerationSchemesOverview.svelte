@@ -1,7 +1,6 @@
 <script>
-    import urlSlug from "url-slug";
 	import { onMount } from 'svelte';
-    import Router, { link } from "svelte-spa-router";
+    import { link } from "svelte-spa-router";
 
     let datas = [];
 

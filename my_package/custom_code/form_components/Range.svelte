@@ -51,14 +51,7 @@
 		--range-handle:          var(--slider-color); /* non-focussed handle color */
 		--range-handle-focus:    var(--slider-color); /* focussed handle color */
 	}
-	.rangeSlider > .rangeHandle > .rangeFloat {
-		opacity: 1;
-		transform: scale(5);
-	}
-
-	#slider2 .rangeFloat{
-		border: 10px black solid;
-	}
+	
 
 </style>
 
