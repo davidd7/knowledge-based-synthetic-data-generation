@@ -1,11 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import {writable} from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import { setContext } from 'svelte';
 
 	// Export params so that url params are inserted into it
 	export let params;
-
 	export let globalProps;
 
 	let feedbackText = "";
@@ -39,14 +38,6 @@
 	} );
 
 
-
-
-
-
-
-    
-	// onMoun
-
 	async function overrideCurrentDataWithDataFromServer() {
         let response = await fetch(`/generation-schemes/${params.id}`, {
             method: 'GET'
@@ -60,11 +51,13 @@
 		}
 
 		let response_data = await response.json();
+		console.log(response_data);
 
 		generation_scheme_data = response_data;
 		kb_name = generation_scheme_data.name;
 		$store = JSON.parse(response_data.data);
 		originalData = JSON.stringify( { name : kb_name, data : $store });
+		Thing = undefined;
 		Thing = (   await import(`../forms/${response_data.module_name}.svelte`)  ).default;
 	}
 
@@ -99,6 +92,7 @@
     }
 
 	async function reset() {
+		console.log("Reset clicked");
 		overrideCurrentDataWithDataFromServer();
 	}
 	
@@ -106,9 +100,6 @@
     
 
 <div class="page-header">
-    <!-- <h1 style="flex-grow: 1;">
-		{kb_name} < ! - -(base module: {generation_scheme_data.module_name})- - >
-	</h1> -->
 	<input style="flex-grow: 1;" bind:value={kb_name} type="text" class={'input-knowledge-base-name'}>
 	<button on:click={reset} class={'edit-scheme-button'}>Reset</button>
 	<button on:click={handleSendButtonClick} class={'edit-scheme-button'}>Save</button>

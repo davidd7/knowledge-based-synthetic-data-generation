@@ -1,12 +1,11 @@
-
 <script>
 	import { getContext } from 'svelte';
-	let context_data = getContext('context');
+	let contextData = getContext('context');
 	
-	let data = context_data;
+	let data = contextData;
 	export let valueKey = 0;
 	
-	console.log("Input3DModel initializes");
+	console.log("3DModelInput initializes");
 	console.log(data);
 	console.log(valueKey);
 	$: {

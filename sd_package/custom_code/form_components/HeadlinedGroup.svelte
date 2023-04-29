@@ -1,10 +1,9 @@
-
 <script>
 	export let headline = "";
 </script>
 
 
-<div class="headlinedGroup">
+<div>
 	<h3>
 		{headline}
 	</h3>
@@ -15,8 +14,6 @@
 
 
 <style>
-	.headlinedGroup {
-	}
 	.indented-block {
 		margin-left: 36px;
 	}

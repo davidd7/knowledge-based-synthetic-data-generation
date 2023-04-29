@@ -26,7 +26,7 @@
 			<div class={"element-container"}  transition:slide|local>
 				<div class={"card"} transition:fade|local>
 					<div style="font-weight: bold; padding-bottom: 6px;">Objekt {i + 1}</div>
-					<slot/>
+					<slot />
 				</div>
 				<button on:click={() => {removeElement(i)}} class="button-remove" transition:fade|local>x</button>
 			</div>

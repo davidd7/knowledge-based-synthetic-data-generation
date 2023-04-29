@@ -6,7 +6,7 @@ This software adds an autonomy layer and an abstraction layer on top of BlenderP
 With the autonomy layer...
 * Programmers can program modules that define a form and API for a synthetic data generation pipeline
 * Process Experts can influence the generation process via a web-based UI
-* Other systemms can trigger trigger synthetic data generation via a REST API
+* Other systems can trigger trigger synthetic data generation via a REST API
 
 With the abstraction layer...
 * Algorithms are split from expert knowledge

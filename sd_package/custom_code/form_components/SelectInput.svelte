@@ -1,22 +1,17 @@
 <script>
-	export let label = "";
-	
-	export let data = [];
-	export let valueKey = "";
-	
-	export let options = [];
+	import { getContext } from 'svelte';
+	let contextData = getContext('context');
 
-/*	$: {
-		data[valueKey] = data[valueKey];
-	}*/
-	
+	export let label = "";
+	export let valueKey = "";
+	export let options = [];	
 </script>
 
 
 <div>
 	{label}
 
-	<select bind:value={data[valueKey]}>
+	<select bind:value={contextData[valueKey]}>
 		{#each options as option}
 			<option  value={option.value}>
 				{option.text}

@@ -1,14 +1,14 @@
-
 <script>
 	import { getContext } from 'svelte';
-	let context_data = getContext('context');
+	let contextData = getContext('context');
+
 	console.log("Range.svelte received context: " );
-	console.log(context_data);
+	console.log(contextData);
 	export let debug = false;
 
 	import RangeSlider from "svelte-range-slider-pips";
 
-	let data = context_data;
+	let data = contextData;
 
 	export let rangeStartKey = 0;
 	export let rangeEndKey = 0;

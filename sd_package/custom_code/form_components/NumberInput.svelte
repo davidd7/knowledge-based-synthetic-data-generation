@@ -1,28 +1,21 @@
 <script>
+	import { getContext } from 'svelte';
+	let contextData = getContext('context');
+
 	export let label = "";
 	export let unitLabel = "";
-	
-	export let data = [];
-	export let valueKey = "";
-	
-/*	$: {
-		data[valueKey] = data[valueKey];
-	}*/
-	
+	export let valueKey = "";		
 </script>
 
 
-<div class={"number-input-container"}>
+<div>
 	{label}
-	<input type="number" bind:value={data[valueKey]}/>
+	<input type="number" bind:value={contextData[valueKey]}/>
 	{unitLabel}
 </div>
 
 
 <style>
-	.number-input-container {
-		
-	}
 </style>
 
 
