@@ -1,6 +1,4 @@
 
-
-
 <script>
 	import { getContext } from 'svelte';
 	let context_data = getContext('context');
@@ -76,8 +74,9 @@
 
 <button on:click={()=>inputFile.click()}>Select file</button>
 
+<div class={"input-file-container"}>
 <input bind:this={inputFile} type="file" on:change={fileChanged} class={"input-file"} />
-
+</div>
 
 
 
@@ -88,6 +87,11 @@
 
 
 <style>
+	.input-file-container {
+		height: 0px;
+		overflow: hidden;
+		width: 0px;
+	}
 	.input-file {
 		visibility: hidden;
 	}

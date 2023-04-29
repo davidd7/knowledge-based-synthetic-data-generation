@@ -76,7 +76,7 @@
 		console.log(JSON.stringify($store));
         feedbackText = "Sending...";
 		try {
-			const response=await fetch(`/generation-schemes/${params.id}`,{
+			const response = await fetch(`/generation-schemes/${params.id}`,{
 				method: 'PUT',
 				headers: {
 					'Accept': 'application/json, text/plain, */*',
@@ -87,15 +87,14 @@
 			if(!response.ok) {
 				throw new Error('Something went wrong');
 			}
-			const response_data=await response.json();
+			const response_data = await response.json();
+			console.log(response_data);
 			originalData = JSON.stringify( { name : kb_name, data : $store });
-			// 
-			// console.log(response_data.id);
-			// console.log("Data was saved");
-			// feedbackText="Input was saved.";
+
+			feedbackText = "Input was saved.";
 		} catch(error) {
 			console.log("Error: " + error);
-			feedbackText="An error occurred while sending the data.";
+			feedbackText = "An error occurred while sending the data.";
 		}
     }
 
